@@ -33,7 +33,7 @@
     <a href="/getting-started/overview/" class="text-xs font-semibold px-3 py-1.5 rounded-lg border hover:underline transition-all" style="color: #008544; background-color: rgba(0, 133, 68, 0.08); border-color: rgba(0, 133, 68, 0.25);">View All Modules ➔</a>
   </div>
 
-  <!-- 4. 3-COLUMN CARDS GRID (ALL 8 MODULES) -->
+  <!-- 4. 3-COLUMN CARDS GRID (ALL 8 MODULES - UNIFORM HEIGHT) -->
   <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
     
     <!-- Module 1 -->
@@ -42,8 +42,8 @@
         <div class="squircle mb-2" style="background-color: #008544;">
           <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"/><path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/><path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"/><path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"/></svg>
         </div>
-        <h3 class="text-xs font-bold portal-title leading-snug">1. Onboarding & Developer Journeys</h3>
-        <p class="text-[11px] portal-subtitle mt-0.5 mb-2.5">Platform ecosystem, workstation setup, fast-track checklists, and framework selection.</p>
+        <h3 class="text-xs font-bold portal-title leading-snug min-h-[2rem] flex items-center">1. Onboarding & Developer Journeys</h3>
+        <p class="text-[11px] portal-subtitle mt-0.5 mb-2.5 min-h-[2rem]">Platform ecosystem, workstation setup, fast-track checklists, and tech stack.</p>
         
         <div class="grid grid-cols-2 gap-1.5 mb-3">
           <a href="/getting-started/overview/" class="sublink-pill">1.1 Overview</a>
@@ -63,8 +63,8 @@
         <div class="squircle mb-2" style="background-color: #059669;">
           <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="7" height="7" x="3" y="3" rx="1"/><rect width="7" height="7" x="14" y="3" rx="1"/><rect width="7" height="7" x="14" y="14" rx="1"/><rect width="7" height="7" x="3" y="14" rx="1"/></svg>
         </div>
-        <h3 class="text-xs font-bold portal-title leading-snug">2. Architecture & Platform Standards</h3>
-        <p class="text-[11px] portal-subtitle mt-0.5 mb-2.5">Clean architecture layers, Circuit Breaker resilience, feature flags, and branching rules.</p>
+        <h3 class="text-xs font-bold portal-title leading-snug min-h-[2rem] flex items-center">2. Architecture & Platform Standards</h3>
+        <p class="text-[11px] portal-subtitle mt-0.5 mb-2.5 min-h-[2rem]">Clean architecture layers, Circuit Breaker resilience, feature flags, and branching rules.</p>
         
         <div class="grid grid-cols-2 gap-1.5 mb-3">
           <a href="/architecture/overview/" class="sublink-pill">2.1 Architecture</a>
@@ -84,8 +84,8 @@
         <div class="squircle mb-2" style="background-color: #7c3aed;">
           <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
         </div>
-        <h3 class="text-xs font-bold portal-title leading-snug">3. Development Platforms & SDKs</h3>
-        <p class="text-[11px] portal-subtitle mt-0.5 mb-2.5">Android, iOS, React Native catalogs, shared libraries, and app core foundations.</p>
+        <h3 class="text-xs font-bold portal-title leading-snug min-h-[2rem] flex items-center">3. Development Platforms & SDKs</h3>
+        <p class="text-[11px] portal-subtitle mt-0.5 mb-2.5 min-h-[2rem]">Android, iOS, React Native catalogs, shared libraries, and app core foundations.</p>
         
         <div class="grid grid-cols-2 gap-1.5 mb-3">
           <a href="/platforms/android/" class="sublink-pill">3.1 Android SDK</a>
@@ -105,8 +105,8 @@
         <div class="squircle mb-2" style="background-color: #ea580c;">
           <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16"/><path d="M16 16h5v5"/></svg>
         </div>
-        <h3 class="text-xs font-bold portal-title leading-snug">4. Build & Release Kit (CI/CD)</h3>
-        <p class="text-[11px] portal-subtitle mt-0.5 mb-2.5">Bitrise pipelines, camp.yml spec reference, Danger PR inspection, and automated builds.</p>
+        <h3 class="text-xs font-bold portal-title leading-snug min-h-[2rem] flex items-center">4. Build & Release Kit (CI/CD)</h3>
+        <p class="text-[11px] portal-subtitle mt-0.5 mb-2.5 min-h-[2rem]">Bitrise pipelines, camp.yml spec reference, Danger PR inspection, and automated builds.</p>
         
         <div class="grid grid-cols-2 gap-1.5 mb-3">
           <a href="/cicd/overview/" class="sublink-pill">4.1 Build Kit</a>
@@ -126,8 +126,8 @@
         <div class="squircle mb-2" style="background-color: #0d9488;">
           <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/></svg>
         </div>
-        <h3 class="text-xs font-bold portal-title leading-snug">5. Observability, Security & Services</h3>
-        <p class="text-[11px] portal-subtitle mt-0.5 mb-2.5">Push notifications, Datadog RUM telemetry, security checklist, and data wipe protocol.</p>
+        <h3 class="text-xs font-bold portal-title leading-snug min-h-[2rem] flex items-center">5. Observability, Security & Services</h3>
+        <p class="text-[11px] portal-subtitle mt-0.5 mb-2.5 min-h-[2rem]">Push notifications, Datadog RUM telemetry, security checklist, and data wipe protocol.</p>
         
         <div class="grid grid-cols-2 gap-1.5 mb-3">
           <a href="/services/push-notifications/" class="sublink-pill">5.1 Push Notify</a>
@@ -147,8 +147,8 @@
         <div class="squircle mb-2" style="background-color: #db2777;">
           <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m7.5 4.27 9 5.15"/><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22V12"/></svg>
         </div>
-        <h3 class="text-xs font-bold portal-title leading-snug">6. App Store & Distribution</h3>
-        <p class="text-[11px] portal-subtitle mt-0.5 mb-2.5">Enterprise App Store, Google Play deployment, Apple App Store publishing, and signing.</p>
+        <h3 class="text-xs font-bold portal-title leading-snug min-h-[2rem] flex items-center">6. App Store & Distribution</h3>
+        <p class="text-[11px] portal-subtitle mt-0.5 mb-2.5 min-h-[2rem]">Enterprise App Store, Google Play deployment, Apple App Store publishing, and signing.</p>
         
         <div class="grid grid-cols-2 gap-1.5 mb-3">
           <a href="/store/enterprise-store/" class="sublink-pill">6.1 Ent Store</a>
@@ -168,8 +168,8 @@
         <div class="squircle mb-2" style="background-color: #4f46e5;">
           <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="16" height="16" x="4" y="4" rx="2"/><rect width="6" height="6" x="9" y="9" rx="1"/><path d="M15 2v2"/><path d="M15 20v2"/><path d="M2 15h2"/><path d="M2 9h2"/><path d="M20 15h2"/><path d="M20 9h2"/><path d="M9 2v2"/><path d="M9 20v2"/></svg>
         </div>
-        <h3 class="text-xs font-bold portal-title leading-snug">7. GenAI & Developer Productivity</h3>
-        <p class="text-[11px] portal-subtitle mt-0.5 mb-2.5">Machine-readable index (llms.txt), AI rules (.cursorrules), FAQs, and prompts.</p>
+        <h3 class="text-xs font-bold portal-title leading-snug min-h-[2rem] flex items-center">7. GenAI & Developer Productivity</h3>
+        <p class="text-[11px] portal-subtitle mt-0.5 mb-2.5 min-h-[2rem]">Machine-readable index (llms.txt), AI rules (.cursorrules), FAQs, and prompts.</p>
         
         <div class="grid grid-cols-2 gap-1.5 mb-3">
           <a href="/genai/llms-txt/" class="sublink-pill">7.1 llms.txt</a>
@@ -189,8 +189,8 @@
         <div class="squircle mb-2" style="background-color: #0284c7;">
           <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 14h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-7a9 9 0 0 1 18 0v7a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3"/></svg>
         </div>
-        <h3 class="text-xs font-bold portal-title leading-snug">8. Support & Troubleshooting Hub</h3>
-        <p class="text-[11px] portal-subtitle mt-0.5 mb-2.5">Support policies, MS Teams channel, troubleshooting matrix, RFC process, and noticeboard.</p>
+        <h3 class="text-xs font-bold portal-title leading-snug min-h-[2rem] flex items-center">8. Support & Troubleshooting Hub</h3>
+        <p class="text-[11px] portal-subtitle mt-0.5 mb-2.5 min-h-[2rem]">Support policies, MS Teams channel, troubleshooting matrix, RFC process, and noticeboard.</p>
         
         <div class="grid grid-cols-2 gap-1.5 mb-3">
           <a href="/support/teams-channel/" class="sublink-pill">8.1 Teams Support</a>
@@ -289,6 +289,7 @@
   .portal-subtitle { color: #64748b; }
   .portal-divider { border-color: #f1f5f9; }
 
+  /* UNIFORM CARD STYLING & HEIGHT */
   .portal-card {
     border: 1px solid #e2e8f0;
     border-radius: 0.75rem;
@@ -297,6 +298,8 @@
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    height: 100%;
+    min-height: 14.5rem;
     transition: all 0.2s ease-in-out;
     box-shadow: 0 1px 3px rgba(0,0,0,0.05);
   }
