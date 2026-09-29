@@ -17,23 +17,23 @@ Use this decision flowchart to determine your exact onboarding path based on you
 
 <pre class="mermaid">
 flowchart TD
-    Start(["🚀 Join Mobile Team"]) ==> Q1{"Are you a Web or Backend Dev?"}
+    Start["Start Onboarding Journey"] --> Q1{"Are you a Web or Backend Dev?"}
     
-    Q1 -- "Yes (New to Mobile)" --> TrackA["Read 1.3 Non-Mobile Track ('Mobile 100')"]
+    Q1 -- "Yes (New to Mobile)" --> TrackA["Read 1.3 Non-Mobile Track"]
     Q1 -- "No (Mobile Engineer)" --> Q2{"What is your target stack?"}
     
-    TrackA ==> Q2
+    TrackA --> Q2
     
-    Q2 -- "React Native" --> SetupRN["1.5 Setup Node.js, Watchman, Xcode & AS"]
+    Q2 -- "React Native" --> SetupRN["1.5 Setup Node.js, Watchman, Xcode & Android Studio"]
     Q2 -- "Native iOS" --> SetupIOS["1.5 Setup macOS, Xcode & CocoaPods"]
     Q2 -- "Native Android" --> SetupAndroid["1.5 Setup Android Studio & JDK 17"]
     
-    SetupRN ==> Verification["Run Local Verification Build"]
-    SetupIOS ==> Verification
-    SetupAndroid ==> Verification
+    SetupRN --> Verification["Run Local Verification Build"]
+    SetupIOS --> Verification
+    SetupAndroid --> Verification
     
-    Verification ==> TrackB["1.2 Follow New Mobile Engineer Track"]
-    TrackB ==> Done(["🎉 Submit & Merge First PR"])
+    Verification --> TrackB["1.2 Follow New Mobile Engineer Track"]
+    TrackB --> Done["Submit & Merge First PR"]
 </pre>
 
 ---
