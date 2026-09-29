@@ -5,63 +5,75 @@ sidebar:
   order: 1
 ---
 
-import { Aside, Steps } from '@astrojs/starlight/components';
+import { Aside, Card, CardGrid, Steps, Tabs, TabItem } from '@astrojs/starlight/components';
 
 <Aside type="tip">
-👋 **Welcome to the Mobile Engineering Platform!** This portal serves as your comprehensive starting point for requesting repository access, configuring your local developer workstation, mastering our 3-layer Clean Architecture standards, and landing your first pull request smoothly. **Target Onboarding SLA: Land your first verified PR within 48 hours.**
+👋 **Welcome to the Mobile Engineering Platform!** Follow the decision guide and 4-step onboarding roadmap below to set up your workstation, obtain repository access, and land your first pull request smoothly. **Target Onboarding SLA: Land your first verified PR within 48 hours.**
 </Aside>
 
-## 1.0.1 Interactive Onboarding Decision Flowchart
+## 1.0.1 Onboarding Decision Guide
 
-Use this decision flowchart to determine your exact onboarding path based on your role background and target tech stack:
+Choose your role and target framework to route to your specific onboarding guide:
 
-<pre class="mermaid">
-flowchart TD
-    Start["Start Onboarding Journey"] --> Q1{"Are you a Web or Backend Dev?"}
+<CardGrid>
+  <Card title="Track A: Experienced Mobile Engineer" icon="rocket">
+    For developers with existing iOS (Swift), Android (Kotlin), or React Native experience. Skip mobile basics and request repo entitlements & IDE tools.
     
-    Q1 -- "Yes (New to Mobile)" --> TrackA["Read 1.3 Non-Mobile Track"]
-    Q1 -- "No (Mobile Engineer)" --> Q2{"What is your target stack?"}
+    [Open 1.2 New Mobile Engineer Track ➔](/mobile/onboarding/new-engineer-onboarding/)
+  </Card>
+
+  <Card title="Track B: Web & Backend Developer" icon="open-book">
+    For developers transitioning from Web (React/Vue) or Backend microservices. Read the "Mobile 100" primer on app binaries, lifecycles & signing.
     
-    TrackA --> Q2
-    
-    Q2 -- "React Native" --> SetupRN["1.5 Setup Node.js, Watchman, Xcode & AS"]
-    Q2 -- "Native iOS" --> SetupIOS["1.5 Setup macOS, Xcode & CocoaPods"]
-    Q2 -- "Native Android" --> SetupAndroid["1.5 Setup Android Studio & JDK 17"]
-    
-    SetupRN --> Verification["Run Local Verification Build"]
-    SetupIOS --> Verification
-    SetupAndroid --> Verification
-    
-    Verification --> TrackB["1.2 Follow New Mobile Engineer Track"]
-    TrackB --> Done["Submit & Merge First PR"]
-</pre>
+    [Open 1.3 Non-Mobile Engineer Track ➔](/mobile/onboarding/non-mobile-engineer-guide/)
+  </Card>
+</CardGrid>
 
 ---
 
-## 1.0.2 Onboarding Milestones & SLA Timeline
+## 1.0.2 Target Framework & Workstation Setup
 
-Every new developer follows our 4-phase onboarding SLA to ensure a predictable 0-to-1 setup:
+Select your target stack to open the step-by-step installation instructions:
 
-| Phase | Milestone Goal | Key Action Required | Target SLA |
-| :--- | :--- | :--- | :--- |
-| **Phase 1** | Ecosystem & Architecture | Read [1.1 Platform Overview](/mobile/onboarding/platform-overview/) & governance policies | **Day 1 (Morning)** |
-| **Phase 2** | Tech Stack Selection | Review [1.4 Tech Stack Selection](/mobile/onboarding/tech-stack-selection/) (React Native vs Native) | **Day 1 (Afternoon)** |
-| **Phase 3** | Workstation Setup | Follow [1.5 Machine Setup Guide](/mobile/onboarding/machine-setup/) (macOS/Windows) | **Day 2 (Morning)** |
-| **Phase 4** | First PR & Build Verification | Complete [1.2 New Mobile Engineer Track](/mobile/onboarding/new-engineer-onboarding/) & merge first PR | **Day 2 (Afternoon)** |
+<Tabs>
+  <TabItem label="React Native">
+    **Cross-Platform Stack:** Node.js 18+, Watchman, React Native CLI, Xcode & Android Studio.
+    
+    ➔ [Open 1.5 Machine Setup Guide for React Native](/mobile/onboarding/machine-setup/)
+  </TabItem>
+  <TabItem label="Native iOS">
+    **iOS Stack:** macOS, Xcode 15+, Swift 5.10+, Swift Package Manager & CocoaPods.
+    
+    ➔ [Open 1.5 Machine Setup Guide for iOS](/mobile/onboarding/machine-setup/)
+  </TabItem>
+  <TabItem label="Native Android">
+    **Android Stack:** Android Studio Hedgehog+, JDK 17, Kotlin 1.9+ & Gradle 8+.
+    
+    ➔ [Open 1.5 Machine Setup Guide for Android](/mobile/onboarding/machine-setup/)
+  </TabItem>
+</Tabs>
 
 ---
 
-## 1.0.3 Role-Based Onboarding Pathways
+## 1.0.3 Your 4-Step Onboarding Roadmap
 
-### Track A: Experienced Mobile Engineers
-Designed for developers with existing iOS (Swift), Android (Kotlin), or React Native experience. Skip basic mobile concepts and go directly to repo entitlement requests, IDE setup, and CI/CD quality gates.
+Follow these 4 phases to get your mobile development environment up and running smoothly:
 
-- ➔ Open [1.2 New Mobile Engineer Track](/mobile/onboarding/new-engineer-onboarding/)
+<Steps>
 
-### Track B: Web & Backend Developers ("Mobile 100")
-Designed for engineers transitioning from web or backend microservices. Covers mobile binary compilation, activity/view lifecycles, app signing certificates, and offline-first caching strategies.
+1. **Understand the Ecosystem**
+   Read [1.1 Platform Overview](/mobile/onboarding/platform-overview/) to learn about our team structure, governance model, and core architectural pillars.
 
-- ➔ Open [1.3 Non-Mobile Engineer Track](/mobile/onboarding/non-mobile-engineer-guide/)
+2. **Select Your Technology Stack**
+   Review [1.4 Tech Stack Selection](/mobile/onboarding/tech-stack-selection/) to determine whether React Native or Native iOS/Android fits your application requirements.
+
+3. **Set Up Your Workstation**
+   Follow the step-by-step [1.5 Machine Setup Guide](/mobile/onboarding/machine-setup/) for macOS or Windows to install Xcode, Android Studio, Node.js, and root certificates.
+
+4. **Complete Your Checklist & Submit Your First PR**
+   Use the [1.2 New Mobile Engineer Track](/mobile/onboarding/new-engineer-onboarding/) checklist to verify your local build and submit your first pull request via Bitrise CI/CD.
+
+</Steps>
 
 ---
 
