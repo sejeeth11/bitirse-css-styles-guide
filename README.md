@@ -68,17 +68,16 @@ Need help during setup? Connect with the mobile platform team:
 - **Architecture Guild Meeting:** Thursdays @ 10:00 AM EST
 - **Documentation RFCs:** Submit an RFC or PR to update this portal.
 
-{/* Client-side Mermaid Hydration Script */}
 <script is:inline src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
 <script is:inline>
-  if (typeof window !== 'undefined') {
-    window.addEventListener('DOMContentLoaded', () => {
-      mermaid.initialize({
+  window.addEventListener('DOMContentLoaded', function() {
+    if (window.mermaid) {
+      window.mermaid.initialize({
         startOnLoad: true,
         theme: 'default',
         flowchart: { useMaxWidth: true, htmlLabels: true, curve: 'basis' }
       });
-      mermaid.contentLoaded();
-    });
-  }
+      window.mermaid.contentLoaded();
+    }
+  });
 </script>
