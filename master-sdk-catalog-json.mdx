@@ -1,1 +1,63 @@
 
+---
+title: "3.4 Master Shared SDK Catalog"
+description: "Unified enterprise SDK repository and installation guide for Android Native, iOS Native, and React Native platforms."
+sidebar:
+  order: 4
+---
+
+import SdkCatalog from '../../../components/SdkCatalog.astro';
+import { Aside, Steps, Tabs, TabItem } from '@astrojs/starlight/components';
+
+<Aside type="tip" title="Enterprise Data-Driven Catalog">
+  This catalog is populated dynamically from `src/data/sdks.json`. You can add, edit, or remove SDK entries in JSON at any time without modifying page code.
+</Aside>
+
+---
+
+## 3.4.1 Enterprise Mobile Packages
+
+<SdkCatalog />
+
+---
+
+## 3.4.2 Shared SDK Registry Credentials Setup
+
+<Steps>
+1. **Configure Repository Credentials**
+   Add your enterprise Nexus / GitHub Packages token to your local build configuration:
+
+   <Tabs>
+     <TabItem label="Android (gradle.properties)">
+       ```ini
+       # ~/.gradle/gradle.properties
+       gpr.user=YOUR_ENTERPRISE_USERNAME
+       gpr.key=YOUR_PERSONAL_ACCESS_TOKEN
+       ```
+     </TabItem>
+     <TabItem label="iOS (.netrc)">
+       ```ini
+       # ~/.netrc
+       machine github.enterprise.com
+       login YOUR_ENTERPRISE_USERNAME
+       password YOUR_PERSONAL_ACCESS_TOKEN
+       ```
+     </TabItem>
+     <TabItem label="React Native (.npmrc)">
+       ```ini
+       # ~/.npmrc
+       @enterprise:registry=https://npm.enterprise.com/
+       //npm.enterprise.com/:_authToken=YOUR_ENTERPRISE_TOKEN
+       ```
+     </TabItem>
+   </Tabs>
+
+2. **Verify Version Compatibility**
+   Check that all SDKs in your project target matching major version releases to prevent binary runtime conflicts.
+
+3. **Validate Installation**
+   Run the platform validation command:
+   - **Android:** `./gradlew dependencies`
+   - **iOS:** `pod install --repo-update` or `xcodebuild -resolvePackageDependencies`
+   - **React Native:** `npx react-native doctor`
+</Steps>
