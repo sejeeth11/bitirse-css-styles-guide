@@ -1,0 +1,417 @@
+---
+import sdks from '../data/sdks.json';
+---
+
+<div class="sdk-catalog-container">
+
+  <!-- Filter Pills Bar (Pure SVG Icons, 0 Emojis) -->
+  <div class="sdk-filter-bar">
+    <span class="filter-label">Filter Platform:</span>
+    <button class="sdk-filter-btn active" data-filter="all">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+      </svg>
+      All SDKs ({sdks.length})
+    </button>
+    
+    <button class="sdk-filter-btn" data-filter="android">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M17.523 15.3414c-.5511 0-.9993-.4486-.9993-.9997 0-.551.4482-.9993.9993-.9993.5516 0 .9997.4483.9997.9993 0 .5511-.4481.9997-.9997.9997zm-11.046 0c-.5511 0-.9993-.4486-.9993-.9997 0-.551.4482-.9993.9993-.9993.5516 0 .9997.4483.9997.9993 0 .5511-.4481.9997-.9997.9997zm11.4045-6.02l1.9973-3.4592a.416.416 0 00-.1522-.5676.416.416 0 00-.5676.1522l-2.0223 3.5028C15.594 8.2727 13.854 7.848 12 7.848c-1.854 0-3.594.4247-5.1367 1.1017L4.841 5.4468a.416.416 0 00-.5676-.1522.416.416 0 00-.1522.5676l1.9973 3.4592C2.688 11.2386.35 14.659.006 18.72h23.988c-.344-4.061-2.682-7.4814-6.1125-9.3986z"/>
+      </svg>
+      Android
+    </button>
+    
+    <button class="sdk-filter-btn" data-filter="ios">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M15.97 4.54c.66-.8 1.11-1.92.99-3.04-0.96.04-2.12.64-2.81 1.44-.61.71-1.15 1.85-1.01 2.95 1.08.08 2.18-.55 2.83-1.35z"/>
+      </svg>
+      iOS
+    </button>
+    
+    <button class="sdk-filter-btn" data-filter="react-native">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="2"/>
+        <ellipse cx="12" cy="12" rx="9" ry="3"/>
+        <ellipse cx="12" cy="12" rx="9" ry="3" transform="rotate(60 12 12)"/>
+        <ellipse cx="12" cy="12" rx="9" ry="3" transform="rotate(120 12 12)"/>
+      </svg>
+      React Native
+    </button>
+  </div>
+
+  <!-- Dynamic Card Grid -->
+  <div class="sdk-grid">
+    {sdks.map((sdk) => (
+      <div class="sdk-card" data-platforms={sdk.platforms.join(' ')}>
+        <div class="sdk-card-top">
+          <div class="sdk-card-header">
+            <h3 class="sdk-title">{sdk.name}</h3>
+            <span class="sdk-version">{sdk.version}</span>
+          </div>
+          <p class="sdk-desc">{sdk.description}</p>
+          <div class="sdk-badges">
+            {sdk.platforms.includes('android') && (
+              <span class="sdk-badge android">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M17.523 15.3414c-.5511 0-.9993-.4486-.9993-.9997 0-.551.4482-.9993.9993-.9993.5516 0 .9997.4483.9997.9993 0 .5511-.4481.9997-.9997.9997zm-11.046 0c-.5511 0-.9993-.4486-.9993-.9997 0-.551.4482-.9993.9993-.9993.5516 0 .9997.4483.9997.9993 0 .5511-.4481.9997-.9997.9997zm11.4045-6.02l1.9973-3.4592a.416.416 0 00-.1522-.5676.416.416 0 00-.5676.1522l-2.0223 3.5028C15.594 8.2727 13.854 7.848 12 7.848c-1.854 0-3.594.4247-5.1367 1.1017L4.841 5.4468a.416.416 0 00-.5676-.1522.416.416 0 00-.1522.5676l1.9973 3.4592C2.688 11.2386.35 14.659.006 18.72h23.988c-.344-4.061-2.682-7.4814-6.1125-9.3986z"/></svg>
+                Android
+              </span>
+            )}
+            {sdk.platforms.includes('ios') && (
+              <span class="sdk-badge ios">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M15.97 4.54c.66-.8 1.11-1.92.99-3.04-0.96.04-2.12.64-2.81 1.44-.61.71-1.15 1.85-1.01 2.95 1.08.08 2.18-.55 2.83-1.35z"/></svg>
+                iOS
+              </span>
+            )}
+            {sdk.platforms.includes('react-native') && (
+              <span class="sdk-badge rn">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="2"/><ellipse cx="12" cy="12" rx="9" ry="3"/><ellipse cx="12" cy="12" rx="9" ry="3" transform="rotate(60 12 12)"/><ellipse cx="12" cy="12" rx="9" ry="3" transform="rotate(120 12 12)"/></svg>
+                React Native
+              </span>
+            )}
+          </div>
+        </div>
+
+        {/* Highlighted Action Button */}
+        <button class="sdk-btn-highlight" data-sdk-id={sdk.id}>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="16 18 22 12 16 6"></polyline>
+            <polyline points="8 6 2 12 8 18"></polyline>
+          </svg>
+          View Installation Instructions
+        </button>
+      </div>
+    ))}
+  </div>
+
+</div>
+
+<!-- Modal Popup for Installation -->
+<div id="sdk-install-modal" class="sdk-modal-overlay">
+  <div class="sdk-modal-content">
+    <div class="sdk-modal-header">
+      <div>
+        <h3 id="modal-sdk-name">SDK Title</h3>
+        <p id="modal-sdk-sub">Installation & Setup Guide</p>
+      </div>
+      <button class="sdk-modal-close" id="close-sdk-modal" aria-label="Close modal">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    
+    <div id="modal-platform-tabs" class="sdk-modal-tabs"></div>
+    <div id="modal-code-body" class="sdk-modal-body"></div>
+  </div>
+</div>
+
+<script define:vars={{ sdks }}>
+  document.addEventListener('DOMContentLoaded', () => {
+    const filterBtns = document.querySelectorAll('.sdk-filter-btn');
+    const cards = document.querySelectorAll('.sdk-card');
+    const modal = document.getElementById('sdk-install-modal');
+    const closeModalBtn = document.getElementById('close-sdk-modal');
+    const highlightBtns = document.querySelectorAll('.sdk-btn-highlight');
+
+    // Filter Logic
+    filterBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        filterBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const filter = btn.getAttribute('data-filter');
+
+        cards.forEach(card => {
+          const platforms = card.getAttribute('data-platforms').split(' ');
+          if (filter === 'all' || platforms.includes(filter)) {
+            card.style.display = 'flex';
+          } else {
+            card.style.display = 'none';
+          }
+        });
+      });
+    });
+
+    // Modal Trigger
+    highlightBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const sdkId = btn.getAttribute('data-sdk-id');
+        const sdk = sdks.find(s => s.id === sdkId);
+        if (!sdk) return;
+
+        document.getElementById('modal-sdk-name').textContent = sdk.name;
+        document.getElementById('modal-sdk-sub').textContent = `Version ${sdk.version} • Installation Setup`;
+
+        const tabsContainer = document.getElementById('modal-platform-tabs');
+        const codeBody = document.getElementById('modal-code-body');
+        tabsContainer.innerHTML = '';
+        codeBody.innerHTML = '';
+
+        const platformKeys = Object.keys(sdk.installation);
+        platformKeys.forEach((key, idx) => {
+          const item = sdk.installation[key];
+
+          // Tab Button
+          const tabBtn = document.createElement('button');
+          tabBtn.className = `sdk-tab-btn ${idx === 0 ? 'active' : ''}`;
+          tabBtn.textContent = item.title;
+          tabBtn.addEventListener('click', () => {
+            document.querySelectorAll('.sdk-tab-btn').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.sdk-code-pane').forEach(p => p.style.display = 'none');
+            tabBtn.classList.add('active');
+            document.getElementById(`code-pane-${key}`).style.display = 'block';
+          });
+          tabsContainer.appendChild(tabBtn);
+
+          // Code Pane
+          const pane = document.createElement('div');
+          pane.className = 'sdk-code-pane';
+          pane.id = `code-pane-${key}`;
+          pane.style.display = idx === 0 ? 'block' : 'none';
+          pane.innerHTML = `<pre><code>${escapeHtml(item.code)}</code></pre>`;
+          codeBody.appendChild(pane);
+        });
+
+        modal.classList.add('active');
+      });
+    });
+
+    if (closeModalBtn) {
+      closeModalBtn.addEventListener('click', () => modal.classList.remove('active'));
+    }
+    if (modal) {
+      modal.addEventListener('click', (e) => {
+        if (e.target === modal) modal.classList.remove('active');
+      });
+    }
+
+    function escapeHtml(str) {
+      return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+    }
+  });
+</script>
+
+<style>
+  /* CARGILL BRAND & DARK GREEN THEME VARIABLES */
+  :root {
+    --cargill-green: #008544;
+    --cargill-green-hover: #006b37;
+    
+    /* Default / Light Theme */
+    --sdk-bg: #ffffff;
+    --sdk-surface: #ffffff;
+    --sdk-border: #dcfce7;
+    --sdk-text: #052e16;
+    --sdk-text-muted: #166534;
+    --sdk-code-bg: #052014;
+    --sdk-modal-overlay: rgba(5, 46, 22, 0.5);
+  }
+
+  /* CUSTOM DARK GREEN THEME (Active when website uses Dark Mode) */
+  :root[data-theme='dark'],
+  [data-theme='dark'] {
+    --sdk-bg: #041c10;
+    --sdk-surface: #0a2e1c;
+    --sdk-border: #14532d;
+    --sdk-text: #f0fdf4;
+    --sdk-text-muted: #86efac;
+    --sdk-code-bg: #02140b;
+    --sdk-modal-overlay: rgba(2, 20, 11, 0.85);
+  }
+
+  .sdk-catalog-container { margin: 1.5rem 0 3rem 0; }
+
+  /* Filter Bar */
+  .sdk-filter-bar {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    margin-bottom: 1.5rem;
+  }
+  .filter-label {
+    font-weight: 600;
+    font-size: 0.9rem;
+    margin-right: 0.5rem;
+    color: var(--sdk-text);
+  }
+  .sdk-filter-btn {
+    background: var(--sdk-surface);
+    border: 1px solid var(--sdk-border);
+    color: var(--sdk-text);
+    padding: 0.45rem 1.1rem;
+    border-radius: 9999px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .sdk-filter-btn svg { flex-shrink: 0; }
+  .sdk-filter-btn:hover { border-color: var(--cargill-green); }
+  .sdk-filter-btn.active {
+    background: var(--cargill-green);
+    color: #ffffff;
+    border-color: var(--cargill-green);
+    box-shadow: 0 4px 14px rgba(0, 133, 68, 0.4);
+  }
+
+  /* Card Grid */
+  .sdk-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 1.25rem;
+  }
+
+  .sdk-card {
+    background: var(--sdk-surface);
+    border: 1px solid var(--sdk-border);
+    border-radius: 12px;
+    padding: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+  }
+  .sdk-card:hover {
+    transform: translateY(-3px);
+    border-color: #22c55e;
+    box-shadow: 0 8px 24px rgba(0, 133, 68, 0.2);
+  }
+
+  .sdk-card-top { margin-bottom: 1.25rem; }
+
+  .sdk-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5rem;
+  }
+  .sdk-title {
+    font-size: 1.15rem;
+    font-weight: 700;
+    margin: 0;
+    color: var(--sdk-text);
+  }
+  .sdk-version {
+    font-size: 0.75rem;
+    font-weight: 700;
+    background: var(--cargill-green);
+    color: #ffffff;
+    padding: 2px 8px;
+    border-radius: 4px;
+  }
+  .sdk-desc {
+    font-size: 0.88rem;
+    color: var(--sdk-text-muted);
+    margin-bottom: 1rem;
+    line-height: 1.45;
+  }
+
+  .sdk-badges { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+  .sdk-badge {
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 3px 10px;
+    border-radius: 6px;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+  }
+  .sdk-badge.android { background: rgba(34, 197, 94, 0.2); color: #4ade80; border: 1px solid rgba(34, 197, 94, 0.4); }
+  .sdk-badge.ios { background: rgba(59, 130, 246, 0.2); color: #60a5fa; border: 1px solid rgba(59, 130, 246, 0.4); }
+  .sdk-badge.rn { background: rgba(56, 189, 248, 0.2); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.4); }
+
+  /* Highlighted Action Button */
+  .sdk-btn-highlight {
+    width: 100%;
+    background: var(--cargill-green);
+    color: #ffffff;
+    border: none;
+    padding: 0.7rem 1rem;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 0.88rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    transition: all 0.2s ease;
+    box-shadow: 0 4px 12px rgba(0, 133, 68, 0.35);
+  }
+  .sdk-btn-highlight:hover {
+    background: var(--cargill-green-hover);
+    transform: translateY(-1px);
+    box-shadow: 0 6px 16px rgba(0, 133, 68, 0.5);
+  }
+
+  /* Modal Popup */
+  .sdk-modal-overlay {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: var(--sdk-modal-overlay);
+    backdrop-filter: blur(4px);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    padding: 1rem;
+  }
+  .sdk-modal-overlay.active { display: flex; }
+
+  .sdk-modal-content {
+    background: var(--sdk-surface);
+    border: 1px solid var(--sdk-border);
+    border-radius: 14px;
+    max-width: 640px;
+    width: 100%;
+    padding: 1.5rem;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
+  }
+
+  .sdk-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 1rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid var(--sdk-border);
+  }
+  .sdk-modal-header h3 { margin: 0; font-size: 1.25rem; color: var(--sdk-text); }
+  .sdk-modal-header p { margin: 0.2rem 0 0 0; font-size: 0.85rem; color: var(--sdk-text-muted); }
+  .sdk-modal-close {
+    background: none; border: none; color: var(--sdk-text-muted); cursor: pointer; display: flex; align-items: center; justify-content: center;
+  }
+  .sdk-modal-close:hover { color: var(--sdk-text); }
+
+  .sdk-modal-tabs {
+    display: flex;
+    gap: 0.5rem;
+    border-bottom: 1px solid var(--sdk-border);
+    margin-bottom: 1rem;
+  }
+  .sdk-tab-btn {
+    background: none;
+    border: none;
+    padding: 0.5rem 1rem;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--sdk-text-muted);
+    border-bottom: 2px solid transparent;
+    cursor: pointer;
+  }
+  .sdk-tab-btn.active {
+    color: #4ade80;
+    border-bottom-color: #4ade80;
+  }
+
+  .sdk-modal-body pre {
+    background: var(--sdk-code-bg);
+    border: 1px solid var(--sdk-border);
+    padding: 1rem;
+    border-radius: 8px;
+    overflow-x: auto;
+    font-size: 0.85rem;
+    color: #f0fdf4;
+  }
+</style>
