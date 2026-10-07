@@ -1,3 +1,4 @@
+
 [
   {
     "id": "auth-sdk",
@@ -8,57 +9,15 @@
     "installation": {
       "android": {
         "title": "Android (Gradle)",
-        "mdFile": "auth-android.md"
+        "mdFile": "android/auth-sdk.md"
       },
       "ios": {
         "title": "iOS (Podfile)",
-        "mdFile": "auth-ios.md"
+        "mdFile": "ios/auth-sdk.md"
       },
       "react-native": {
         "title": "React Native (npm)",
-        "mdFile": "auth-rn.md"
-      }
-    }
-  },
-  {
-    "id": "resilience-sdk",
-    "name": "Resilience & Circuit Breaker",
-    "version": "v1.8.2",
-    "description": "Automatic HTTP retry policies, exponential backoff algorithm, offline fallback caching, and circuit breaking.",
-    "platforms": ["android", "ios", "react-native"],
-    "installation": {
-      "android": {
-        "title": "Android (Gradle)",
-        "mdFile": "resilience-android.md"
-      },
-      "ios": {
-        "title": "iOS (Podfile)",
-        "mdFile": "resilience-ios.md"
-      },
-      "react-native": {
-        "title": "React Native (npm)",
-        "mdFile": "resilience-rn.md"
-      }
-    }
-  },
-  {
-    "id": "ui-kit",
-    "name": "Design System UI Kit",
-    "version": "v3.1.0",
-    "description": "Standardized buttons, input fields, modals, design tokens, dark mode support, and WCAG AA accessibility.",
-    "platforms": ["android", "ios", "react-native"],
-    "installation": {
-      "android": {
-        "title": "Android (Compose)",
-        "mdFile": "ui-kit-android.md"
-      },
-      "ios": {
-        "title": "iOS (SwiftUI)",
-        "mdFile": "ui-kit-ios.md"
-      },
-      "react-native": {
-        "title": "React Native (npm)",
-        "mdFile": "ui-kit-rn.md"
+        "mdFile": "react-native/auth-sdk.md"
       }
     }
   }
