@@ -8,15 +8,15 @@
     "installation": {
       "android": {
         "title": "Android (Gradle)",
-        "code": "// build.gradle.kts\ndependencies {\n    implementation(\"com.enterprise.mobile:auth-sdk:2.4.0\")\n}\n\n// Quick Initialization\nEnterpriseAuth.initialize(\n    context = applicationContext,\n    clientId = \"mobile-app-client-id\"\n)"
+        "mdFile": "auth-android.md"
       },
       "ios": {
         "title": "iOS (Podfile)",
-        "code": "// Podfile\npod 'EnterpriseAuth', '~> 2.4.0'\n\n// Usage\nimport EnterpriseAuth\nEnterpriseAuth.shared.configure(clientId: \"mobile-app-client-id\")"
+        "mdFile": "auth-ios.md"
       },
       "react-native": {
         "title": "React Native (npm)",
-        "code": "npm install @enterprise/react-native-auth@^2.4.0\ncd ios && pod install\n\n// Usage\nimport { EnterpriseAuth } from '@enterprise/react-native-auth';\nawait EnterpriseAuth.configure({ clientId: 'mobile-app-client-id' });"
+        "mdFile": "auth-rn.md"
       }
     }
   },
@@ -29,28 +29,15 @@
     "installation": {
       "android": {
         "title": "Android (Gradle)",
-        "code": "// build.gradle.kts\ndependencies {\n    implementation(\"com.enterprise.mobile:resilience-sdk:1.8.2\")\n}\n\nval okHttpClient = OkHttpClient.Builder()\n    .addInterceptor(ResilienceInterceptor(maxRetries = 3))\n    .build()"
+        "mdFile": "resilience-android.md"
       },
       "ios": {
         "title": "iOS (Podfile)",
-        "code": "// Podfile\npod 'EnterpriseResilience', '~> 1.8.2'\n\nlet config = URLSessionConfiguration.default\nEnterpriseResilience.enable(for: config, maxRetries: 3)"
+        "mdFile": "resilience-ios.md"
       },
       "react-native": {
         "title": "React Native (npm)",
-        "code": "npm install @enterprise/react-native-resilience@^1.8.2\n\nimport { createResilientAxios } from '@enterprise/react-native-resilience';\nconst api = createResilientAxios({ retryCount: 3 });"
-      }
-    }
-  },
-  {
-    "id": "android-biometrics",
-    "name": "Android Biometric Vault",
-    "version": "v1.2.0",
-    "description": "Android Native specific KeyStore BiometricPrompt handler for hardware fingerprint & face unlock.",
-    "platforms": ["android"],
-    "installation": {
-      "android": {
-        "title": "Android Only (Gradle)",
-        "code": "// build.gradle.kts\ndependencies {\n    implementation(\"com.enterprise.mobile:android-biometrics:1.2.0\")\n}\n\n// Trigger Biometric Unlock\nBiometricVault.prompt(\n    activity = this,\n    title = \"Unlock App\",\n    onSuccess = { token -> /* Logged in */ }\n)"
+        "mdFile": "resilience-rn.md"
       }
     }
   },
@@ -63,45 +50,15 @@
     "installation": {
       "android": {
         "title": "Android (Compose)",
-        "code": "// build.gradle.kts\ndependencies {\n    implementation(\"com.enterprise.mobile:ui-components:3.1.0\")\n}\n\nEnterpriseTheme {\n    EnterprisePrimaryButton(text = \"Submit Order\", onClick = {})\n}"
+        "mdFile": "ui-kit-android.md"
       },
       "ios": {
         "title": "iOS (SwiftUI)",
-        "code": "// Podfile\npod 'EnterpriseUI', '~> 3.1.0'\n\nimport EnterpriseUI\nEnterpriseButton(title: \"Submit Order\", action: {})"
+        "mdFile": "ui-kit-ios.md"
       },
       "react-native": {
         "title": "React Native (npm)",
-        "code": "npm install @enterprise/react-native-ui@^3.1.0\n\nimport { EnterpriseProvider, Button } from '@enterprise/react-native-ui';\n<EnterpriseProvider><Button>Submit</Button></EnterpriseProvider>"
-      }
-    }
-  },
-  {
-    "id": "rn-haptics",
-    "name": "React Native Haptic Engine",
-    "version": "v1.0.4",
-    "description": "React Native specific native haptic feedback wrapper for custom vibration patterns and tactile responses.",
-    "platforms": ["react-native"],
-    "installation": {
-      "react-native": {
-        "title": "React Native Only (npm)",
-        "code": "npm install @enterprise/react-native-haptics@^1.0.4\ncd ios && pod install\n\n// Usage\nimport { Haptic } from '@enterprise/react-native-haptics';\nHaptic.trigger('impactHeavy');"
-      }
-    }
-  },
-  {
-    "id": "telemetry-sdk",
-    "name": "Telemetry & Observability",
-    "version": "v2.1.4",
-    "description": "Datadog / OpenTelemetry Real User Monitoring (RUM), automated crash reporting, and network tracing.",
-    "platforms": ["android", "ios"],
-    "installation": {
-      "android": {
-        "title": "Android (Gradle)",
-        "code": "// build.gradle.kts\ndependencies {\n    implementation(\"com.enterprise.mobile:telemetry-sdk:2.1.4\")\n}\n\nEnterpriseTelemetry.builder(this)\n    .setEnvironment(\"production\")\n    .enableCrashReporting(true)\n    .build()"
-      },
-      "ios": {
-        "title": "iOS (Podfile)",
-        "code": "// Podfile\npod 'EnterpriseTelemetry', '~> 2.1.4'\n\nimport EnterpriseTelemetry\nEnterpriseTelemetry.start(clientToken: \"rum_token\", environment: \"prod\")"
+        "mdFile": "ui-kit-rn.md"
       }
     }
   }
