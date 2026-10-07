@@ -1,7 +1,6 @@
 ---
 // src/components/mobile/SdkCatalog.astro
 
-// Dynamically import all .md files in the project
 const importedMdFiles = import.meta.glob('/src/**/*.{md,mdx}', { eager: true, query: '?raw' });
 
 function getMdContentFromFile(fileKey: string) {
@@ -16,15 +15,15 @@ function getMdContentFromFile(fileKey: string) {
 
 const defaultSdks = [
   {
-    "id": "auth-sdk",
-    "name": "Auth & Identity SDK",
-    "version": "v2.4.0",
-    "description": "OAuth 2.0 / OIDC user login, PKCE flow, biometric key storage, and automated JWT token refresh.",
+    "id": "ui-kit",
+    "name": "Design System UI Kit",
+    "version": "v3.1.0",
+    "description": "Standardized buttons, input fields, modals, design tokens, dark mode support, and WCAG AA accessibility.",
     "platforms": ["android", "ios", "react-native"],
     "installation": {
-      "android": { "title": "Android (Gradle)", "mdFile": "android/auth-sdk.md" },
-      "ios": { "title": "iOS (Podfile)", "mdFile": "ios/auth-sdk.md" },
-      "react-native": { "title": "React Native (npm)", "mdFile": "react-native/auth-sdk.md" }
+      "android": { "title": "Android (Compose)", "mdFile": "ui-kit-android.md" },
+      "ios": { "title": "iOS (SwiftUI)", "mdFile": "ui-kit-ios.md" },
+      "react-native": { "title": "React Native (npm)", "mdFile": "ui-kit-rn.md" }
     }
   }
 ];
@@ -55,8 +54,6 @@ const processedSdks = sdks.map((sdk: any) => {
 ---
 
 <div class="sdk-catalog-container">
-
-  <!-- Platform Filter Bar (100% Pure SVG Icons, 0 Emojis) -->
   <div class="sdk-filter-bar">
     <span class="filter-label">Filter Platform:</span>
     <button class="sdk-filter-btn active" data-filter="all">
@@ -77,7 +74,6 @@ const processedSdks = sdks.map((sdk: any) => {
     </button>
   </div>
 
-  <!-- 3-Column Card Grid -->
   <div class="sdk-grid">
     {processedSdks && processedSdks.map((sdk: any) => (
       <div class="sdk-card" data-sdk-id={sdk.id} data-platforms={sdk.platforms ? sdk.platforms.join(' ') : ''}>
@@ -100,15 +96,12 @@ const processedSdks = sdks.map((sdk: any) => {
           </div>
         </div>
 
-        <!-- Inline Accordion Trigger Button -->
         <button class="sdk-btn-accordion" aria-expanded="false">
           <span class="btn-text">Expand Installation Setup</span>
-          <svg class="chevron-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+          <svg class="chevron-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
         </button>
 
-        <!-- Inline Expandable Drawer Panel -->
         <div class="sdk-inline-drawer">
-          <!-- STICKY PLATFORM TABS BAR (NEVER SCROLLS) -->
           <div class="drawer-tabs">
             {sdk.installation && Object.keys(sdk.installation).map((platformKey: string, idx: number) => {
               const item = sdk.installation[platformKey];
@@ -120,7 +113,6 @@ const processedSdks = sdks.map((sdk: any) => {
             })}
           </div>
 
-          <!-- ONLY THE DRAWER BODY SCROLLS UNDER TABS -->
           <div class="drawer-body">
             {sdk.installation && Object.keys(sdk.installation).map((platformKey: string, idx: number) => {
               const item = sdk.installation[platformKey];
@@ -148,7 +140,6 @@ const processedSdks = sdks.map((sdk: any) => {
       </div>
     ))}
   </div>
-
 </div>
 
 <script>
@@ -203,7 +194,6 @@ const processedSdks = sdks.map((sdk: any) => {
       renderAllMarkdownElements();
 
       document.addEventListener('click', (e) => {
-        // 1. Filter Buttons
         const filterBtn = e.target.closest('.sdk-filter-btn');
         if (filterBtn) {
           document.querySelectorAll('.sdk-filter-btn').forEach(b => b.classList.remove('active'));
@@ -221,7 +211,6 @@ const processedSdks = sdks.map((sdk: any) => {
           return;
         }
 
-        // 2. Inline Accordion Toggle
         const accordionBtn = e.target.closest('.sdk-btn-accordion');
         if (accordionBtn) {
           const card = accordionBtn.closest('.sdk-card');
@@ -240,7 +229,6 @@ const processedSdks = sdks.map((sdk: any) => {
           return;
         }
 
-        // 3. Drawer Platform Tabs Switcher
         const tabBtn = e.target.closest('.drawer-tab-btn');
         if (tabBtn) {
           const card = tabBtn.closest('.sdk-card');
@@ -295,47 +283,21 @@ const processedSdks = sdks.map((sdk: any) => {
   }
 
   .sdk-catalog-container { margin: 1.5rem 0 3rem 0; }
-
-  /* Filter Bar */
-  .sdk-filter-bar {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    flex-wrap: wrap;
-    margin-bottom: 1.5rem;
-  }
+  .sdk-filter-bar { display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 1.5rem; }
   .filter-label { font-weight: 600; font-size: 0.9rem; margin-right: 0.5rem; color: var(--sdk-text); }
-  .sdk-filter-btn {
-    background: var(--sdk-surface);
-    border: 1px solid var(--sdk-border);
-    color: var(--sdk-text);
-    padding: 0.45rem 1.1rem;
-    border-radius: 9999px;
-    font-size: 0.85rem;
-    font-weight: 600;
-    cursor: pointer;
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    transition: all 0.2s ease;
-  }
-  .sdk-filter-btn.active {
-    background: var(--cargill-green);
-    color: #ffffff;
-    border-color: var(--cargill-green);
-  }
+  .sdk-filter-btn { background: var(--sdk-surface); border: 1px solid var(--sdk-border); color: var(--sdk-text); padding: 0.45rem 1.1rem; border-radius: 9999px; font-size: 0.85rem; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 0.5rem; }
+  .sdk-filter-btn.active { background: var(--cargill-green); color: #ffffff; border-color: var(--cargill-green); }
 
-  /* 3-COLUMN GRID */
+  /* STRICT 3-COLUMN GRID LOCK */
   .sdk-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
     gap: 1.25rem;
     align-items: start;
   }
-  @media (max-width: 1024px) { .sdk-grid { grid-template-columns: repeat(2, 1fr); } }
-  @media (max-width: 640px) { .sdk-grid { grid-template-columns: 1fr; } }
+  @media (max-width: 1024px) { .sdk-grid { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; } }
+  @media (max-width: 640px) { .sdk-grid { grid-template-columns: minmax(0, 1fr) !important; } }
 
-  /* CARD STYLING */
   .sdk-card {
     background: var(--sdk-surface);
     border: 1px solid var(--sdk-border);
@@ -344,248 +306,67 @@ const processedSdks = sdks.map((sdk: any) => {
     display: flex;
     flex-direction: column;
     box-shadow: var(--sdk-card-shadow);
-    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    min-width: 0 !important;
+    word-break: break-word;
+    overflow-wrap: break-word;
   }
-  .sdk-card:hover {
-    border-color: var(--cargill-green);
-    box-shadow: var(--sdk-card-hover-shadow);
-  }
+  .sdk-card:hover { border-color: var(--cargill-green); box-shadow: var(--sdk-card-hover-shadow); }
 
-  .sdk-card-top {
-    display: flex;
-    flex-direction: column;
-    flex-grow: 1;
-    margin-bottom: 1.25rem;
-  }
-
-  .sdk-card-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 0.5rem;
-  }
+  .sdk-card-top { display: flex; flex-direction: column; flex-grow: 1; margin-bottom: 1.25rem; }
+  .sdk-card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem; }
   .sdk-title { font-size: 1.15rem; font-weight: 700; margin: 0; color: var(--sdk-text); }
-  .sdk-version {
-    font-size: 0.75rem;
-    font-weight: 700;
-    background: var(--cargill-green);
-    color: #ffffff;
-    padding: 2px 8px;
-    border-radius: 4px;
-    flex-shrink: 0;
-  }
+  .sdk-version { font-size: 0.75rem; font-weight: 700; background: var(--cargill-green); color: #ffffff; padding: 2px 8px; border-radius: 4px; flex-shrink: 0; }
 
-  .sdk-desc {
-    font-size: 0.88rem;
-    color: var(--sdk-text-muted);
-    margin-bottom: 1.25rem;
-    line-height: 1.45;
-    display: -webkit-box;
-    -webkit-line-clamp: 3;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-    min-height: 3.9em;
-  }
+  .sdk-desc { font-size: 0.88rem; color: var(--sdk-text-muted); margin-bottom: 1.25rem; line-height: 1.45; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; min-height: 3.9em; }
 
-  .sdk-badges {
-    display: flex;
-    gap: 0.5rem;
-    flex-wrap: wrap;
-    margin-top: auto;
-    min-height: 28px;
-    align-items: center;
-  }
-  .sdk-badge {
-    font-size: 0.75rem;
-    font-weight: 600;
-    padding: 3px 10px;
-    border-radius: 6px;
-    display: inline-flex;
-    align-items: center;
-    gap: 5px;
-  }
+  .sdk-badges { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: auto; min-height: 28px; align-items: center; }
+  .sdk-badge { font-size: 0.75rem; font-weight: 600; padding: 3px 10px; border-radius: 6px; display: inline-flex; align-items: center; gap: 5px; }
   .sdk-badge.android { background: rgba(34, 197, 94, 0.15); color: #15803d; border: 1px solid rgba(34, 197, 94, 0.4); }
   .sdk-badge.ios { background: rgba(59, 130, 246, 0.15); color: #1d4ed8; border: 1px solid rgba(59, 130, 246, 0.4); }
   .sdk-badge.rn { background: rgba(56, 189, 248, 0.15); color: #0369a1; border: 1px solid rgba(56, 189, 248, 0.4); }
 
-  /* INLINE ACCORDION BUTTON */
-  .sdk-btn-accordion {
-    width: 100%;
-    background: var(--cargill-green);
-    color: #ffffff;
-    border: none;
-    padding: 0.75rem 1rem;
-    border-radius: 8px;
-    font-weight: 600;
-    font-size: 0.88rem;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    transition: background 0.2s ease;
-    margin-top: auto;
-  }
+  .sdk-btn-accordion { width: 100%; background: var(--cargill-green); color: #ffffff; border: none; padding: 0.75rem 1rem; border-radius: 8px; font-weight: 600; font-size: 0.88rem; cursor: pointer; display: flex; align-items: center; justify-content: space-between; margin-top: auto; }
   .sdk-btn-accordion:hover { background: var(--cargill-green-hover); }
-  .sdk-btn-accordion .chevron-icon { transition: transform 0.3s ease; }
-  .sdk-card.expanded .sdk-btn-accordion .chevron-icon { transform: rotate(180deg); }
 
-  /* FLEX CONTAINER FOR INLINE DRAWER (PREVENTS TAB OVERLAP & LEAKAGE) */
+  /* COMPACT FIXED HEIGHT DRAWER (300PX FIXED HEIGHT CAP) */
   .sdk-inline-drawer {
     max-height: 0;
     overflow: hidden;
-    transition: max-height 0.35s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.25s ease;
+    transition: max-height 0.35s ease, opacity 0.25s ease;
     opacity: 0;
     margin-top: 0;
     border-top: 0 solid var(--sdk-border);
     display: flex;
     flex-direction: column;
+    min-width: 0 !important;
   }
   .sdk-card.expanded .sdk-inline-drawer {
-    max-height: 480px;
+    height: 300px !important; /* COMPACT 300PX FIXED HEIGHT */
+    max-height: 300px !important;
     opacity: 1;
     margin-top: 1rem;
     padding-top: 0.75rem;
     border-top: 1px solid var(--sdk-border);
   }
 
-  /* STICKY PLATFORM TABS BAR (FIXED AT TOP OF DRAWER, NEVER SCROLLS) */
-  .drawer-tabs {
-    display: flex;
-    gap: 0.35rem;
-    border-bottom: 2px solid var(--sdk-border);
-    margin-bottom: 0.75rem;
-    background: var(--sdk-surface);
-    flex-shrink: 0;
-    z-index: 5;
-  }
-  .drawer-tab-btn {
-    background: none;
-    border: none;
-    padding: 0.45rem 0.85rem;
-    font-size: 0.82rem;
-    font-weight: 600;
-    color: var(--sdk-text-muted);
-    cursor: pointer;
-    border-bottom: 2px solid transparent;
-    transition: all 0.2s ease;
-  }
-  .drawer-tab-btn:hover { color: var(--cargill-green); }
-  .drawer-tab-btn.active {
-    color: var(--cargill-green);
-    border-bottom-color: var(--cargill-green);
-    background: rgba(0, 133, 68, 0.08);
-    border-radius: 4px 4px 0 0;
-  }
+  .drawer-tabs { display: flex; gap: 0.35rem; border-bottom: 2px solid var(--sdk-border); margin-bottom: 0.75rem; background: var(--sdk-surface); flex-shrink: 0; z-index: 5; }
+  .drawer-tab-btn { background: none; border: none; padding: 0.45rem 0.85rem; font-size: 0.82rem; font-weight: 600; color: var(--sdk-text-muted); cursor: pointer; border-bottom: 2px solid transparent; }
+  .drawer-tab-btn.active { color: var(--cargill-green); border-bottom-color: var(--cargill-green); background: rgba(0, 133, 68, 0.08); border-radius: 4px 4px 0 0; }
 
-  /* DRAWER BODY (ONLY THE BODY SCROLLS UNDER TABS) */
-  .drawer-body {
-    font-size: 0.84rem;
-    line-height: 1.5;
-    color: var(--sdk-text);
-    overflow-y: auto;
-    flex-grow: 1;
-    padding-right: 0.4rem;
-  }
-
-  /* CUSTOM CARGILL SCROLLBAR ON BODY */
+  .drawer-body { font-size: 0.84rem; line-height: 1.5; color: var(--sdk-text); overflow-y: auto; flex-grow: 1; padding-right: 0.4rem; min-width: 0 !important; word-break: break-word; overflow-wrap: break-word; }
   .drawer-body::-webkit-scrollbar { width: 6px; }
   .drawer-body::-webkit-scrollbar-track { background: rgba(0, 133, 68, 0.05); border-radius: 4px; }
   .drawer-body::-webkit-scrollbar-thumb { background: var(--cargill-green); border-radius: 4px; }
-  .drawer-body::-webkit-scrollbar-thumb:hover { background: var(--cargill-green-hover); }
 
-  .md-rendered-content h4 { margin: 0.6rem 0 0.3rem 0; font-size: 0.9rem; color: var(--sdk-text); }
-  .md-rendered-content ul { padding-left: 1.2rem; margin: 0.4rem 0 0.8rem 0; }
-  .md-rendered-content li { margin-bottom: 0.2rem; }
-  
-  .sdk-note-callout {
-    background: rgba(0, 133, 68, 0.1);
-    border-left: 3px solid var(--cargill-green);
-    padding: 0.5rem 0.75rem;
-    border-radius: 4px;
-    margin: 0.5rem 0;
-    font-size: 0.8rem;
-    color: var(--sdk-text);
-  }
-  .sdk-warning-callout {
-    background: rgba(234, 179, 8, 0.1);
-    border-left: 3px solid #d97706;
-    padding: 0.5rem 0.75rem;
-    border-radius: 4px;
-    margin: 0.5rem 0;
-    font-size: 0.8rem;
-    color: var(--sdk-text);
-  }
+  .md-rendered-content h1, .md-rendered-content h2 { font-size: 1.05rem !important; font-weight: 700 !important; margin: 0.8rem 0 0.4rem 0 !important; color: var(--sdk-text) !important; line-height: 1.35 !important; border-bottom: 1px solid var(--sdk-border); padding-bottom: 0.2rem; }
+  .md-rendered-content h3, .md-rendered-content h4 { font-size: 0.92rem !important; font-weight: 700 !important; margin: 0.6rem 0 0.3rem 0 !important; color: var(--sdk-text) !important; }
 
-  .inline-code {
-    background: rgba(0, 133, 68, 0.12);
-    color: var(--cargill-green);
-    padding: 2px 5px;
-    border-radius: 3px;
-    font-family: SFMono-Regular, Consolas, monospace;
-    font-size: 0.8rem;
-  }
+  .sdk-note-callout { background: rgba(0, 133, 68, 0.1); border-left: 3px solid var(--cargill-green); padding: 0.5rem 0.75rem; border-radius: 4px; margin: 0.5rem 0; font-size: 0.8rem; }
+  .inline-code { background: rgba(0, 133, 68, 0.12); color: var(--cargill-green); padding: 2px 5px; border-radius: 3px; font-family: monospace; font-size: 0.8rem; }
 
-  /* DARK BLACK BACKGROUND ON CODE BLOCKS */
-  .sdk-code-block,
-  .md-rendered-content .sdk-code-block {
-    background: #052014 !important;
-    border: 1px solid var(--sdk-border) !important;
-    border-radius: 6px !important;
-    margin: 0.5rem 0 0.8rem 0 !important;
-    overflow: hidden !important;
-  }
-  
-  .sdk-code-header,
-  .md-rendered-content .sdk-code-header {
-    background: rgba(255, 255, 255, 0.08) !important;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.15) !important;
-    padding: 0.35rem 0.65rem !important;
-    display: flex !important;
-    justify-content: space-between !important;
-    align-items: center !important;
-    font-size: 0.7rem !important;
-    font-weight: 700 !important;
-    color: #86efac !important;
-    text-transform: uppercase !important;
-  }
-  
-  .sdk-copy-btn {
-    background: rgba(255, 255, 255, 0.15) !important;
-    border: 1px solid rgba(255, 255, 255, 0.25) !important;
-    color: #ffffff !important;
-    padding: 2px 7px !important;
-    border-radius: 3px !important;
-    font-size: 0.65rem !important;
-    cursor: pointer !important;
-  }
-  .sdk-copy-btn:hover { background: var(--cargill-green) !important; }
+  .sdk-code-block { background: #052014 !important; border: 1px solid var(--sdk-border) !important; border-radius: 6px !important; margin: 0.5rem 0 0.8rem 0 !important; overflow: hidden !important; max-width: 100% !important; }
+  .sdk-code-header { background: rgba(255, 255, 255, 0.08) !important; border-bottom: 1px solid rgba(255, 255, 255, 0.15) !important; padding: 0.35rem 0.65rem !important; display: flex !important; justify-content: space-between !important; font-size: 0.7rem !important; font-weight: 700 !important; color: #86efac; text-transform: uppercase !important; }
+  .sdk-copy-btn { background: rgba(255, 255, 255, 0.15) !important; border: 1px solid rgba(255, 255, 255, 0.25) !important; color: #ffffff !important; padding: 2px 6px !important; border-radius: 3px !important; font-size: 0.65rem !important; cursor: pointer !important; }
 
-  .sdk-code-block pre,
-  .md-rendered-content pre,
-  .drawer-body pre,
-  pre:has(code) {
-    background: #052014 !important;
-    color: #f0fdf4 !important;
-    margin: 0 !important;
-    padding: 0.75rem !important;
-    font-size: 0.8rem !important;
-    line-height: 1.45 !important;
-    font-family: SFMono-Regular, Consolas, monospace !important;
-    overflow-x: auto !important;
-    border-radius: 0 0 6px 6px !important;
-  }
-
-  .sdk-code-block code,
-  .md-rendered-content pre code {
-    background: transparent !important;
-    color: #f0fdf4 !important;
-    padding: 0 !important;
-  }
-
-  [data-theme='dark'] .sdk-code-block,
-  [data-theme='dark'] .md-rendered-content .sdk-code-block,
-  [data-theme='dark'] .sdk-code-block pre,
-  [data-theme='dark'] .md-rendered-content pre {
-    background: #02140b !important;
-  }
+  .sdk-code-block pre, .md-rendered-content pre { background: #052014 !important; color: #f0fdf4 !important; margin: 0 !important; padding: 0.75rem !important; font-size: 0.78rem !important; line-height: 1.45 !important; font-family: monospace !important; overflow-x: auto !important; white-space: pre-wrap !important; word-break: break-all !important; }
 </style>
