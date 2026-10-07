@@ -74,6 +74,7 @@ const processedSdks = sdks.map((sdk: any) => {
     </button>
   </div>
 
+  <!-- 2-COLUMN RESPONSIVE GRID -->
   <div class="sdk-grid">
     {processedSdks && processedSdks.map((sdk: any) => (
       <div class="sdk-card" data-sdk-id={sdk.id} data-platforms={sdk.platforms ? sdk.platforms.join(' ') : ''}>
@@ -96,49 +97,55 @@ const processedSdks = sdks.map((sdk: any) => {
           </div>
         </div>
 
-        <button class="sdk-btn-accordion" aria-expanded="false">
-          <span class="btn-text">Expand Installation Setup</span>
-          <svg class="chevron-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+        <button class="sdk-btn-modal-trigger" data-sdk-name={sdk.name} data-sdk-version={sdk.version}>
+          <span>View Installation Setup</span>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
         </button>
 
-        <div class="sdk-inline-drawer">
-          <div class="drawer-tabs">
-            {sdk.installation && Object.keys(sdk.installation).map((platformKey: string, idx: number) => {
-              const item = sdk.installation[platformKey];
-              return (
-                <button class={`drawer-tab-btn ${idx === 0 ? 'active' : ''}`} data-tab-key={platformKey}>
-                  {item.title || platformKey.toUpperCase()}
-                </button>
-              );
-            })}
-          </div>
-
-          <div class="drawer-body">
-            {sdk.installation && Object.keys(sdk.installation).map((platformKey: string, idx: number) => {
-              const item = sdk.installation[platformKey];
-              return (
-                <div class={`drawer-pane pane-${platformKey}`} style={idx === 0 ? 'display: block;' : 'display: none;'}>
-                  {item.mdContent ? (
-                    <div class="md-rendered-content" data-raw-md={item.mdContent}></div>
-                  ) : (
-                    <div>
-                      {item.notes && <div class="sdk-note-callout">💡 <strong>Prerequisite Note:</strong> {item.notes}</div>}
-                      <div class="sdk-code-block">
-                        <div class="sdk-code-header">
-                          <span>code</span>
-                          <button class="sdk-copy-btn">Copy</button>
-                        </div>
-                        <pre><code>{item.code}</code></pre>
+        <!-- Hidden Data Store for Modal Population -->
+        <div class="sdk-hidden-installation-data" style="display: none;">
+          {sdk.installation && Object.keys(sdk.installation).map((platformKey: string) => {
+            const item = sdk.installation[platformKey];
+            return (
+              <div class="platform-data-item" data-platform-key={platformKey} data-title={item.title || platformKey.toUpperCase()}>
+                {item.mdContent ? (
+                  <div class="md-raw-content" data-raw-md={item.mdContent}></div>
+                ) : (
+                  <div>
+                    {item.notes && <div class="sdk-note-callout">💡 <strong>Prerequisite Note:</strong> {item.notes}</div>}
+                    <div class="sdk-code-block">
+                      <div class="sdk-code-header">
+                        <span>code</span>
+                        <button class="sdk-copy-btn">Copy</button>
                       </div>
+                      <pre><code>{item.code}</code></pre>
                     </div>
-                  )}
-                </div>
-              );
-            })}
-          </div>
+                  </div>
+                )}
+              </div>
+            );
+          })}
         </div>
       </div>
     ))}
+  </div>
+</div>
+
+<!-- GLOBAL POPUP MODAL DIALOG OVERLAY -->
+<div id="sdkModalOverlay" class="sdk-modal-overlay">
+  <div class="sdk-modal-container">
+    <div class="sdk-modal-header">
+      <div class="sdk-modal-title-group">
+        <h2 id="modalTitle" class="sdk-modal-title">SDK Installation</h2>
+        <span id="modalVersion" class="sdk-version">v1.0.0</span>
+      </div>
+      <button id="modalCloseBtn" class="sdk-modal-close-btn" aria-label="Close modal">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+      </button>
+    </div>
+
+    <div id="modalTabsBar" class="sdk-modal-tabs"></div>
+    <div id="modalBodyContent" class="sdk-modal-body"></div>
   </div>
 </div>
 
@@ -181,19 +188,79 @@ const processedSdks = sdks.map((sdk: any) => {
       return (str || '').replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
     }
 
-    function renderAllMarkdownElements() {
-      document.querySelectorAll('.md-rendered-content[data-raw-md]').forEach(el => {
-        if (el.getAttribute('data-rendered') === 'true') return;
-        const rawMd = el.getAttribute('data-raw-md') || '';
-        el.innerHTML = parseMarkdown(rawMd);
-        el.setAttribute('data-rendered', 'true');
-      });
+    function getPlatformIconSVG(key) {
+      if (key === 'android') {
+        return `<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M17.523 15.3414c-.5511 0-.9993-.4486-.9993-.9997 0-.551.4482-.9993.9993-.9993.5516 0 .9997.4483.9997.9993 0 .5511-.4481.9997-.9997-.9997zm-11.046 0c-.5511 0-.9993-.4486-.9993-.9997 0-.551.4482-.9993.9993-.9993.5516 0 .9997.4483.9997.9993 0 .5511-.4481.9997-.9997-.9997zm11.4045-6.02l1.9973-3.4592a.416.416 0 00-.1522-.5676.416.416 0 00-.5676.1522l-2.0223 3.5028C15.594 8.2727 13.854 7.848 12 7.848c-1.854 0-3.594.4247-5.1367 1.1017L4.841 5.4468a.416.416 0 00-.5676-.1522.416.416 0 00-.1522.5676l1.9973 3.4592C2.688 11.2386.35 14.659.006 18.72h23.988c-.344-4.061-2.682-7.4814-6.1125-9.3986z"/></svg>`;
+      } else if (key === 'ios') {
+        return `<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M15.97 4.54c.66-.8 1.11-1.92.99-3.04-0.96.04-2.12.64-2.81 1.44-.61.71-1.15 1.85-1.01 2.95 1.08.08 2.18-.55 2.83-1.35z"/></svg>`;
+      } else {
+        return `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="2"/><ellipse cx="12" cy="12" rx="9" ry="3"/><ellipse cx="12" cy="12" rx="9" ry="3" transform="rotate(60 12 12)"/><ellipse cx="12" cy="12" rx="9" ry="3" transform="rotate(120 12 12)"/></svg>`;
+      }
     }
 
-    function setupAccordionListeners() {
-      renderAllMarkdownElements();
+    function openModalForCard(card) {
+      const modalOverlay = document.getElementById('sdkModalOverlay');
+      const modalTitle = document.getElementById('modalTitle');
+      const modalVersion = document.getElementById('modalVersion');
+      const modalTabsBar = document.getElementById('modalTabsBar');
+      const modalBodyContent = document.getElementById('modalBodyContent');
 
+      if (!modalOverlay || !card) return;
+
+      const triggerBtn = card.querySelector('.sdk-btn-modal-trigger');
+      const title = triggerBtn ? triggerBtn.getAttribute('data-sdk-name') : 'SDK Installation';
+      const version = triggerBtn ? triggerBtn.getAttribute('data-sdk-version') : '';
+
+      modalTitle.textContent = title;
+      modalVersion.textContent = version;
+
+      modalTabsBar.innerHTML = '';
+      modalBodyContent.innerHTML = '';
+
+      const platformItems = card.querySelectorAll('.platform-data-item');
+      
+      platformItems.forEach((item, idx) => {
+        const platformKey = item.getAttribute('data-platform-key');
+        const platformTitle = item.getAttribute('data-title');
+        
+        // Build tab button
+        const tabBtn = document.createElement('button');
+        tabBtn.className = `sdk-modal-tab-btn ${idx === 0 ? 'active' : ''}`;
+        tabBtn.setAttribute('data-target-platform', platformKey);
+        tabBtn.innerHTML = `${getPlatformIconSVG(platformKey)} <span>${platformTitle}</span>`;
+        modalTabsBar.appendChild(tabBtn);
+
+        // Build content pane
+        const pane = document.createElement('div');
+        pane.className = `modal-pane modal-pane-${platformKey}`;
+        pane.style.display = idx === 0 ? 'block' : 'none';
+
+        const rawMdEl = item.querySelector('.md-raw-content');
+        if (rawMdEl) {
+          const rawMd = rawMdEl.getAttribute('data-raw-md') || '';
+          pane.innerHTML = parseMarkdown(rawMd);
+        } else {
+          pane.innerHTML = item.innerHTML;
+        }
+
+        modalBodyContent.appendChild(pane);
+      });
+
+      modalOverlay.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeModal() {
+      const modalOverlay = document.getElementById('sdkModalOverlay');
+      if (modalOverlay) {
+        modalOverlay.classList.remove('active');
+      }
+      document.body.style.overflow = '';
+    }
+
+    function setupCatalogListeners() {
       document.addEventListener('click', (e) => {
+        // Platform Filter Click
         const filterBtn = e.target.closest('.sdk-filter-btn');
         if (filterBtn) {
           document.querySelectorAll('.sdk-filter-btn').forEach(b => b.classList.remove('active'));
@@ -211,49 +278,55 @@ const processedSdks = sdks.map((sdk: any) => {
           return;
         }
 
-        const accordionBtn = e.target.closest('.sdk-btn-accordion');
-        if (accordionBtn) {
-          const card = accordionBtn.closest('.sdk-card');
-          if (!card) return;
-          const isExpanded = card.classList.contains('expanded');
-          
-          if (isExpanded) {
-            card.classList.remove('expanded');
-            accordionBtn.setAttribute('aria-expanded', 'false');
-            accordionBtn.querySelector('.btn-text').textContent = 'Expand Installation Setup';
-          } else {
-            card.classList.add('expanded');
-            accordionBtn.setAttribute('aria-expanded', 'true');
-            accordionBtn.querySelector('.btn-text').textContent = 'Collapse Setup Guide';
-          }
+        // Open Modal Trigger Click
+        const modalTrigger = e.target.closest('.sdk-btn-modal-trigger');
+        if (modalTrigger) {
+          const card = modalTrigger.closest('.sdk-card');
+          openModalForCard(card);
           return;
         }
 
-        const tabBtn = e.target.closest('.drawer-tab-btn');
-        if (tabBtn) {
-          const card = tabBtn.closest('.sdk-card');
-          if (!card) return;
-          const tabKey = tabBtn.getAttribute('data-tab-key');
+        // Close Modal Button Click
+        if (e.target.closest('#modalCloseBtn')) {
+          closeModal();
+          return;
+        }
 
-          card.querySelectorAll('.drawer-tab-btn').forEach(b => b.classList.remove('active'));
-          tabBtn.classList.add('active');
+        // Modal Tab Switching Click
+        const modalTabBtn = e.target.closest('.sdk-modal-tab-btn');
+        if (modalTabBtn) {
+          const targetPlatform = modalTabBtn.getAttribute('data-target-platform');
+          document.querySelectorAll('.sdk-modal-tab-btn').forEach(b => b.classList.remove('active'));
+          modalTabBtn.classList.add('active');
 
-          card.querySelectorAll('.drawer-pane').forEach(pane => {
-            pane.style.display = 'none';
-          });
-          const targetPane = card.querySelector(`.pane-${tabKey}`);
+          document.querySelectorAll('.modal-pane').forEach(p => p.style.display = 'none');
+          const targetPane = document.querySelector(`.modal-pane-${targetPlatform}`);
           if (targetPane) targetPane.style.display = 'block';
           return;
+        }
+
+        // Modal Overlay Backdrop Click
+        const modalOverlay = document.getElementById('sdkModalOverlay');
+        if (e.target === modalOverlay) {
+          closeModal();
+          return;
+        }
+      });
+
+      // Escape key handler
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+          closeModal();
         }
       });
     }
 
     if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', setupAccordionListeners);
+      document.addEventListener('DOMContentLoaded', setupCatalogListeners);
     } else {
-      setupAccordionListeners();
+      setupCatalogListeners();
     }
-    document.addEventListener('astro:page-load', setupAccordionListeners);
+    document.addEventListener('astro:page-load', setupCatalogListeners);
   })();
 </script>
 
@@ -262,7 +335,8 @@ const processedSdks = sdks.map((sdk: any) => {
     --cargill-green: #008544;
     --cargill-green-hover: #006b37;
     --sdk-bg: #ffffff;
-    --sdk-surface: #f2fbf5;
+    --sdk-surface: #ffffff;
+    --sdk-card-bg: #f2fbf5;
     --sdk-border: #bbf7d0;
     --sdk-text: #052e16;
     --sdk-text-muted: #166534;
@@ -273,7 +347,8 @@ const processedSdks = sdks.map((sdk: any) => {
 
   :root[data-theme='dark'], [data-theme='dark'] {
     --sdk-bg: #041c10;
-    --sdk-surface: #0a2e1c;
+    --sdk-surface: #072415;
+    --sdk-card-bg: #0a2e1c;
     --sdk-border: #14532d;
     --sdk-text: #f0fdf4;
     --sdk-text-muted: #86efac;
@@ -283,90 +358,173 @@ const processedSdks = sdks.map((sdk: any) => {
   }
 
   .sdk-catalog-container { margin: 1.5rem 0 3rem 0; }
-  .sdk-filter-bar { display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 1.5rem; }
+  .sdk-filter-bar { display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 1.75rem; }
   .filter-label { font-weight: 600; font-size: 0.9rem; margin-right: 0.5rem; color: var(--sdk-text); }
-  .sdk-filter-btn { background: var(--sdk-surface); border: 1px solid var(--sdk-border); color: var(--sdk-text); padding: 0.45rem 1.1rem; border-radius: 9999px; font-size: 0.85rem; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 0.5rem; }
+  .sdk-filter-btn { background: var(--sdk-card-bg); border: 1px solid var(--sdk-border); color: var(--sdk-text); padding: 0.5rem 1.1rem; border-radius: 9999px; font-size: 0.85rem; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 0.5rem; transition: all 0.2s ease; }
+  .sdk-filter-btn:hover { border-color: var(--cargill-green); }
   .sdk-filter-btn.active { background: var(--cargill-green); color: #ffffff; border-color: var(--cargill-green); }
 
-  /* STRICT 3-COLUMN GRID LOCK */
+  /* 2-COLUMN RESPONSIVE GRID */
   .sdk-grid {
     display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
-    gap: 1.25rem;
-    align-items: start;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 1.5rem;
+    align-items: stretch;
   }
-  @media (max-width: 1024px) { .sdk-grid { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; } }
-  @media (max-width: 640px) { .sdk-grid { grid-template-columns: minmax(0, 1fr) !important; } }
+  @media (max-width: 768px) { .sdk-grid { grid-template-columns: minmax(0, 1fr) !important; } }
 
   .sdk-card {
-    background: var(--sdk-surface);
+    background: var(--sdk-card-bg);
     border: 1px solid var(--sdk-border);
     border-radius: 12px;
-    padding: 1.25rem;
+    padding: 1.5rem;
     display: flex;
     flex-direction: column;
     box-shadow: var(--sdk-card-shadow);
     min-width: 0 !important;
     word-break: break-word;
     overflow-wrap: break-word;
+    transition: all 0.2s ease;
   }
-  .sdk-card:hover { border-color: var(--cargill-green); box-shadow: var(--sdk-card-hover-shadow); }
+  .sdk-card:hover { border-color: var(--cargill-green); box-shadow: var(--sdk-card-hover-shadow); transform: translateY(-2px); }
 
   .sdk-card-top { display: flex; flex-direction: column; flex-grow: 1; margin-bottom: 1.25rem; }
-  .sdk-card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem; }
-  .sdk-title { font-size: 1.15rem; font-weight: 700; margin: 0; color: var(--sdk-text); }
-  .sdk-version { font-size: 0.75rem; font-weight: 700; background: var(--cargill-green); color: #ffffff; padding: 2px 8px; border-radius: 4px; flex-shrink: 0; }
+  .sdk-card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.65rem; }
+  .sdk-title { font-size: 1.25rem; font-weight: 700; margin: 0; color: var(--sdk-text); }
+  .sdk-version { font-size: 0.75rem; font-weight: 700; background: var(--cargill-green); color: #ffffff; padding: 3px 9px; border-radius: 4px; flex-shrink: 0; }
 
-  .sdk-desc { font-size: 0.88rem; color: var(--sdk-text-muted); margin-bottom: 1.25rem; line-height: 1.45; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; min-height: 3.9em; }
+  .sdk-desc { font-size: 0.9rem; color: var(--sdk-text-muted); margin: 0 0 1.25rem 0; line-height: 1.5; }
 
   .sdk-badges { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: auto; min-height: 28px; align-items: center; }
-  .sdk-badge { font-size: 0.75rem; font-weight: 600; padding: 3px 10px; border-radius: 6px; display: inline-flex; align-items: center; gap: 5px; }
+  .sdk-badge { font-size: 0.75rem; font-weight: 600; padding: 4px 10px; border-radius: 6px; display: inline-flex; align-items: center; gap: 5px; }
   .sdk-badge.android { background: rgba(34, 197, 94, 0.15); color: #15803d; border: 1px solid rgba(34, 197, 94, 0.4); }
   .sdk-badge.ios { background: rgba(59, 130, 246, 0.15); color: #1d4ed8; border: 1px solid rgba(59, 130, 246, 0.4); }
   .sdk-badge.rn { background: rgba(56, 189, 248, 0.15); color: #0369a1; border: 1px solid rgba(56, 189, 248, 0.4); }
 
-  .sdk-btn-accordion { width: 100%; background: var(--cargill-green); color: #ffffff; border: none; padding: 0.75rem 1rem; border-radius: 8px; font-weight: 600; font-size: 0.88rem; cursor: pointer; display: flex; align-items: center; justify-content: space-between; margin-top: auto; }
-  .sdk-btn-accordion:hover { background: var(--cargill-green-hover); }
+  .sdk-btn-modal-trigger { width: 100%; background: var(--cargill-green); color: #ffffff; border: none; padding: 0.8rem 1.2rem; border-radius: 8px; font-weight: 600; font-size: 0.9rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.5rem; margin-top: auto; transition: background 0.2s ease; }
+  .sdk-btn-modal-trigger:hover { background: var(--cargill-green-hover); }
 
-  /* COMPACT FIXED HEIGHT DRAWER (300PX FIXED HEIGHT CAP) */
-  .sdk-inline-drawer {
-    max-height: 0;
-    overflow: hidden;
-    transition: max-height 0.35s ease, opacity 0.25s ease;
+  /* FULL-SCREEN POPUP MODAL OVERLAY */
+  .sdk-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.65);
+    backdrop-filter: blur(4px);
+    z-index: 99999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1.5rem;
+    box-sizing: border-box;
     opacity: 0;
-    margin-top: 0;
-    border-top: 0 solid var(--sdk-border);
+    pointer-events: none;
+    transition: opacity 0.25s ease;
+  }
+  .sdk-modal-overlay.active {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .sdk-modal-container {
+    background: var(--sdk-surface);
+    border: 1px solid var(--sdk-border);
+    border-radius: 16px;
+    width: 100%;
+    max-width: 820px;
+    max-height: 85vh;
     display: flex;
     flex-direction: column;
-    min-width: 0 !important;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+    transform: translateY(20px) scale(0.98);
+    transition: transform 0.25s ease;
+    overflow: hidden;
   }
-  .sdk-card.expanded .sdk-inline-drawer {
-    height: 300px !important; /* COMPACT 300PX FIXED HEIGHT */
-    max-height: 300px !important;
-    opacity: 1;
-    margin-top: 1rem;
-    padding-top: 0.75rem;
-    border-top: 1px solid var(--sdk-border);
+  .sdk-modal-overlay.active .sdk-modal-container {
+    transform: translateY(0) scale(1);
   }
 
-  .drawer-tabs { display: flex; gap: 0.35rem; border-bottom: 2px solid var(--sdk-border); margin-bottom: 0.75rem; background: var(--sdk-surface); flex-shrink: 0; z-index: 5; }
-  .drawer-tab-btn { background: none; border: none; padding: 0.45rem 0.85rem; font-size: 0.82rem; font-weight: 600; color: var(--sdk-text-muted); cursor: pointer; border-bottom: 2px solid transparent; }
-  .drawer-tab-btn.active { color: var(--cargill-green); border-bottom-color: var(--cargill-green); background: rgba(0, 133, 68, 0.08); border-radius: 4px 4px 0 0; }
+  .sdk-modal-header {
+    padding: 1.25rem 1.5rem;
+    border-bottom: 1px solid var(--sdk-border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: var(--sdk-card-bg);
+  }
+  .sdk-modal-title-group { display: flex; align-items: center; gap: 0.75rem; }
+  .sdk-modal-title { font-size: 1.35rem; font-weight: 700; margin: 0; color: var(--sdk-text); }
 
-  .drawer-body { font-size: 0.84rem; line-height: 1.5; color: var(--sdk-text); overflow-y: auto; flex-grow: 1; padding-right: 0.4rem; min-width: 0 !important; word-break: break-word; overflow-wrap: break-word; }
-  .drawer-body::-webkit-scrollbar { width: 6px; }
-  .drawer-body::-webkit-scrollbar-track { background: rgba(0, 133, 68, 0.05); border-radius: 4px; }
-  .drawer-body::-webkit-scrollbar-thumb { background: var(--cargill-green); border-radius: 4px; }
+  .sdk-modal-close-btn {
+    background: none;
+    border: none;
+    color: var(--sdk-text-muted);
+    cursor: pointer;
+    padding: 0.4rem;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s ease, color 0.2s ease;
+  }
+  .sdk-modal-close-btn:hover { background: rgba(0, 0, 0, 0.08); color: var(--sdk-text); }
 
-  .md-rendered-content h1, .md-rendered-content h2 { font-size: 1.05rem !important; font-weight: 700 !important; margin: 0.8rem 0 0.4rem 0 !important; color: var(--sdk-text) !important; line-height: 1.35 !important; border-bottom: 1px solid var(--sdk-border); padding-bottom: 0.2rem; }
-  .md-rendered-content h3, .md-rendered-content h4 { font-size: 0.92rem !important; font-weight: 700 !important; margin: 0.6rem 0 0.3rem 0 !important; color: var(--sdk-text) !important; }
+  .sdk-modal-tabs {
+    display: flex;
+    background: var(--sdk-card-bg);
+    border-bottom: 2px solid var(--sdk-border);
+    padding: 0 1.5rem;
+    gap: 0.5rem;
+    overflow-x: auto;
+  }
+  .sdk-modal-tab-btn {
+    background: none;
+    border: none;
+    padding: 0.85rem 1.25rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--sdk-text-muted);
+    cursor: pointer;
+    border-bottom: 3px solid transparent;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: -2px;
+    white-space: nowrap;
+    transition: all 0.2s ease;
+  }
+  .sdk-modal-tab-btn:hover { color: var(--cargill-green); }
+  .sdk-modal-tab-btn.active {
+    color: var(--cargill-green);
+    border-bottom-color: var(--cargill-green);
+    background: rgba(0, 133, 68, 0.08);
+    border-radius: 6px 6px 0 0;
+  }
 
-  .sdk-note-callout { background: rgba(0, 133, 68, 0.1); border-left: 3px solid var(--cargill-green); padding: 0.5rem 0.75rem; border-radius: 4px; margin: 0.5rem 0; font-size: 0.8rem; }
-  .inline-code { background: rgba(0, 133, 68, 0.12); color: var(--cargill-green); padding: 2px 5px; border-radius: 3px; font-family: monospace; font-size: 0.8rem; }
+  .sdk-modal-body {
+    padding: 1.75rem;
+    overflow-y: auto;
+    flex-grow: 1;
+    font-size: 0.92rem;
+    line-height: 1.6;
+    color: var(--sdk-text);
+  }
+  .sdk-modal-body::-webkit-scrollbar { width: 8px; }
+  .sdk-modal-body::-webkit-scrollbar-track { background: rgba(0, 133, 68, 0.05); }
+  .sdk-modal-body::-webkit-scrollbar-thumb { background: var(--cargill-green); border-radius: 4px; }
 
-  .sdk-code-block { background: #052014 !important; border: 1px solid var(--sdk-border) !important; border-radius: 6px !important; margin: 0.5rem 0 0.8rem 0 !important; overflow: hidden !important; max-width: 100% !important; }
-  .sdk-code-header { background: rgba(255, 255, 255, 0.08) !important; border-bottom: 1px solid rgba(255, 255, 255, 0.15) !important; padding: 0.35rem 0.65rem !important; display: flex !important; justify-content: space-between !important; font-size: 0.7rem !important; font-weight: 700 !important; color: #86efac; text-transform: uppercase !important; }
-  .sdk-copy-btn { background: rgba(255, 255, 255, 0.15) !important; border: 1px solid rgba(255, 255, 255, 0.25) !important; color: #ffffff !important; padding: 2px 6px !important; border-radius: 3px !important; font-size: 0.65rem !important; cursor: pointer !important; }
+  .md-rendered-content h1, .md-rendered-content h2 { font-size: 1.2rem !important; font-weight: 700 !important; margin: 1.2rem 0 0.6rem 0 !important; color: var(--sdk-text) !important; border-bottom: 1px solid var(--sdk-border); padding-bottom: 0.4rem; }
+  .md-rendered-content h3, .md-rendered-content h4 { font-size: 1.05rem !important; font-weight: 700 !important; margin: 1rem 0 0.5rem 0 !important; color: var(--sdk-text) !important; }
 
-  .sdk-code-block pre, .md-rendered-content pre { background: #052014 !important; color: #f0fdf4 !important; margin: 0 !important; padding: 0.75rem !important; font-size: 0.78rem !important; line-height: 1.45 !important; font-family: monospace !important; overflow-x: auto !important; white-space: pre-wrap !important; word-break: break-all !important; }
+  .sdk-note-callout { background: rgba(0, 133, 68, 0.1); border-left: 4px solid var(--cargill-green); padding: 0.75rem 1rem; border-radius: 6px; margin: 0.8rem 0; font-size: 0.88rem; }
+  .inline-code { background: rgba(0, 133, 68, 0.12); color: var(--cargill-green); padding: 2px 6px; border-radius: 4px; font-family: monospace; font-size: 0.85rem; }
+
+  .sdk-code-block { background: #052014 !important; border: 1px solid var(--sdk-border) !important; border-radius: 8px !important; margin: 1rem 0 !important; overflow: hidden !important; }
+  .sdk-code-header { background: rgba(255, 255, 255, 0.08) !important; border-bottom: 1px solid rgba(255, 255, 255, 0.15) !important; padding: 0.45rem 0.85rem !important; display: flex !important; justify-content: space-between !important; align-items: center !important; font-size: 0.75rem !important; font-weight: 700 !important; color: #86efac; text-transform: uppercase !important; }
+  .sdk-copy-btn { background: rgba(255, 255, 255, 0.15) !important; border: 1px solid rgba(255, 255, 255, 0.25) !important; color: #ffffff !important; padding: 3px 10px !important; border-radius: 4px !important; font-size: 0.72rem !important; cursor: pointer !important; transition: background 0.2s; }
+  .sdk-copy-btn:hover { background: rgba(255, 255, 255, 0.3) !important; }
+
+  .sdk-code-block pre, .md-rendered-content pre { background: #052014 !important; color: #f0fdf4 !important; margin: 0 !important; padding: 1rem !important; font-size: 0.85rem !important; line-height: 1.5 !important; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace !important; overflow-x: auto !important; }
 </style>
