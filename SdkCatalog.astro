@@ -1,8 +1,8 @@
 ---
-// src/components/SdkCatalog.astro
+// src/components/mobile/SdkCatalog.astro
 
-// AUTO-IMPORT ALL .MD FILES INSIDE THE COMPONENTS DIRECTORY
-const importedMdFiles = import.meta.glob('/src/components/**/*.{md,mdx}', { eager: true, query: '?raw' });
+// Dynamically import all .md files in the project
+const importedMdFiles = import.meta.glob('/src/**/*.{md,mdx}', { eager: true, query: '?raw' });
 
 function getMdContentFromFile(fileKey: string) {
   if (!fileKey) return null;
@@ -16,15 +16,15 @@ function getMdContentFromFile(fileKey: string) {
 
 const defaultSdks = [
   {
-    "id": "ui-kit",
-    "name": "Design System UI Kit",
-    "version": "v3.1.0",
-    "description": "Standardized buttons, input fields, modals, design tokens, dark mode support, and WCAG AA accessibility.",
+    "id": "auth-sdk",
+    "name": "Auth & Identity SDK",
+    "version": "v2.4.0",
+    "description": "OAuth 2.0 / OIDC user login, PKCE flow, biometric key storage, and automated JWT token refresh.",
     "platforms": ["android", "ios", "react-native"],
     "installation": {
-      "android": { "title": "Android (Compose)", "mdFile": "ui-kit-android.md" },
-      "ios": { "title": "iOS (SwiftUI)", "mdFile": "ui-kit-ios.md" },
-      "react-native": { "title": "React Native (npm)", "mdFile": "ui-kit-rn.md" }
+      "android": { "title": "Android (Gradle)", "mdFile": "android/auth-sdk.md" },
+      "ios": { "title": "iOS (Podfile)", "mdFile": "ios/auth-sdk.md" },
+      "react-native": { "title": "React Native (npm)", "mdFile": "react-native/auth-sdk.md" }
     }
   }
 ];
@@ -55,6 +55,8 @@ const processedSdks = sdks.map((sdk: any) => {
 ---
 
 <div class="sdk-catalog-container">
+
+  <!-- Platform Filter Bar (100% Pure SVG Icons, 0 Emojis) -->
   <div class="sdk-filter-bar">
     <span class="filter-label">Filter Platform:</span>
     <button class="sdk-filter-btn active" data-filter="all">
@@ -62,7 +64,7 @@ const processedSdks = sdks.map((sdk: any) => {
       All SDKs ({processedSdks ? processedSdks.length : 0})
     </button>
     <button class="sdk-filter-btn" data-filter="android">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M17.523 15.3414c-.5511 0-.9993-.4486-.9993-.9997 0-.551.4482-.9993.9993-.9993.5516 0 .9997.4483.9997.9993 0 .5511-.4481.9997-.9997.9997zm-11.046 0c-.5511 0-.9993-.4486-.9993-.9997 0-.551.4482-.9993.9993-.9993.5516 0 .9997.4483.9997.9993 0 .5511-.4481.9997-.9997.9997zm11.4045-6.02l1.9973-3.4592a.416.416 0 00-.1522-.5676.416.416 0 00-.5676.1522l-2.0223 3.5028C15.594 8.2727 13.854 7.848 12 7.848c-1.854 0-3.594.4247-5.1367 1.1017L4.841 5.4468a.416.416 0 00-.5676-.1522.416.416 0 00-.1522.5676l1.9973 3.4592C2.688 11.2386.35 14.659.006 18.72h23.988c-.344-4.061-2.682-7.4814-6.1125-9.3986z"/></svg>
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M17.523 15.3414c-.5511 0-.9993-.4486-.9993-.9997 0-.551.4482-.9993.9993-.9993.5516 0 .9997.4483.9997.9993 0 .5511-.4481.9997-.9997-.9997zm-11.046 0c-.5511 0-.9993-.4486-.9993-.9997 0-.551.4482-.9993.9993-.9993.5516 0 .9997.4483.9997.9993 0 .5511-.4481.9997-.9997-.9997zm11.4045-6.02l1.9973-3.4592a.416.416 0 00-.1522-.5676.416.416 0 00-.5676.1522l-2.0223 3.5028C15.594 8.2727 13.854 7.848 12 7.848c-1.854 0-3.594.4247-5.1367 1.1017L4.841 5.4468a.416.416 0 00-.5676-.1522.416.416 0 00-.1522.5676l1.9973 3.4592C2.688 11.2386.35 14.659.006 18.72h23.988c-.344-4.061-2.682-7.4814-6.1125-9.3986z"/></svg>
       Android
     </button>
     <button class="sdk-filter-btn" data-filter="ios">
@@ -75,9 +77,10 @@ const processedSdks = sdks.map((sdk: any) => {
     </button>
   </div>
 
+  <!-- 3-Column Card Grid -->
   <div class="sdk-grid">
     {processedSdks && processedSdks.map((sdk: any) => (
-      <div class="sdk-card" data-platforms={sdk.platforms ? sdk.platforms.join(' ') : ''}>
+      <div class="sdk-card" data-sdk-id={sdk.id} data-platforms={sdk.platforms ? sdk.platforms.join(' ') : ''}>
         <div class="sdk-card-top">
           <div class="sdk-card-header">
             <h3 class="sdk-title">{sdk.name}</h3>
@@ -86,7 +89,7 @@ const processedSdks = sdks.map((sdk: any) => {
           <p class="sdk-desc">{sdk.description}</p>
           <div class="sdk-badges">
             {sdk.platforms && sdk.platforms.includes('android') && (
-              <span class="sdk-badge android"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M17.523 15.3414c-.5511 0-.9993-.4486-.9993-.9997 0-.551.4482-.9993.9993-.9993.5516 0 .9997.4483.9997.9993 0 .5511-.4481.9997-.9997.9997zm-11.046 0c-.5511 0-.9993-.4486-.9993-.9997 0-.551.4482-.9993.9993-.9993.5516 0 .9997.4483.9997.9993 0 .5511-.4481.9997-.9997.9997zm11.4045-6.02l1.9973-3.4592a.416.416 0 00-.1522-.5676.416.416 0 00-.5676.1522l-2.0223 3.5028C15.594 8.2727 13.854 7.848 12 7.848c-1.854 0-3.594.4247-5.1367 1.1017L4.841 5.4468a.416.416 0 00-.5676-.1522.416.416 0 00-.1522.5676l1.9973 3.4592C2.688 11.2386.35 14.659.006 18.72h23.988c-.344-4.061-2.682-7.4814-6.1125-9.3986z"/></svg>Android</span>
+              <span class="sdk-badge android"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M17.523 15.3414c-.5511 0-.9993-.4486-.9993-.9997 0-.551.4482-.9993.9993-.9993.5516 0 .9997.4483.9997.9993 0 .5511-.4481.9997-.9997-.9997zm-11.046 0c-.5511 0-.9993-.4486-.9993-.9997 0-.551.4482-.9993.9993-.9993.5516 0 .9997.4483.9997.9993 0 .5511-.4481.9997-.9997-.9997zm11.4045-6.02l1.9973-3.4592a.416.416 0 00-.1522-.5676.416.416 0 00-.5676.1522l-2.0223 3.5028C15.594 8.2727 13.854 7.848 12 7.848c-1.854 0-3.594.4247-5.1367 1.1017L4.841 5.4468a.416.416 0 00-.5676-.1522.416.416 0 00-.1522.5676l1.9973 3.4592C2.688 11.2386.35 14.659.006 18.72h23.988c-.344-4.061-2.682-7.4814-6.1125-9.3986z"/></svg>Android</span>
             )}
             {sdk.platforms && sdk.platforms.includes('ios') && (
               <span class="sdk-badge ios"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M15.97 4.54c.66-.8 1.11-1.92.99-3.04-0.96.04-2.12.64-2.81 1.44-.61.71-1.15 1.85-1.01 2.95 1.08.08 2.18-.55 2.83-1.35z"/></svg>iOS</span>
@@ -97,36 +100,64 @@ const processedSdks = sdks.map((sdk: any) => {
           </div>
         </div>
 
-        <button class="sdk-btn-highlight" data-sdk-id={sdk.id}>
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>
-          View Installation Instructions
+        <!-- Inline Accordion Trigger Button -->
+        <button class="sdk-btn-accordion" aria-expanded="false">
+          <span class="btn-text">Expand Installation Setup</span>
+          <svg class="chevron-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
         </button>
+
+        <!-- Inline Expandable Drawer Panel -->
+        <div class="sdk-inline-drawer">
+          <!-- STICKY PLATFORM TABS BAR (NEVER SCROLLS) -->
+          <div class="drawer-tabs">
+            {sdk.installation && Object.keys(sdk.installation).map((platformKey: string, idx: number) => {
+              const item = sdk.installation[platformKey];
+              return (
+                <button class={`drawer-tab-btn ${idx === 0 ? 'active' : ''}`} data-tab-key={platformKey}>
+                  {item.title || platformKey.toUpperCase()}
+                </button>
+              );
+            })}
+          </div>
+
+          <!-- ONLY THE DRAWER BODY SCROLLS UNDER TABS -->
+          <div class="drawer-body">
+            {sdk.installation && Object.keys(sdk.installation).map((platformKey: string, idx: number) => {
+              const item = sdk.installation[platformKey];
+              return (
+                <div class={`drawer-pane pane-${platformKey}`} style={idx === 0 ? 'display: block;' : 'display: none;'}>
+                  {item.mdContent ? (
+                    <div class="md-rendered-content" data-raw-md={item.mdContent}></div>
+                  ) : (
+                    <div>
+                      {item.notes && <div class="sdk-note-callout">💡 <strong>Prerequisite Note:</strong> {item.notes}</div>}
+                      <div class="sdk-code-block">
+                        <div class="sdk-code-header">
+                          <span>code</span>
+                          <button class="sdk-copy-btn">Copy</button>
+                        </div>
+                        <pre><code>{item.code}</code></pre>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        </div>
       </div>
     ))}
   </div>
+
 </div>
 
-<div id="sdk-install-modal" class="sdk-modal-overlay">
-  <div class="sdk-modal-content">
-    <div class="sdk-modal-header">
-      <div>
-        <h3 id="modal-sdk-name">SDK Title</h3>
-        <p id="modal-sdk-sub">Installation & Setup Guide</p>
-      </div>
-      <button class="sdk-modal-close" id="close-sdk-modal" aria-label="Close modal">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-      </button>
-    </div>
-    <div id="modal-platform-tabs" class="sdk-modal-tabs"></div>
-    <div class="sdk-modal-scrollable-body" id="modal-code-body"></div>
-  </div>
-</div>
-
-<script define:vars={{ sdks: processedSdks }}>
+<script>
   (function() {
     function parseMarkdown(md) {
       if (!md) return '';
-      let html = md
+      let normalizedMd = md.replace(/\r\n/g, '\n');
+      
+      let html = normalizedMd
         .replace(/```(\w*)\n([\s\S]*?)```/g, function(match, lang, code) {
           const escapedCode = escapeHtml(code.trim());
           const displayLang = lang || 'code';
@@ -159,16 +190,26 @@ const processedSdks = sdks.map((sdk: any) => {
       return (str || '').replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
     }
 
-    function setupModalListeners() {
-      if (window.__sdkCatalogBound) return;
-      window.__sdkCatalogBound = true;
+    function renderAllMarkdownElements() {
+      document.querySelectorAll('.md-rendered-content[data-raw-md]').forEach(el => {
+        if (el.getAttribute('data-rendered') === 'true') return;
+        const rawMd = el.getAttribute('data-raw-md') || '';
+        el.innerHTML = parseMarkdown(rawMd);
+        el.setAttribute('data-rendered', 'true');
+      });
+    }
+
+    function setupAccordionListeners() {
+      renderAllMarkdownElements();
 
       document.addEventListener('click', (e) => {
+        // 1. Filter Buttons
         const filterBtn = e.target.closest('.sdk-filter-btn');
         if (filterBtn) {
           document.querySelectorAll('.sdk-filter-btn').forEach(b => b.classList.remove('active'));
           filterBtn.classList.add('active');
           const filter = filterBtn.getAttribute('data-filter');
+
           document.querySelectorAll('.sdk-card').forEach(card => {
             const platforms = (card.getAttribute('data-platforms') || '').split(' ');
             if (filter === 'all' || platforms.includes(filter)) {
@@ -180,72 +221,51 @@ const processedSdks = sdks.map((sdk: any) => {
           return;
         }
 
-        const openBtn = e.target.closest('.sdk-btn-highlight');
-        if (openBtn) {
-          const sdkId = openBtn.getAttribute('data-sdk-id');
-          const sdk = sdks ? sdks.find(s => s.id === sdkId) : null;
-          const modal = document.getElementById('sdk-install-modal');
-          if (!sdk || !modal || !sdk.installation) return;
-
-          document.getElementById('modal-sdk-name').textContent = sdk.name || '';
-          document.getElementById('modal-sdk-sub').textContent = `Version ${sdk.version || ''} • Installation Setup`;
-
-          const tabsContainer = document.getElementById('modal-platform-tabs');
-          const codeBody = document.getElementById('modal-code-body');
-          tabsContainer.innerHTML = '';
-          codeBody.innerHTML = '';
-
-          const platformKeys = Object.keys(sdk.installation);
-          platformKeys.forEach((key, idx) => {
-            const item = sdk.installation[key];
-            const tabBtn = document.createElement('button');
-            tabBtn.className = `sdk-tab-btn ${idx === 0 ? 'active' : ''}`;
-            tabBtn.textContent = item.title || key.toUpperCase();
-            tabBtn.setAttribute('data-tab-key', key);
-            tabsContainer.appendChild(tabBtn);
-
-            const pane = document.createElement('div');
-            pane.className = 'sdk-code-pane';
-            pane.id = `code-pane-${key}`;
-            pane.style.display = idx === 0 ? 'block' : 'none';
-
-            if (item.mdContent) {
-              pane.innerHTML = parseMarkdown(item.mdContent);
-            } else {
-              let notesHtml = item.notes ? `<div class="sdk-note-callout">💡 <strong>Prerequisite Note:</strong> ${escapeHtml(item.notes)}</div>` : '';
-              pane.innerHTML = `${notesHtml}<div class="sdk-code-block"><pre><code>${escapeHtml(item.code)}</code></pre></div>`;
-            }
-            codeBody.appendChild(pane);
-          });
-          modal.classList.add('active');
+        // 2. Inline Accordion Toggle
+        const accordionBtn = e.target.closest('.sdk-btn-accordion');
+        if (accordionBtn) {
+          const card = accordionBtn.closest('.sdk-card');
+          if (!card) return;
+          const isExpanded = card.classList.contains('expanded');
+          
+          if (isExpanded) {
+            card.classList.remove('expanded');
+            accordionBtn.setAttribute('aria-expanded', 'false');
+            accordionBtn.querySelector('.btn-text').textContent = 'Expand Installation Setup';
+          } else {
+            card.classList.add('expanded');
+            accordionBtn.setAttribute('aria-expanded', 'true');
+            accordionBtn.querySelector('.btn-text').textContent = 'Collapse Setup Guide';
+          }
           return;
         }
 
-        const tabBtn = e.target.closest('.sdk-tab-btn');
+        // 3. Drawer Platform Tabs Switcher
+        const tabBtn = e.target.closest('.drawer-tab-btn');
         if (tabBtn) {
-          const key = tabBtn.getAttribute('data-tab-key');
-          document.querySelectorAll('.sdk-tab-btn').forEach(b => b.classList.remove('active'));
-          document.querySelectorAll('.sdk-code-pane').forEach(p => p.style.display = 'none');
-          tabBtn.classList.add('active');
-          const activePane = document.getElementById(`code-pane-${key}`);
-          if (activePane) activePane.style.display = 'block';
-          return;
-        }
+          const card = tabBtn.closest('.sdk-card');
+          if (!card) return;
+          const tabKey = tabBtn.getAttribute('data-tab-key');
 
-        const modal = document.getElementById('sdk-install-modal');
-        if (e.target.closest('#close-sdk-modal') || e.target === modal) {
-          if (modal) modal.classList.remove('active');
+          card.querySelectorAll('.drawer-tab-btn').forEach(b => b.classList.remove('active'));
+          tabBtn.classList.add('active');
+
+          card.querySelectorAll('.drawer-pane').forEach(pane => {
+            pane.style.display = 'none';
+          });
+          const targetPane = card.querySelector(`.pane-${tabKey}`);
+          if (targetPane) targetPane.style.display = 'block';
           return;
         }
       });
     }
 
     if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', setupModalListeners);
+      document.addEventListener('DOMContentLoaded', setupAccordionListeners);
     } else {
-      setupModalListeners();
+      setupAccordionListeners();
     }
-    document.addEventListener('astro:page-load', setupModalListeners);
+    document.addEventListener('astro:page-load', setupAccordionListeners);
   })();
 </script>
 
@@ -259,11 +279,10 @@ const processedSdks = sdks.map((sdk: any) => {
     --sdk-text: #052e16;
     --sdk-text-muted: #166534;
     --sdk-code-bg: #052014;
-    --sdk-modal-bg: #ffffff;
-    --sdk-modal-overlay: rgba(5, 46, 22, 0.7);
     --sdk-card-shadow: 0 4px 14px rgba(0, 133, 68, 0.08);
-    --sdk-card-hover-shadow: 0 10px 25px rgba(0, 133, 68, 0.2);
+    --sdk-card-hover-shadow: 0 10px 25px rgba(0, 133, 68, 0.18);
   }
+
   :root[data-theme='dark'], [data-theme='dark'] {
     --sdk-bg: #041c10;
     --sdk-surface: #0a2e1c;
@@ -271,56 +290,302 @@ const processedSdks = sdks.map((sdk: any) => {
     --sdk-text: #f0fdf4;
     --sdk-text-muted: #86efac;
     --sdk-code-bg: #02140b;
-    --sdk-modal-bg: #0a2e1c;
-    --sdk-modal-overlay: rgba(2, 20, 11, 0.88);
     --sdk-card-shadow: 0 4px 14px rgba(0, 0, 0, 0.3);
     --sdk-card-hover-shadow: 0 10px 25px rgba(0, 133, 68, 0.3);
   }
 
   .sdk-catalog-container { margin: 1.5rem 0 3rem 0; }
-  .sdk-filter-bar { display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 1.5rem; }
-  .filter-label { font-weight: 600; font-size: 0.9rem; margin-right: 0.5rem; color: var(--sdk-text); }
-  .sdk-filter-btn { background: var(--sdk-surface); border: 1px solid var(--sdk-border); color: var(--sdk-text); padding: 0.45rem 1.1rem; border-radius: 9999px; font-size: 0.85rem; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 0.5rem; }
-  .sdk-filter-btn.active { background: var(--cargill-green); color: #ffffff; border-color: var(--cargill-green); }
 
-  .sdk-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.25rem; align-items: stretch; }
+  /* Filter Bar */
+  .sdk-filter-bar {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    margin-bottom: 1.5rem;
+  }
+  .filter-label { font-weight: 600; font-size: 0.9rem; margin-right: 0.5rem; color: var(--sdk-text); }
+  .sdk-filter-btn {
+    background: var(--sdk-surface);
+    border: 1px solid var(--sdk-border);
+    color: var(--sdk-text);
+    padding: 0.45rem 1.1rem;
+    border-radius: 9999px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.2s ease;
+  }
+  .sdk-filter-btn.active {
+    background: var(--cargill-green);
+    color: #ffffff;
+    border-color: var(--cargill-green);
+  }
+
+  /* 3-COLUMN GRID */
+  .sdk-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.25rem;
+    align-items: start;
+  }
   @media (max-width: 1024px) { .sdk-grid { grid-template-columns: repeat(2, 1fr); } }
   @media (max-width: 640px) { .sdk-grid { grid-template-columns: 1fr; } }
 
-  .sdk-card { background: var(--sdk-surface); border: 1px solid var(--sdk-border); border-radius: 12px; padding: 1.25rem; display: flex; flex-direction: column; justify-content: space-between; height: 100%; box-shadow: var(--sdk-card-shadow); }
-  .sdk-card-top { display: flex; flex-direction: column; flex-grow: 1; margin-bottom: 1.25rem; }
-  .sdk-card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem; }
+  /* CARD STYLING */
+  .sdk-card {
+    background: var(--sdk-surface);
+    border: 1px solid var(--sdk-border);
+    border-radius: 12px;
+    padding: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    box-shadow: var(--sdk-card-shadow);
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  }
+  .sdk-card:hover {
+    border-color: var(--cargill-green);
+    box-shadow: var(--sdk-card-hover-shadow);
+  }
+
+  .sdk-card-top {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    margin-bottom: 1.25rem;
+  }
+
+  .sdk-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5rem;
+  }
   .sdk-title { font-size: 1.15rem; font-weight: 700; margin: 0; color: var(--sdk-text); }
-  .sdk-version { font-size: 0.75rem; font-weight: 700; background: var(--cargill-green); color: #ffffff; padding: 2px 8px; border-radius: 4px; }
-  .sdk-desc { font-size: 0.88rem; color: var(--sdk-text-muted); margin-bottom: 1.25rem; line-height: 1.45; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; min-height: 3.9em; }
-  .sdk-badges { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: auto; min-height: 28px; align-items: center; }
-  .sdk-badge { font-size: 0.75rem; font-weight: 600; padding: 3px 10px; border-radius: 6px; display: inline-flex; align-items: center; gap: 5px; }
+  .sdk-version {
+    font-size: 0.75rem;
+    font-weight: 700;
+    background: var(--cargill-green);
+    color: #ffffff;
+    padding: 2px 8px;
+    border-radius: 4px;
+    flex-shrink: 0;
+  }
+
+  .sdk-desc {
+    font-size: 0.88rem;
+    color: var(--sdk-text-muted);
+    margin-bottom: 1.25rem;
+    line-height: 1.45;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    min-height: 3.9em;
+  }
+
+  .sdk-badges {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    margin-top: auto;
+    min-height: 28px;
+    align-items: center;
+  }
+  .sdk-badge {
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 3px 10px;
+    border-radius: 6px;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+  }
   .sdk-badge.android { background: rgba(34, 197, 94, 0.15); color: #15803d; border: 1px solid rgba(34, 197, 94, 0.4); }
   .sdk-badge.ios { background: rgba(59, 130, 246, 0.15); color: #1d4ed8; border: 1px solid rgba(59, 130, 246, 0.4); }
   .sdk-badge.rn { background: rgba(56, 189, 248, 0.15); color: #0369a1; border: 1px solid rgba(56, 189, 248, 0.4); }
 
-  .sdk-btn-highlight { width: 100%; background: var(--cargill-green); color: #ffffff; border: none; padding: 0.75rem 1rem; border-radius: 8px; font-weight: 600; font-size: 0.88rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.5rem; margin-top: auto; }
-  .sdk-btn-highlight:hover { background: var(--cargill-green-hover); }
+  /* INLINE ACCORDION BUTTON */
+  .sdk-btn-accordion {
+    width: 100%;
+    background: var(--cargill-green);
+    color: #ffffff;
+    border: none;
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 0.88rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    transition: background 0.2s ease;
+    margin-top: auto;
+  }
+  .sdk-btn-accordion:hover { background: var(--cargill-green-hover); }
+  .sdk-btn-accordion .chevron-icon { transition: transform 0.3s ease; }
+  .sdk-card.expanded .sdk-btn-accordion .chevron-icon { transform: rotate(180deg); }
 
-  .sdk-modal-overlay { position: fixed !important; top: 0 !important; left: 0 !important; width: 100vw !important; height: 100vh !important; background: var(--sdk-modal-overlay) !important; backdrop-filter: blur(4px); display: none; align-items: center; justify-content: center; z-index: 99999 !important; padding: 1rem; }
-  .sdk-modal-overlay.active { display: flex !important; }
-  .sdk-modal-content { background: var(--sdk-modal-bg); border: 2px solid var(--sdk-border); border-radius: 14px; max-width: 720px; width: 100%; padding: 1.5rem; box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4); max-height: 85vh; display: flex; flex-direction: column; }
-  .sdk-modal-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem; padding-bottom: 0.75rem; border-bottom: 1px solid var(--sdk-border); flex-shrink: 0; }
-  .sdk-modal-header h3 { margin: 0; font-size: 1.25rem; color: var(--sdk-text); }
-  .sdk-modal-header p { margin: 0.2rem 0 0 0; font-size: 0.85rem; color: var(--sdk-text-muted); }
-  .sdk-modal-close { background: none; border: none; color: var(--sdk-text-muted); cursor: pointer; }
+  /* FLEX CONTAINER FOR INLINE DRAWER (PREVENTS TAB OVERLAP & LEAKAGE) */
+  .sdk-inline-drawer {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.35s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.25s ease;
+    opacity: 0;
+    margin-top: 0;
+    border-top: 0 solid var(--sdk-border);
+    display: flex;
+    flex-direction: column;
+  }
+  .sdk-card.expanded .sdk-inline-drawer {
+    max-height: 480px;
+    opacity: 1;
+    margin-top: 1rem;
+    padding-top: 0.75rem;
+    border-top: 1px solid var(--sdk-border);
+  }
 
-  .sdk-modal-tabs { display: flex; gap: 0.5rem; border-bottom: 2px solid var(--sdk-border); margin-bottom: 1rem; flex-shrink: 0; }
-  .sdk-tab-btn { background: none; border: none; padding: 0.65rem 1.25rem; font-size: 0.88rem; font-weight: 600; color: var(--sdk-text-muted); border-bottom: 3px solid transparent; cursor: pointer; }
-  .sdk-tab-btn.active { color: var(--cargill-green); border-bottom-color: var(--cargill-green); background: rgba(0, 133, 68, 0.08); border-radius: 6px 6px 0 0; }
-  .sdk-modal-scrollable-body { overflow-y: auto; padding-right: 0.5rem; flex-grow: 1; }
+  /* STICKY PLATFORM TABS BAR (FIXED AT TOP OF DRAWER, NEVER SCROLLS) */
+  .drawer-tabs {
+    display: flex;
+    gap: 0.35rem;
+    border-bottom: 2px solid var(--sdk-border);
+    margin-bottom: 0.75rem;
+    background: var(--sdk-surface);
+    flex-shrink: 0;
+    z-index: 5;
+  }
+  .drawer-tab-btn {
+    background: none;
+    border: none;
+    padding: 0.45rem 0.85rem;
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--sdk-text-muted);
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    transition: all 0.2s ease;
+  }
+  .drawer-tab-btn:hover { color: var(--cargill-green); }
+  .drawer-tab-btn.active {
+    color: var(--cargill-green);
+    border-bottom-color: var(--cargill-green);
+    background: rgba(0, 133, 68, 0.08);
+    border-radius: 4px 4px 0 0;
+  }
 
-  .md-rendered-content { font-size: 0.9rem; line-height: 1.6; color: var(--sdk-text); }
-  .md-rendered-content h3 { font-size: 1.05rem; margin: 1rem 0 0.4rem 0; color: var(--sdk-text); }
-  .sdk-note-callout { background: rgba(0, 133, 68, 0.1); border: 1px solid var(--sdk-border); border-left: 4px solid var(--cargill-green); padding: 0.65rem 0.85rem; border-radius: 6px; margin: 0.75rem 0; font-size: 0.85rem; }
-  .inline-code { background: rgba(0, 133, 68, 0.12); color: var(--cargill-green); padding: 2px 6px; border-radius: 4px; font-family: monospace; }
-  .sdk-code-block { background: var(--sdk-code-bg); border: 1px solid var(--sdk-border); border-radius: 8px; margin: 0.75rem 0 1.25rem 0; overflow: hidden; }
-  .sdk-code-header { background: rgba(255, 255, 255, 0.05); padding: 0.4rem 0.85rem; display: flex; justify-content: space-between; align-items: center; font-size: 0.75rem; color: #86efac; text-transform: uppercase; }
-  .sdk-copy-btn { background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); color: #ffffff; padding: 2px 8px; border-radius: 4px; font-size: 0.7rem; cursor: pointer; }
-  .sdk-code-block pre { margin: 0; padding: 0.85rem; overflow-x: auto; font-size: 0.84rem; color: #f0fdf4; font-family: monospace; }
+  /* DRAWER BODY (ONLY THE BODY SCROLLS UNDER TABS) */
+  .drawer-body {
+    font-size: 0.84rem;
+    line-height: 1.5;
+    color: var(--sdk-text);
+    overflow-y: auto;
+    flex-grow: 1;
+    padding-right: 0.4rem;
+  }
+
+  /* CUSTOM CARGILL SCROLLBAR ON BODY */
+  .drawer-body::-webkit-scrollbar { width: 6px; }
+  .drawer-body::-webkit-scrollbar-track { background: rgba(0, 133, 68, 0.05); border-radius: 4px; }
+  .drawer-body::-webkit-scrollbar-thumb { background: var(--cargill-green); border-radius: 4px; }
+  .drawer-body::-webkit-scrollbar-thumb:hover { background: var(--cargill-green-hover); }
+
+  .md-rendered-content h4 { margin: 0.6rem 0 0.3rem 0; font-size: 0.9rem; color: var(--sdk-text); }
+  .md-rendered-content ul { padding-left: 1.2rem; margin: 0.4rem 0 0.8rem 0; }
+  .md-rendered-content li { margin-bottom: 0.2rem; }
+  
+  .sdk-note-callout {
+    background: rgba(0, 133, 68, 0.1);
+    border-left: 3px solid var(--cargill-green);
+    padding: 0.5rem 0.75rem;
+    border-radius: 4px;
+    margin: 0.5rem 0;
+    font-size: 0.8rem;
+    color: var(--sdk-text);
+  }
+  .sdk-warning-callout {
+    background: rgba(234, 179, 8, 0.1);
+    border-left: 3px solid #d97706;
+    padding: 0.5rem 0.75rem;
+    border-radius: 4px;
+    margin: 0.5rem 0;
+    font-size: 0.8rem;
+    color: var(--sdk-text);
+  }
+
+  .inline-code {
+    background: rgba(0, 133, 68, 0.12);
+    color: var(--cargill-green);
+    padding: 2px 5px;
+    border-radius: 3px;
+    font-family: SFMono-Regular, Consolas, monospace;
+    font-size: 0.8rem;
+  }
+
+  /* DARK BLACK BACKGROUND ON CODE BLOCKS */
+  .sdk-code-block,
+  .md-rendered-content .sdk-code-block {
+    background: #052014 !important;
+    border: 1px solid var(--sdk-border) !important;
+    border-radius: 6px !important;
+    margin: 0.5rem 0 0.8rem 0 !important;
+    overflow: hidden !important;
+  }
+  
+  .sdk-code-header,
+  .md-rendered-content .sdk-code-header {
+    background: rgba(255, 255, 255, 0.08) !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.15) !important;
+    padding: 0.35rem 0.65rem !important;
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    font-size: 0.7rem !important;
+    font-weight: 700 !important;
+    color: #86efac !important;
+    text-transform: uppercase !important;
+  }
+  
+  .sdk-copy-btn {
+    background: rgba(255, 255, 255, 0.15) !important;
+    border: 1px solid rgba(255, 255, 255, 0.25) !important;
+    color: #ffffff !important;
+    padding: 2px 7px !important;
+    border-radius: 3px !important;
+    font-size: 0.65rem !important;
+    cursor: pointer !important;
+  }
+  .sdk-copy-btn:hover { background: var(--cargill-green) !important; }
+
+  .sdk-code-block pre,
+  .md-rendered-content pre,
+  .drawer-body pre,
+  pre:has(code) {
+    background: #052014 !important;
+    color: #f0fdf4 !important;
+    margin: 0 !important;
+    padding: 0.75rem !important;
+    font-size: 0.8rem !important;
+    line-height: 1.45 !important;
+    font-family: SFMono-Regular, Consolas, monospace !important;
+    overflow-x: auto !important;
+    border-radius: 0 0 6px 6px !important;
+  }
+
+  .sdk-code-block code,
+  .md-rendered-content pre code {
+    background: transparent !important;
+    color: #f0fdf4 !important;
+    padding: 0 !important;
+  }
+
+  [data-theme='dark'] .sdk-code-block,
+  [data-theme='dark'] .md-rendered-content .sdk-code-block,
+  [data-theme='dark'] .sdk-code-block pre,
+  [data-theme='dark'] .md-rendered-content pre {
+    background: #02140b !important;
+  }
 </style>
