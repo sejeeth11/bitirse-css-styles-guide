@@ -1,5 +1,5 @@
 ---
-title: Localization & Internationalization (I18N)
+title: Localization & Internationalization (I18N).
 description: Enterprise guidelines, locale management, dynamic string resource loading, pluralization, RTL support, and multi-language contracts for Android, iOS, and React Native.
 sidebar:
   order: 5
@@ -303,7 +303,7 @@ export const configureRtlDirection = (isRtl: boolean) => {
     </div>
     <div style="background: var(--sl-color-bg-nav); border: 1px solid var(--sl-color-gray-5); border-radius: 8px; padding: 14px 16px;">
       <div style="font-weight: 700; color: #ef4444; font-size: 0.9rem; margin-bottom: 4px;">2. Zero String Concatenation</div>
-      <div style="font-size: 0.86rem; color: var(--sl-color-gray-2); line-height: 1.5;">Never join strings like <code>"Hello " + name</code>. Use parameter format strings (<code>%1$s</code> or <code>{{name}}</code>).</div>
+      <div style="font-size: 0.86rem; color: var(--sl-color-gray-2); line-height: 1.5;">Never join strings like <code>"Hello " + userName</code>. Use parameter format strings (<code>%1$s</code> or <code>&#123;&#123;userName&#125;&#125;</code>).</div>
     </div>
     <div style="background: var(--sl-color-bg-nav); border: 1px solid var(--sl-color-gray-5); border-radius: 8px; padding: 14px 16px;">
       <div style="font-weight: 700; color: #ef4444; font-size: 0.9rem; margin-bottom: 4px;">3. Native Plural Handling</div>
