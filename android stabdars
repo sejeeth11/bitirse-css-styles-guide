@@ -1,279 +1,126 @@
 ---
-title: Branding & Assets
-description: Enterprise guidelines for asset pipelines, vector icons, splash screens, custom typography, dynamic app icons, and branding token management across Android, iOS, and React Native.
+title: Development Platforms & SDKs Overview
+description: Enterprise guidelines, platform selection matrix, tier-1 framework specifications, and shared SDK ecosystem for Android, iOS, and React Native.
 sidebar:
-  order: 4
+  order: 1
 ---
 
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 
-Welcome to the **Enterprise Branding & Assets Standards**. Asset management standardizes how visual brand elements—vector icons, dynamic splash screens, image assets, typography files, and app launcher icons—are cataloged, optimized, and consumed across all mobile platforms.
+Welcome to the **Development Platforms & SDKs Overview**. This section defines our official mobile engineering platforms, framework governance tiers, and shared SDK ecosystem required for building enterprise mobile applications.
 
-<div style="border: 2px solid #8b5cf6; border-radius: 12px; padding: 22px 26px; background-color: var(--sl-color-bg-nav); margin: 24px 0; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);">
+<div style="border: 2px solid #2563eb; border-radius: 12px; padding: 22px 26px; background-color: var(--sl-color-bg-nav); margin: 24px 0; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);">
   <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 12px;">
-    <span style="background: #8b5cf6; color: white; padding: 4px 12px; border-radius: 20px; font-weight: 700; font-size: 0.8rem; letter-spacing: 0.05em;">BRANDING MANDATE</span>
-    <strong style="font-size: 1.15rem; color: var(--sl-color-white);">Optimized Vector Assets & Scalable Brand Resources</strong>
+    <span style="background: #2563eb; color: white; padding: 4px 12px; border-radius: 20px; font-weight: 700; font-size: 0.8rem; letter-spacing: 0.05em;">PLATFORM MANDATE</span>
+    <strong style="font-size: 1.15rem; color: var(--sl-color-white);">Tier-1 Approved Mobile Stacks</strong>
   </div>
   <p style="margin: 0 0 16px 0; color: var(--sl-color-gray-2); font-size: 0.98rem; line-height: 1.6;">
-    All enterprise applications must consume centralized vector assets (SVG/VectorDrawables), compressed WebP raster images, and system-scalable typography. Uncompressed raw PNGs, hardcoded asset paths, or unoptimized asset bundles are strictly forbidden.
+    Enterprise mobile applications must be built strictly using our three <strong>Tier-1 Approved Stacks</strong>: Native Android (Kotlin + Jetpack Compose), Native iOS (Swift 5.9+ + SwiftUI), or Cross-Platform React Native (TypeScript). Unapproved frameworks (Flutter, Xamarin, Ionic) are strictly prohibited.
   </p>
   <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px;">
-    <div style="background: var(--sl-color-gray-6); padding: 14px 16px; border-radius: 8px; border-left: 4px solid #8b5cf6;">
-      <div style="font-weight: 700; font-size: 0.92rem; color: var(--sl-color-white);">🎨 Vector Icons</div>
-      <div style="font-size: 0.84rem; color: var(--sl-color-gray-3); margin-top: 3px;">Resolution-Independent SVGs</div>
+    <div style="background: var(--sl-color-gray-6); padding: 14px 16px; border-radius: 8px; border-left: 4px solid #008544;">
+      <div style="font-weight: 700; font-size: 0.92rem; color: var(--sl-color-white);">🤖 Native Android</div>
+      <div style="font-size: 0.84rem; color: var(--sl-color-gray-3); margin-top: 3px;">Kotlin 1.9+ & Jetpack Compose</div>
     </div>
     <div style="background: var(--sl-color-gray-6); padding: 14px 16px; border-radius: 8px; border-left: 4px solid #2563eb;">
-      <div style="font-weight: 700; font-size: 0.92rem; color: var(--sl-color-white);">🔤 Custom Typography</div>
-      <div style="font-size: 0.84rem; color: var(--sl-color-gray-3); margin-top: 3px;">Dynamic Type Scalable Fonts</div>
+      <div style="font-weight: 700; font-size: 0.92rem; color: var(--sl-color-white);">🍏 Native iOS</div>
+      <div style="font-size: 0.84rem; color: var(--sl-color-gray-3); margin-top: 3px;">Swift 5.9+ & SwiftUI @Observable</div>
     </div>
-    <div style="background: var(--sl-color-gray-6); padding: 14px 16px; border-radius: 8px; border-left: 4px solid #008544;">
-      <div style="font-weight: 700; font-size: 0.92rem; color: var(--sl-color-white);">📱 App Launch Icons</div>
-      <div style="font-size: 0.84rem; color: var(--sl-color-gray-3); margin-top: 3px;">Adaptive & Dynamic Icons</div>
+    <div style="background: var(--sl-color-gray-6); padding: 14px 16px; border-radius: 8px; border-left: 4px solid #61dafb;">
+      <div style="font-weight: 700; font-size: 0.92rem; color: var(--sl-color-white);">⚛️ React Native</div>
+      <div style="font-size: 0.84rem; color: var(--sl-color-gray-3); margin-top: 3px;">React Native 0.73+ & TypeScript</div>
     </div>
   </div>
 </div>
 
 ---
 
-## 1. Enterprise Asset Pipeline Architecture
+## 1. Platform Governance & Architecture Ecosystem
 
 ```mermaid
 graph TD
-    subgraph Design_Figma ["Design & Asset Source"]
-        Figma["Central Figma Brand Library"]
-        Tokens["Design System Asset Manifest"]
+    subgraph Governance ["Platform Selection & Governance"]
+        Req["Business & Tech Requirements"]
+        Matrix{"Technology Decision Matrix"}
     end
 
-    subgraph Optimization ["Build Optimization Engine"]
-        SVG["Vector SVGs & WebP Compression"]
-        Generator["Platform Asset Compiler"]
+    subgraph Tier1_Platforms ["Tier-1 Approved Frameworks"]
+        AndroidStack["Android: Kotlin + Compose + Hilt"]
+        iOSStack["iOS: Swift + SwiftUI + Concurrency"]
+        RNStack["React Native: TS + Custom Hooks + Metro"]
     end
 
-    subgraph Target_Platforms ["Native Platform Artifacts"]
-        AndroidRes["Android VectorDrawables & Xml Font Provider"]
-        AssetsCatalog["iOS Asset Catalog (.xcassets & Custom Fonts)"]
-        RNBundle["React Native Metro SVG Transformer"]
+    subgraph Core_SDKs ["Enterprise Core SDK Ecosystem"]
+        AuthSDK["Auth & Token KeyStore / Keychain"]
+        ConfigSDK["Remote Config & Feature Flags"]
+        ObsSDK["Datadog Telemetry & RUM"]
+        DesignSDK["Enterprise Design System Tokens"]
     end
 
-    Figma --> Tokens
-    Tokens --> SVG
-    SVG --> Generator
-    Generator --> AndroidRes
-    Generator --> AssetsCatalog
-    Generator --> RNBundle
+    Req --> Matrix
+    Matrix -- "High Perf / Hardware Deep" --> AndroidStack
+    Matrix -- "Native Apple Ecosystem" --> iOSStack
+    Matrix -- "Multi-Platform Feature Parity" --> RNStack
 
-    classDef designStyle fill:#f5f3ff,stroke:#8b5cf6,stroke-width:2px;
-    classDef optStyle fill:#eff6ff,stroke:#2563eb,stroke-width:2px;
-    classDef platformStyle fill:#f2fbf5,stroke:#008544,stroke-width:2px;
+    AndroidStack --> Core_SDKs
+    iOSStack --> Core_SDKs
+    RNStack --> Core_SDKs
 
-    class Figma,Tokens designStyle;
-    class SVG,Generator optStyle;
-    class AndroidRes,AssetsCatalog,RNBundle platformStyle;
+    classDef govStyle fill:#f5f3ff,stroke:#8b5cf6,stroke-width:2px;
+    classDef tierStyle fill:#eff6ff,stroke:#2563eb,stroke-width:2px;
+    classDef sdkStyle fill:#f2fbf5,stroke:#008544,stroke-width:2px;
+
+    class Req,Matrix govStyle;
+    class AndroidStack,iOSStack,RNStack tierStyle;
+    class Core_SDKs,AuthSDK,ConfigSDK,ObsSDK,DesignSDK sdkStyle;
 ```
 
 ---
 
-## 2. Strongly-Typed Asset Contracts
+## 2. Technology Selection Decision Matrix
 
-Centralizing asset references in strongly-typed code modules prevents runtime string misspellings and missing resource crashes.
+Choosing the right development platform is a strategic engineering decision governed by application requirements.
+
+| Decision Criteria | Native Android (Kotlin) | Native iOS (Swift) | React Native (TypeScript) |
+| :--- | :--- | :--- | :--- |
+| **Primary Use Case** | Deep OS integration, hardware sensors, high-throughput background services. | Apple Ecosystem apps, WidgetKit, Apple Pay, WatchOS extensions. | Cross-platform business workflow apps, rapid MVP iteration, shared web/mobile logic. |
+| **UI Framework** | Jetpack Compose (Declarative) | SwiftUI (Declarative) | React Native JSX + StyleSheet |
+| **State Management** | `StateFlow` + ViewModel | `@Observable` ViewModel | Custom Hooks + Zustand / Redux |
+| **Async Model** | Kotlin Coroutines & Flow | Swift Concurrency (`async`/`await`) | JavaScript Promises & async/await |
+| **Dependency Injection** | Hilt / Dagger | Swift Protocol Injections | React Context / Factory DI |
+
+---
+
+## 3. Standard Shared SDK Initialization Entry Point
+
+Every enterprise mobile application must bootstrap core enterprise SDKs (Auth, Analytics, Remote Config) during app launch.
 
 <Tabs>
   <TabItem label="Android (Compose)">
 
 ```kotlin
-// File: core/designsystem/theme/BrandIcons.kt
-package com.enterprise.mobile.core.designsystem.theme
+// File: Application.kt
+package com.enterprise.mobile
 
-import androidx.annotation.DrawableRes
-import androidx.compose.ui.graphics.vector.ImageVector
+import android.app.Application
+import com.enterprise.mobile.core.config.AppConfigProvider
+import com.enterprise.mobile.core.observability.ObservabilitySDK
+import dagger.hilt.android.HiltAndroidApp
+import javax.inject.Inject
 
-object BrandIcons {
-    // Vector Drawable Resource Enums
-    val AppLogo: Int = R.drawable.ic_brand_logo
-    val UserAvatarPlaceholder: Int = R.drawable.ic_avatar_placeholder
-    val SecurityShield: Int = R.drawable.ic_security_shield
-    
-    // System Status Icons
-    val CheckmarkCircle: Int = R.drawable.ic_check_circle
-    val WarningTriangle: Int = R.drawable.ic_warning_triangle
-}
-```
+@HiltAndroidApp
+class EnterpriseApplication : Application() {
 
-  </TabItem>
-  <TabItem label="iOS (SwiftUI)">
+    @Inject lateinit var appConfigProvider: AppConfigProvider
+    @Inject lateinit var observabilitySDK: ObservabilitySDK
 
-```swift
-// File: Core/DesignSystem/Theme/BrandAssets.swift
-import SwiftUI
-
-public enum BrandAssets {
-    // Strongly-typed Image Asset Catalogs
-    public static let appLogo = Image("BrandLogo", bundle: .main)
-    public static let avatarPlaceholder = Image("AvatarPlaceholder", bundle: .main)
-    public static let securityShield = Image("SecurityShield", bundle: .main)
-    
-    // System Status Image Symbols
-    public static let checkmarkCircle = Image(systemName: "checkmark.circle.fill")
-    public static let warningTriangle = Image(systemName: "exclamationmark.triangle.fill")
-}
-```
-
-  </TabItem>
-  <TabItem label="React Native (TypeScript)">
-
-```typescript
-// File: src/core/designsystem/theme/brandAssets.ts
-import BrandLogoSvg from '../../../assets/vectors/brand-logo.svg';
-import AvatarPlaceholderSvg from '../../../assets/vectors/avatar-placeholder.svg';
-import SecurityShieldSvg from '../../../assets/vectors/security-shield.svg';
-
-export const BrandAssets = {
-  AppLogo: BrandLogoSvg,
-  AvatarPlaceholder: AvatarPlaceholderSvg,
-  SecurityShield: SecurityShieldSvg,
-};
-```
-
-  </TabItem>
-</Tabs>
-
----
-
-## 3. Custom Font Loading & Dynamic Type Scaling
-
-Custom typography must scale naturally with device accessibility text settings (Android Font Scale / iOS Dynamic Type).
-
-<Tabs>
-  <TabItem label="Android (Compose)">
-
-```kotlin
-// File: core/designsystem/theme/Type.kt
-package com.enterprise.mobile.core.designsystem.theme
-
-import androidx.compose.material3.Typography
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.Font
-import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.sp
-import com.enterprise.mobile.core.designsystem.R
-
-// Font Family Definition
-val EnterpriseFontFamily = FontFamily(
-    Font(R.font.enterprise_sans_regular, FontWeight.Normal),
-    Font(R.font.enterprise_sans_medium, FontWeight.Medium),
-    Font(R.font.enterprise_sans_bold, FontWeight.Bold)
-)
-
-val EnterpriseTypography = Typography(
-    headlineLarge = TextStyle(
-        fontFamily = EnterpriseFontFamily,
-        fontWeight = FontWeight.Bold,
-        fontSize = 32.sp,
-        lineHeight = 40.sp
-    ),
-    bodyMedium = TextStyle(
-        fontFamily = EnterpriseFontFamily,
-        fontWeight = FontWeight.Normal,
-        fontSize = 16.sp,
-        lineHeight = 24.sp
-    )
-)
-```
-
-  </TabItem>
-  <TabItem label="iOS (SwiftUI)">
-
-```swift
-// File: Core/DesignSystem/Theme/Typography.swift
-import SwiftUI
-
-public extension Font {
-    static func enterpriseHeadlineLarge() -> Font {
-        return Font.custom("EnterpriseSans-Bold", size: 32, relativeTo: .largeTitle)
-    }
-
-    static func enterpriseBodyMedium() -> Font {
-        return Font.custom("EnterpriseSans-Regular", size: 16, relativeTo: .body)
-    }
-}
-
-// Custom Font Registration helper
-public struct FontRegistrar {
-    public static func registerFonts() {
-        guard let fontURL = Bundle.main.url(forResource: "EnterpriseSans-Bold", withExtension: "ttf"),
-              let fontDataProvider = CGDataProvider(url: fontURL as CFURL),
-              let font = CGFont(fontDataProvider) else { return }
-        CTFontManagerRegisterGraphicsFont(font, nil)
-    }
-}
-```
-
-  </TabItem>
-  <TabItem label="React Native (TypeScript)">
-
-```typescript
-// File: src/core/designsystem/theme/typography.ts
-import { TextStyle } from 'react-native';
-
-export const fontFamily = {
-  regular: 'EnterpriseSans-Regular',
-  medium: 'EnterpriseSans-Medium',
-  bold: 'EnterpriseSans-Bold',
-};
-
-export const typography: Record<string, TextStyle> = {
-  headlineLarge: {
-    fontFamily: fontFamily.bold,
-    fontSize: 32,
-    lineHeight: 40,
-  },
-  bodyMedium: {
-    fontFamily: fontFamily.regular,
-    fontSize: 16,
-    lineHeight: 24,
-  },
-};
-```
-
-  </TabItem>
-</Tabs>
-
----
-
-## 4. UI Asset Component Consumption
-
-Using strongly-typed brand assets safely inside screen components.
-
-<Tabs>
-  <TabItem label="Android (Compose)">
-
-```kotlin
-// File: feature/branding/ui/BrandHeader.kt
-package com.enterprise.mobile.feature.branding.ui
-
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.size
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.unit.dp
-import com.enterprise.mobile.core.designsystem.theme.BrandIcons
-import com.enterprise.mobile.core.designsystem.theme.EnterpriseTypography
-
-@Composable
-fun BrandHeader(modifier: Modifier = Modifier) {
-    Row(modifier = modifier) {
-        Image(
-            painter = painterResource(id = BrandIcons.AppLogo),
-            contentDescription = "Enterprise Brand Logo",
-            modifier = Modifier.size(40.dp)
-        )
-        Text(
-            text = "Enterprise Mobile",
-            style = EnterpriseTypography.headlineLarge
+    override fun onCreate() {
+        super.onCreate()
+        
+        // 1. Initialize Telemetry & RUM
+        observabilitySDK.initialize(
+            context = this,
+            config = appConfigProvider.currentConfig
         )
     }
 }
@@ -283,20 +130,26 @@ fun BrandHeader(modifier: Modifier = Modifier) {
   <TabItem label="iOS (SwiftUI)">
 
 ```swift
-// File: Features/Branding/Views/BrandHeader.swift
+// File: EnterpriseApp.swift
 import SwiftUI
 
-struct BrandHeaderView: View {
-    var body: some View {
-        HStack(spacing: 12) {
-            BrandAssets.appLogo
-                .resizable()
-                .scaledToFit()
-                .frame(width: 40, height: 40)
-            
-            Text("Enterprise Mobile")
-                .font(.enterpriseHeadlineLarge())
-                .foregroundColor(.primary)
+@main
+struct EnterpriseApp: App {
+    @State private var featureFlagManager = FeatureFlagManager()
+
+    init() {
+        // 1. Register Custom Typography & Shared Core SDKs
+        FontRegistrar.registerFonts()
+        ObservabilitySDK.shared.initialize(with: AppConfig.current)
+    }
+
+    var body: some Scene {
+        WindowGroup {
+            MainContentView()
+                .environment(featureFlagManager)
+                .task {
+                    await featureFlagManager.fetchRemoteFlags()
+                }
         }
     }
 }
@@ -306,34 +159,25 @@ struct BrandHeaderView: View {
   <TabItem label="React Native (TypeScript)">
 
 ```tsx
-// File: src/features/branding/presentation/BrandHeader.tsx
-import React from 'react';
-import { View, Text, StyleSheet } from 'react.style';
-import { BrandAssets } from '../../../core/designsystem/theme/brandAssets';
-import { typography } from '../../../core/designsystem/theme/typography';
+// File: App.tsx
+import React, { useEffect } from 'react';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { initializeObservability } from './src/core/observability/observabilitySDK';
+import { appConfig } from './src/core/config/appConfig';
+import { RootNavigator } from './src/navigation/RootNavigator';
 
-export const BrandHeader: React.FC = () => {
-  const AppLogo = BrandAssets.AppLogo;
+export const App: React.FC = () => {
+  useEffect(() => {
+    // 1. Initialize Telemetry & RUM on App Mount
+    initializeObservability(appConfig);
+  }, []);
 
   return (
-    <View style={styles.container}>
-      <AppLogo width={40} height={40} />
-      <Text style={styles.title}>Enterprise Mobile</Text>
-    </View>
+    <SafeAreaProvider>
+      <RootNavigator />
+    </SafeAreaProvider>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 12,
-  },
-  title: {
-    ...typography.headlineLarge,
-    color: '#161b22',
-  },
-});
 ```
 
   </TabItem>
@@ -341,58 +185,58 @@ const styles = StyleSheet.create({
 
 ---
 
-## 5. Mandatory Branding & Asset Rules
+## 4. Mandatory Platform Rules
 
 <div style="border: 1px solid rgba(239, 68, 68, 0.3); background: rgba(239, 68, 68, 0.04); border-left: 5px solid #ef4444; border-radius: 10px; padding: 22px 24px; margin: 28px 0;">
   <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 16px;">
     <span style="background: #ef4444; color: white; font-weight: 700; font-size: 0.75rem; padding: 3px 10px; border-radius: 4px; letter-spacing: 0.05em;">NON-NEGOTIABLE</span>
-    <h3 style="margin: 0; font-size: 1.1rem; color: var(--sl-color-white); font-weight: 700;">Asset Architectural Violations</h3>
+    <h3 style="margin: 0; font-size: 1.1rem; color: var(--sl-color-white); font-weight: 700;">Platform Violation Rules</h3>
   </div>
   <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px;">
     <div style="background: var(--sl-color-bg-nav); border: 1px solid var(--sl-color-gray-5); border-radius: 8px; padding: 14px 16px;">
-      <div style="font-weight: 700; color: #ef4444; font-size: 0.9rem; margin-bottom: 4px;">1. Zero Raw Bitmap Bitmaps</div>
-      <div style="font-size: 0.86rem; color: var(--sl-color-gray-2); line-height: 1.5;">All UI iconography must use Vector assets (SVG / VectorDrawable / PDF). Heavy PNG bitmaps are strictly limited to photos.</div>
+      <div style="font-weight: 700; color: #ef4444; font-size: 0.9rem; margin-bottom: 4px;">1. Zero Unapproved Frameworks</div>
+      <div style="font-size: 0.86rem; color: var(--sl-color-gray-2); line-height: 1.5;">Flutter, Xamarin, and Ionic are strictly prohibited. Applications must use Tier-1 approved tech stacks.</div>
     </div>
     <div style="background: var(--sl-color-bg-nav); border: 1px solid var(--sl-color-gray-5); border-radius: 8px; padding: 14px 16px;">
-      <div style="font-weight: 700; color: #ef4444; font-size: 0.9rem; margin-bottom: 4px;">2. Mandatory WebP Raster Compression</div>
-      <div style="font-size: 0.86rem; color: var(--sl-color-gray-2); line-height: 1.5;">Raster images must be compressed into WebP format with a maximum single image size limit of 250KB.</div>
+      <div style="font-weight: 700; color: #ef4444; font-size: 0.9rem; margin-bottom: 4px;">2. Mandatory Modern UI Toolkit</div>
+      <div style="font-size: 0.86rem; color: var(--sl-color-gray-2); line-height: 1.5;">Android XML layouts and iOS UIKit Storyboards are deprecated. Declarative Jetpack Compose / SwiftUI is required.</div>
     </div>
     <div style="background: var(--sl-color-bg-nav); border: 1px solid var(--sl-color-gray-5); border-radius: 8px; padding: 14px 16px;">
-      <div style="font-weight: 700; color: #ef4444; font-size: 0.9rem; margin-bottom: 4px;">3. No Hardcoded Asset Paths</div>
-      <div style="font-size: 0.86rem; color: var(--sl-color-gray-2); line-height: 1.5;">Asset names must never be hardcoded as string literals in views. Consume exclusively through <code>BrandAssets</code> catalog.</div>
+      <div style="font-weight: 700; color: #ef4444; font-size: 0.9rem; margin-bottom: 4px;">3. Strict Type Safety</div>
+      <div style="font-size: 0.86rem; color: var(--sl-color-gray-2); line-height: 1.5;">Untyped JavaScript or Kotlin <code>Any</code> / Swift <code>AnyObject</code> bypasses are forbidden. Enforce strict type contracts.</div>
     </div>
     <div style="background: var(--sl-color-bg-nav); border: 1px solid var(--sl-color-gray-5); border-radius: 8px; padding: 14px 16px;">
-      <div style="font-weight: 700; color: #ef4444; font-size: 0.9rem; margin-bottom: 4px;">4. Accessibility Content Descriptions</div>
-      <div style="font-size: 0.86rem; color: var(--sl-color-gray-2); line-height: 1.5;">Every informative brand asset must include localized content descriptions for screen readers (TalkBack / VoiceOver).</div>
+      <div style="font-weight: 700; color: #ef4444; font-size: 0.9rem; margin-bottom: 4px;">4. Shared Enterprise Core SDKs</div>
+      <div style="font-size: 0.86rem; color: var(--sl-color-gray-2); line-height: 1.5;">Apps must not re-implement authentication, networking, or observability from scratch; consume enterprise shared SDKs.</div>
     </div>
   </div>
 </div>
 
 ---
 
-## 6. Branding & Assets PR Checklist
+## 5. Development Platforms Quality Gate Checklist
 
 <div style="background: var(--sl-color-bg-nav); border: 1px solid var(--sl-color-gray-5); border-radius: 12px; padding: 22px 26px; margin: 28px 0;">
   <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; border-bottom: 1px solid var(--sl-color-gray-5); padding-bottom: 12px;">
-    <h3 style="margin: 0; font-size: 1.1rem; color: var(--sl-color-white); font-weight: 700;">Asset Management Quality Gate</h3>
-    <span style="background: #8b5cf6; color: white; font-size: 0.75rem; font-weight: 700; padding: 4px 10px; border-radius: 12px;">PRE-MERGE CHECK</span>
+    <h3 style="margin: 0; font-size: 1.1rem; color: var(--sl-color-white); font-weight: 700;">Platform Compliance Gate</h3>
+    <span style="background: #2563eb; color: white; font-size: 0.75rem; font-weight: 700; padding: 4px 10px; border-radius: 12px;">PRE-MERGE CHECK</span>
   </div>
   <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px;">
     <div style="display: flex; align-items: flex-start; gap: 10px; font-size: 0.9rem; color: var(--sl-color-gray-2);">
-      <span style="color: #8b5cf6; font-weight: 900;">✓</span>
-      <div>Icons and vector assets imported from design system manifest.</div>
+      <span style="color: #2563eb; font-weight: 900;">✓</span>
+      <div>Tech stack aligns with Tier-1 approved platform standards.</div>
     </div>
     <div style="display: flex; align-items: flex-start; gap: 10px; font-size: 0.9rem; color: var(--sl-color-gray-2);">
-      <span style="color: #8b5cf6; font-weight: 900;">✓</span>
-      <div>Raster images compressed as WebP (under 250KB per file).</div>
+      <span style="color: #2563eb; font-weight: 900;">✓</span>
+      <div>App entry point initializes mandatory Enterprise Observability SDK.</div>
     </div>
     <div style="display: flex; align-items: flex-start; gap: 10px; font-size: 0.9rem; color: var(--sl-color-gray-2);">
-      <span style="color: #8b5cf6; font-weight: 900;">✓</span>
-      <div>Custom typography scales dynamically with system accessibility settings.</div>
+      <span style="color: #2563eb; font-weight: 900;">✓</span>
+      <div>UI layer constructed purely with modern declarative UI frameworks.</div>
     </div>
     <div style="display: flex; align-items: flex-start; gap: 10px; font-size: 0.9rem; color: var(--sl-color-gray-2);">
-      <span style="color: #8b5cf6; font-weight: 900;">✓</span>
-      <div>App launcher dynamic adaptive icons generated for all target resolutions.</div>
+      <span style="color: #2563eb; font-weight: 900;">✓</span>
+      <div>Strict type-checking enabled without dynamic type escapes.</div>
     </div>
   </div>
 </div>
