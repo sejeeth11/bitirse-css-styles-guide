@@ -1,1 +1,452 @@
+---
+title: Android Development Standards & MVVM Architecture
+description: Enterprise guidelines, MVVM Clean Architecture, Unidirectional Data Flow diagrams, and production Kotlin code standards for Cargill Android Mobile Applications.
+sidebar:
+  order: 2
+---
 
+import { Tabs, TabItem } from '@astrojs/starlight/components';
+
+Welcome to the **Cargill Enterprise Android Development Standards**. Architecture is the foundation of our mobile engineering strategy. This document provides a comprehensive specification of our mandatory **MVVM Clean Architecture** pattern.
+
+:::tip[Core Architectural Mandate]
+All Cargill Android applications must strictly enforce **MVVM (Model-View-ViewModel)** with **Clean Architecture** and **Unidirectional Data Flow (UDF)** powered by **Jetpack Compose** and **Kotlin StateFlow**.
+:::
+
+---
+
+## 1. MVVM Clean Architecture Diagrams
+
+### Layered Architecture Flowchart
+
+The diagram below illustrates how data and control flow between the **UI Layer**, **Domain Layer**, and **Data Layer**.
+
+```mermaid
+graph TD
+    subgraph UI_Layer ["1. UI Layer (Presentation)"]
+        View["Jetpack Compose Screen (@Composable)"]
+        VM["MVVM ViewModel (Hilt Injected)"]
+        State["UiState (StateFlow / Sealed Interface)"]
+        Event["UiEvent (User Actions / Callbacks)"]
+    end
+
+    subgraph Domain_Layer ["2. Domain Layer (Pure Business Logic)"]
+        UC["Use Cases (e.g. GetUserProfileUseCase)"]
+        Model["Domain Models (Pure Kotlin Data Classes)"]
+    end
+
+    subgraph Data_Layer ["3. Data Layer (Single Source of Truth)"]
+        Repo["UserRepositoryImpl"]
+        Remote["Remote DataSource (Retrofit API)"]
+        Local["Local DataSource (Room DB)"]
+    end
+
+    %% Flow interactions
+    View -- "1. Emits User Event" --> Event
+    Event -- "2. Triggers Event Function" --> VM
+    VM -- "3. Executes Use Case" --> UC
+    UC -- "4. Requests Data" --> Repo
+    Repo -- "5a. Fetches API Data" --> Remote
+    Repo -- "5b. Caches / Queries Local DB" --> Local
+    Repo -- "6. Returns Domain Model" --> UC
+    UC -- "7. Delivers Result" --> VM
+    VM -- "8. Updates StateFlow" --> State
+    State -- "9. Recomposes UI" --> View
+
+    %% Styling
+    classDef uiStyle fill:#f2fbf5,stroke:#008544,stroke-width:2px;
+    classDef domainStyle fill:#eff6ff,stroke:#2563eb,stroke-width:2px;
+    classDef dataStyle fill:#fef3c7,stroke:#d97706,stroke-width:2px;
+
+    class View,VM,State,Event uiStyle;
+    class UC,Model domainStyle;
+    class Repo,Remote,Local dataStyle;
+```
+
+---
+
+### Unidirectional Data Flow (UDF) Sequence Diagram
+
+This sequence diagram illustrates the step-by-step lifecycle of an asynchronous user request from the UI down to the network and back.
+
+```mermaid
+sequenceDiagram
+    autonumber
+    actor User
+    participant ComposeView as Jetpack Compose Screen
+    participant ViewModel as UserProfileViewModel
+    participant UseCase as GetUserProfileUseCase
+    participant Repository as UserRepositoryImpl
+    participant API as Retrofit API
+
+    User->>ComposeView: Tap "Refresh Profile" Button
+    ComposeView->>ViewModel: onEvent(RefreshProfile(userId))
+    ViewModel->>ViewModel: Emit StateFlow(Loading)
+    ComposeView-->>User: Render CircularProgressIndicator
+    ViewModel->>UseCase: invoke(userId)
+    UseCase->>Repository: getUserProfile(userId)
+    Repository->>API: GET /v1/users/{userId}
+    API-->>Repository: Return UserNetworkDto JSON
+    Repository->>Repository: Map DTO to Entity & Cache in Room DB
+    Repository-->>UseCase: Return Result.success(UserDomainModel)
+    UseCase-->>ViewModel: Return Result.success(UserDomainModel)
+    ViewModel->>ViewModel: Emit StateFlow(Success(user))
+    ViewModel-->>ComposeView: Recompose Screen with Profile Data
+    ComposeView-->>User: Display Profile Details & VIP Badges
+```
+
+---
+
+## 2. Layer-by-Layer Responsibilities
+
+| Layer | Responsibility | Key Technologies |
+| :--- | :--- | :--- |
+| **UI Layer** | Render stateless UI and capture user actions. Must never execute business logic directly. | Jetpack Compose, Material 3, `@Composable` |
+| **ViewModel** | Manages UI state, transforms domain models into `StateFlow<UiState>`, handles coroutine scopes (`viewModelScope`). | Kotlin `StateFlow`, Hilt (`@HiltViewModel`) |
+| **Domain Layer** | Encapsulates pure business logic into single-purpose UseCases. Independent of Android framework classes. | Pure Kotlin, `Result<T>` |
+| **Data Layer** | Single source of truth. Handles network API requests, local database caching, and data mapping. | Retrofit, OkHttp, Room DB, EncryptedSharedPreferences |
+
+---
+
+## 3. Complete All-in-One Kotlin Specification File
+
+Below is the complete, self-contained **all-in-one Kotlin file** (`UserProfileFeature.kt`). It contains the entire stack in one place: DTO, Room Database Entity, Room DAO, Mappers, Repository, Domain Entity, Use Case, ViewModel, UI State, and Jetpack Compose View.
+
+```kotlin
+// File: com/cargill/mobile/feature/user/UserProfileFeature.kt
+package com.cargill.mobile.feature.user
+
+import androidx.compose.foundation.layout.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewModelScope
+import androidx.room.*
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
+import retrofit2.http.GET
+import retrofit2.http.Path
+import javax.inject.Inject
+import javax.inject.Singleton
+
+// ============================================================================
+// 1. DATA LAYER (DTOs, Room Entity, DAO, Mappers & Repository)
+// ============================================================================
+
+// Retrofit API Transfer Object (DTO)
+@Serializable
+data class UserNetworkDto(
+    @SerialName("id") val id: String,
+    @SerialName("full_name") val fullName: String,
+    @SerialName("email") val email: String,
+    @SerialName("is_vip") val isVip: Boolean
+)
+
+// Retrofit Service Contract
+interface CargillApiService {
+    @GET("v1/users/{id}")
+    suspend fun getUser(@Path("id") id: String): UserNetworkDto
+}
+
+// Room Database Local Entity
+@Entity(tableName = "users")
+data class UserEntity(
+    @PrimaryKey val id: String,
+    val fullName: String,
+    val email: String,
+    val isVip: Boolean
+)
+
+// Room DAO Interface
+@Dao
+interface UserDao {
+    @Query("SELECT * FROM users WHERE id = :id")
+    suspend fun getUserById(id: String): UserEntity?
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertUser(user: UserEntity)
+}
+
+// Mapper Extension Functions (Explicit Conversion between Layers)
+fun UserNetworkDto.toEntity() = UserEntity(
+    id = id,
+    fullName = fullName,
+    email = email,
+    isVip = isVip
+)
+
+fun UserNetworkDto.toDomainModel() = UserDomainModel(
+    id = id,
+    name = fullName,
+    email = email,
+    isVip = isVip
+)
+
+fun UserEntity.toDomainModel() = UserDomainModel(
+    id = id,
+    name = fullName,
+    email = email,
+    isVip = isVip
+)
+
+// Repository Interface Contract
+interface UserRepository {
+    suspend fun getUserProfile(userId: String): Result<UserDomainModel>
+}
+
+// Single Source of Truth Repository Implementation
+@Singleton
+class UserRepositoryImpl @Inject constructor(
+    private val apiService: CargillApiService,
+    private val userDao: UserDao,
+    private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
+) : UserRepository {
+
+    override suspend fun getUserProfile(userId: String): Result<UserDomainModel> {
+        return withContext(ioDispatcher) {
+            try {
+                // Fetch fresh remote data from API
+                val dto = apiService.getUser(userId)
+                
+                // Cache into local database
+                userDao.insertUser(dto.toEntity())
+                
+                Result.success(dto.toDomainModel())
+            } catch (e: Exception) {
+                // Fallback to local Room DB cache if network fails
+                val localEntity = userDao.getUserById(userId)
+                if (localEntity != null) {
+                    Result.success(localEntity.toDomainModel())
+                } else {
+                    Result.failure(e)
+                }
+            }
+        }
+    }
+}
+
+// ============================================================================
+// 2. DOMAIN LAYER (Pure Business Entities & Use Cases)
+// ============================================================================
+
+// Pure Domain Model (Framework-Independent)
+data class UserDomainModel(
+    val id: String,
+    val name: String,
+    val email: String,
+    val isVip: Boolean
+)
+
+// Pure Business UseCase
+class GetUserProfileUseCase @Inject constructor(
+    private val userRepository: UserRepository
+) {
+    suspend operator fun invoke(userId: String): Result<UserDomainModel> {
+        if (userId.isBlank()) {
+            return Result.failure(IllegalArgumentException("User ID cannot be empty."))
+        }
+        return userRepository.getUserProfile(userId)
+    }
+}
+
+// ============================================================================
+// 3. VIEWMODEL & UI STATE LAYER (MVVM + StateFlow + UDF)
+// ============================================================================
+
+// Sealed UI State Contract (Guarantees atomic UI representation)
+sealed interface UserProfileUiState {
+    data object Loading : UserProfileUiState
+    data class Success(val user: UserDomainModel) : UserProfileUiState
+    data class Error(val errorMessage: String) : UserProfileUiState
+}
+
+// Sealed User Action Intents
+sealed interface UserProfileUiEvent {
+    data class RefreshProfile(val userId: String) : UserProfileUiEvent
+}
+
+@HiltViewModel
+class UserProfileViewModel @Inject constructor(
+    private val getUserProfileUseCase: GetUserProfileUseCase
+) : ViewModel() {
+
+    private val _uiState = MutableStateFlow<UserProfileUiState>(UserProfileUiState.Loading)
+    val uiState: StateFlow<UserProfileUiState> = _uiState.asStateFlow()
+
+    fun onEvent(event: UserProfileUiEvent) {
+        when (event) {
+            is UserProfileUiEvent.RefreshProfile -> fetchProfile(event.userId)
+        }
+    }
+
+    private fun fetchProfile(userId: String) {
+        viewModelScope.launch {
+            _uiState.value = UserProfileUiState.Loading
+            getUserProfileUseCase(userId)
+                .onSuccess { domainUser ->
+                    _uiState.value = UserProfileUiState.Success(user = domainUser)
+                }
+                .onFailure { throwable ->
+                    _uiState.value = UserProfileUiState.Error(
+                        errorMessage = throwable.localizedMessage ?: "An unexpected error occurred."
+                    )
+                }
+        }
+    }
+}
+
+// ============================================================================
+// 4. UI LAYER (Stateless Jetpack Compose Screen & Components)
+// ============================================================================
+
+private val CargillGreen = Color(0xFF008544)
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun UserProfileScreen(
+    userId: String,
+    viewModel: UserProfileViewModel = hiltViewModel(),
+    onNavigateBack: () -> Unit
+) {
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
+    LaunchedEffect(userId) {
+        viewModel.onEvent(UserProfileUiEvent.RefreshProfile(userId))
+    }
+
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = { Text("User Profile") },
+                navigationIcon = {
+                    IconButton(onClick = onNavigateBack) {
+                        Icon(Icons.Default.ArrowBack, contentDescription = "Back")
+                    }
+                },
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = MaterialTheme.colorScheme.surfaceVariant
+                )
+            )
+        }
+    ) { paddingValues ->
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(paddingValues),
+            contentAlignment = Alignment.Center
+        ) {
+            when (val state = uiState) {
+                is UserProfileUiState.Loading -> {
+                    CircularProgressIndicator(color = CargillGreen)
+                }
+                is UserProfileUiState.Success -> {
+                    ProfileDetailsView(
+                        user = state.user,
+                        onRefresh = { viewModel.onEvent(UserProfileUiEvent.RefreshProfile(userId)) }
+                    )
+                }
+                is UserProfileUiState.Error -> {
+                    ErrorView(
+                        message = state.errorMessage,
+                        onRetry = { viewModel.onEvent(UserProfileUiEvent.RefreshProfile(userId)) }
+                    )
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun ProfileDetailsView(
+    user: UserDomainModel,
+    onRefresh: () -> Unit
+) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(24.dp),
+        verticalArrangement = Arrangement.spacedBy(16.dp)
+    ) {
+        Text(text = user.name, style = MaterialTheme.typography.headlineMedium)
+        Text(text = user.email, style = MaterialTheme.typography.bodyLarge, color = Color.Gray)
+
+        if (user.isVip) {
+            Surface(
+                color = CargillGreen,
+                shape = MaterialTheme.shapes.small
+            ) {
+                Text(
+                    text = "VIP Enterprise Account",
+                    color = Color.White,
+                    style = MaterialTheme.typography.labelMedium,
+                    modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp)
+                )
+            }
+        }
+
+        Spacer(modifier = Modifier.weight(1f))
+
+        Button(
+            onClick = onRefresh,
+            modifier = Modifier.fillMaxWidth(),
+            colors = ButtonDefaults.buttonColors(containerColor = CargillGreen)
+        ) {
+            Text("Refresh User Profile")
+        }
+    }
+}
+
+@Composable
+private fun ErrorView(
+    message: String,
+    onRetry: () -> Unit
+) {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(12.dp)
+    ) {
+        Text(text = message, color = MaterialTheme.colorScheme.error)
+        Button(onClick = onRetry) {
+            Text("Retry")
+        }
+    }
+}
+```
+
+---
+
+## 4. Mandatory MVVM Rules for Android Devs
+
+:::caution[Architectural Rules]
+1. **Never pass Android `Context` into ViewModels or UseCases.** Passing Context causes memory leaks.
+2. **Never expose `MutableStateFlow` outside ViewModel.** Always expose as immutable `StateFlow<UiState>`.
+3. **Use `collectAsStateWithLifecycle()` in Compose:** Never use plain `collectAsState()` as it wastes CPU/battery when the app is in the background.
+4. **ViewModel must not import Compose packages:** Keep ViewModels free of `@Composable` or `androidx.compose.*` imports.
+:::
+
+---
+
+## Checklist for Android MVVM PR Approval
+
+- [ ] Architecture follows **Clean Architecture (UI -> Domain -> Data)**.
+- [ ] ViewModel uses `StateFlow` and immutable UI state (Sealed Interface).
+- [ ] Jetpack Compose uses `collectAsStateWithLifecycle()`.
+- [ ] UseCases are pure Kotlin with zero `android.*` imports.
+- [ ] Repository acts as single source of truth handling network/cache fallback.
+- [ ] Unit tests written for ViewModel state transitions and UseCases.
