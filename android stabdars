@@ -1,32 +1,32 @@
 ---
-title: iOS Development Standards & Architecture
-description: Enterprise guidelines, Swift 5.9+ @Observable MVVM Architecture, Swift Concurrency, and production Swift code standards for iOS Mobile Applications.
+title: React Native Development Standards & Architecture
+description: Enterprise guidelines, TypeScript 5.0+ MVVM Clean Architecture, Unidirectional Data Flow, custom hooks, and production React Native standards.
 sidebar:
-  order: 3
+  order: 4
 ---
 
-Welcome to the **Enterprise iOS Development Standards**. Architecture is the foundation of our mobile engineering strategy. This document provides a comprehensive specification of our mandatory **Swift 5.9+ MVVM Architecture** pattern.
+Welcome to the **Enterprise React Native Development Standards**. React Native is a primary cross-platform mobile framework in our enterprise ecosystem. This document defines our mandatory **MVVM Clean Architecture** pattern using **TypeScript**, **Custom Hooks**, and **Unidirectional Data Flow**.
 
-<div style="border: 2px solid #2563eb; border-radius: 12px; padding: 22px 26px; background-color: var(--sl-color-bg-nav); margin: 24px 0; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);">
+<div style="border: 2px solid #61dafb; border-radius: 12px; padding: 22px 26px; background-color: var(--sl-color-bg-nav); margin: 24px 0; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);">
   <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 12px;">
-    <span style="background: #2563eb; color: white; padding: 4px 12px; border-radius: 20px; font-weight: 700; font-size: 0.8rem; letter-spacing: 0.05em;">ARCHITECTURE MANDATE</span>
-    <strong style="font-size: 1.15rem; color: var(--sl-color-white);">MVVM Clean Architecture + Swift Concurrency</strong>
+    <span style="background: #61dafb; color: #000000; padding: 4px 12px; border-radius: 20px; font-weight: 800; font-size: 0.8rem; letter-spacing: 0.05em;">ARCHITECTURE MANDATE</span>
+    <strong style="font-size: 1.15rem; color: var(--sl-color-white);">TypeScript MVVM Clean Architecture + Custom Hooks</strong>
   </div>
   <p style="margin: 0 0 16px 0; color: var(--sl-color-gray-2); font-size: 0.98rem; line-height: 1.6;">
-    All enterprise iOS applications must strictly enforce MVVM with Clean Architecture using Swift 5.9+ <code>@Observable</code> and Swift Concurrency (<code>async/await</code>, <code>actor</code>). Direct UI data mutations or legacy completion callbacks are prohibited.
+    All enterprise React Native applications must strictly enforce MVVM Clean Architecture with strict TypeScript (<code>noImplicitAny: true</code>), Custom Hook Controllers, and Unidirectional Data Flow. Writing direct API calls inside JSX renders is strictly prohibited.
   </p>
   <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px;">
-    <div style="background: var(--sl-color-gray-6); padding: 14px 16px; border-radius: 8px; border-left: 4px solid #008544;">
+    <div style="background: var(--sl-color-gray-6); padding: 14px 16px; border-radius: 8px; border-left: 4px solid #61dafb;">
       <div style="font-weight: 700; font-size: 0.92rem; color: var(--sl-color-white);">1. UI & State</div>
-      <div style="font-size: 0.84rem; color: var(--sl-color-gray-3); margin-top: 3px;">SwiftUI + @Observable ViewModel</div>
+      <div style="font-size: 0.84rem; color: var(--sl-color-gray-3); margin-top: 3px;">React Native Components + Custom Hooks</div>
     </div>
     <div style="background: var(--sl-color-gray-6); padding: 14px 16px; border-radius: 8px; border-left: 4px solid #2563eb;">
       <div style="font-weight: 700; font-size: 0.92rem; color: var(--sl-color-white);">2. Pure Domain</div>
-      <div style="font-size: 0.84rem; color: var(--sl-color-gray-3); margin-top: 3px;">Protocol-Oriented UseCases</div>
+      <div style="font-size: 0.84rem; color: var(--sl-color-gray-3); margin-top: 3px;">TypeScript Business UseCases</div>
     </div>
     <div style="background: var(--sl-color-gray-6); padding: 14px 16px; border-radius: 8px; border-left: 4px solid #d97706;">
-      <div style="font-weight: 700; font-size: 0.92rem; color: var(--sl-color-white);">3. Data & Cache</div>
-      <div style="font-size: 0.84rem; color: var(--sl-color-gray-3); margin-top: 3px;">Actor Isolation + Keychain</div>
+      <div style="font-weight: 700; font-size: 0.92rem; color: var(--sl-color-white);">3. Data & Storage</div>
+      <div style="font-size: 0.84rem; color: var(--sl-color-gray-3); margin-top: 3px;">Repository (TanStack Query + MMKV/Keychain)</div>
     </div>
   </div>
 </div>
@@ -37,44 +37,52 @@ Welcome to the **Enterprise iOS Development Standards**. Architecture is the fou
 
 ### Layered Architecture Flowchart
 
-The diagram below illustrates how data and control flow between the **UI Layer**, **Domain Layer**, and **Data Layer**.
+The diagram below illustrates how data and control flow between the **UI Layer (React Native)**, **ViewModel Layer (Custom Hooks)**, **Domain Layer (Pure TypeScript)**, and **Data Layer**.
 
 ```mermaid
 graph TD
     subgraph UI_Layer ["1. UI Layer (Presentation)"]
-        View["SwiftUI Screen View"]
-        VM["MVVM ViewModel (@Observable / @MainActor)"]
-        State["ProfileUiState (Enum Contract)"]
+        View["React Native Screen View (FC Component)"]
+        State["UserProfileUiState (Discriminated Union)"]
+        Styles["StyleSheet / Encapsulated Theme"]
     end
 
-    subgraph Domain_Layer ["2. Domain Layer (Pure Business Logic)"]
-        UC["Use Cases (e.g. GetUserProfileUseCaseProtocol)"]
-        Model["Domain Models (Pure Swift Structs)"]
+    subgraph ViewModel_Layer ["2. ViewModel / Controller Layer"]
+        Hook["Custom ViewModel Hook (useUserProfileViewModel)"]
+        Zustand["Zustand Store / TanStack Query"]
     end
 
-    subgraph Data_Layer ["3. Data Layer (Single Source of Truth)"]
-        Repo["Actor UserProfileRepository"]
-        Remote["Remote DataSource (URLSession API)"]
-        Local["Local DataSource (Keychain / SwiftData)"]
+    subgraph Domain_Layer ["3. Domain Layer (Pure Business Logic)"]
+        UC["Use Cases (e.g. GetUserProfileUseCase)"]
+        Model["Domain Models (Pure TypeScript Interfaces)"]
+    end
+
+    subgraph Data_Layer ["4. Data Layer (Single Source of Truth)"]
+        Repo["UserRepositoryImpl"]
+        Remote["Remote Axios / Fetch Client"]
+        Local["Local Storage (MMKV / Keychain)"]
     end
 
     %% Flow interactions
-    View -- "1. Triggers User Action" --> VM
-    VM -- "2. Executes Use Case" --> UC
-    UC -- "3. Requests Data" --> Repo
-    Repo -- "4a. Fetches Remote API" --> Remote
-    Repo -- "4b. Caches in Keychain/SwiftData" --> Local
-    Repo -- "5. Returns Domain Model" --> UC
-    UC -- "6. Delivers Result" --> VM
-    VM -- "7. Updates State Property" --> State
-    State -- "8. Recomposes SwiftUI Body" --> View
+    View -- "1. Invokes Handler Callback" --> Hook
+    Hook -- "2. Dispatches State Transition" --> Zustand
+    Hook -- "3. Executes Business Use Case" --> UC
+    UC -- "4. Requests Repository Data" --> Repo
+    Repo -- "5a. Fetches Remote API" --> Remote
+    Repo -- "5b. Caches in MMKV / Keychain" --> Local
+    Repo -- "6. Returns Domain Model" --> UC
+    UC -- "7. Delivers Domain Result" --> Hook
+    Hook -- "8. Updates State Hook" --> State
+    State -- "9. Re-renders UI Screen" --> View
 
     %% Styling
     classDef uiStyle fill:#f2fbf5,stroke:#008544,stroke-width:2px;
+    classDef vmStyle fill:#fefce8,stroke:#ca8a04,stroke-width:2px;
     classDef domainStyle fill:#eff6ff,stroke:#2563eb,stroke-width:2px;
     classDef dataStyle fill:#fef3c7,stroke:#d97706,stroke-width:2px;
 
-    class View,VM,State uiStyle;
+    class View,State,Styles uiStyle;
+    class Hook,Zustand vmStyle;
     class UC,Model domainStyle;
     class Repo,Remote,Local dataStyle;
 ```
@@ -83,32 +91,32 @@ graph TD
 
 ### Unidirectional Data Flow (UDF) Sequence Diagram
 
-This sequence diagram illustrates the step-by-step lifecycle of an asynchronous user request using Swift Concurrency.
+This sequence diagram illustrates the step-by-step lifecycle of an asynchronous user request in React Native.
 
 ```mermaid
 sequenceDiagram
     autonumber
     actor User
-    participant View as SwiftUI UserProfileView
-    participant VM as UserProfileViewModel (@MainActor)
-    participant UC as GetUserProfileUseCase
-    participant Repo as UserProfileRepository (Actor)
-    participant API as URLSession Network API
+    participant Screen as React Native Screen
+    participant Hook as Custom ViewModel Hook
+    participant UseCase as GetUserProfileUseCase
+    participant Repo as UserRepositoryImpl
+    participant API as Fetch / Network API
 
-    User->>View: Tap "Refresh Profile" Button
-    View->>VM: loadUserProfile()
-    VM->>VM: Set state = .loading
-    View-->>User: Render ProgressView Spinner
-    VM->>UC: execute(userId)
-    UC->>Repo: fetchProfile(userId)
-    Repo->>API: URLSession.shared.data(from: url)
-    API-->>Repo: Return Data & HTTPURLResponse
-    Repo->>Repo: Decode JSON & Update Actor Memory Cache
-    Repo-->>UC: Return UserProfile Struct
-    UC-->>VM: Return UserProfile Struct
-    VM->>VM: Set state = .success(user)
-    VM-->>View: Recompose View Body
-    View-->>User: Render Profile Details & Badges
+    User->>Screen: Tap "Refresh Profile" Button
+    Screen->>Hook: refreshProfile()
+    Hook->>Hook: setUiState({ kind: 'loading' })
+    Screen-->>User: Render ActivityIndicator Spinner
+    Hook->>UseCase: execute(userId)
+    UseCase->>Repo: getUserProfile(userId)
+    Repo->>API: fetch('/v1/users/{id}')
+    API-->>Repo: Return UserNetworkDto JSON
+    Repo->>Repo: Map DTO to Domain Model & Memory Cache
+    Repo-->>UseCase: Return UserDomainModel
+    UseCase-->>Hook: Return UserDomainModel
+    Hook->>Hook: setUiState({ kind: 'success', user })
+    Hook-->>Screen: Re-render Functional Component
+    Screen-->>User: Display Profile Details & Badges
 ```
 
 ---
@@ -118,11 +126,11 @@ sequenceDiagram
 <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; margin: 24px 0;">
   <div style="background: var(--sl-color-bg-nav); border: 1px solid var(--sl-color-gray-5); border-radius: 10px; padding: 18px 20px;">
     <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
-      <h4 style="margin: 0; font-size: 1rem; color: #008544;">UI Layer</h4>
-      <span style="font-size: 0.75rem; background: rgba(0, 133, 68, 0.15); color: #008544; font-weight: 700; padding: 2px 8px; border-radius: 4px;">PRESENTATION</span>
+      <h4 style="margin: 0; font-size: 1rem; color: #61dafb;">UI Layer</h4>
+      <span style="font-size: 0.75rem; background: rgba(97, 218, 251, 0.15); color: #61dafb; font-weight: 700; padding: 2px 8px; border-radius: 4px;">PRESENTATION</span>
     </div>
-    <p style="font-size: 0.88rem; color: var(--sl-color-gray-2); margin: 0 0 10px 0; line-height: 1.5;">Declarative SwiftUI views. Captures user interactions and renders UI state. Must never execute business logic directly.</p>
-    <div style="font-size: 0.8rem; font-weight: 600; color: var(--sl-color-gray-3);">Technologies: SwiftUI, @Observable, Environment</div>
+    <p style="font-size: 0.88rem; color: var(--sl-color-gray-2); margin: 0 0 10px 0; line-height: 1.5;">Declarative React Native components. Renders UI states and triggers event callbacks. Must contain zero async logic.</p>
+    <div style="font-size: 0.8rem; font-weight: 600; color: var(--sl-color-gray-3);">Technologies: React Native 0.73+, FC Hooks, StyleSheet</div>
   </div>
 
   <div style="background: var(--sl-color-bg-nav); border: 1px solid var(--sl-color-gray-5); border-radius: 10px; padding: 18px 20px;">
@@ -130,8 +138,8 @@ sequenceDiagram
       <h4 style="margin: 0; font-size: 1rem; color: #2563eb;">ViewModel Layer</h4>
       <span style="font-size: 0.75rem; background: rgba(37, 99, 235, 0.15); color: #2563eb; font-weight: 700; padding: 2px 8px; border-radius: 4px;">STATE HOLDER</span>
     </div>
-    <p style="font-size: 0.88rem; color: var(--sl-color-gray-2); margin: 0 0 10px 0; line-height: 1.5;">Manages UI state, transforms domain entities, and guarantees main thread execution via @MainActor.</p>
-    <div style="font-size: 0.8rem; font-weight: 600; color: var(--sl-color-gray-3);">Technologies: Swift 5.9 @Observable, @MainActor</div>
+    <p style="font-size: 0.88rem; color: var(--sl-color-gray-2); margin: 0 0 10px 0; line-height: 1.5;">Custom Hooks (`useViewModel`) and Zustand stores. Encapsulates state mutations, async requests, and side effects.</p>
+    <div style="font-size: 0.8rem; font-weight: 600; color: var(--sl-color-gray-3);">Technologies: Custom React Hooks, Zustand, TanStack Query</div>
   </div>
 
   <div style="background: var(--sl-color-bg-nav); border: 1px solid var(--sl-color-gray-5); border-radius: 10px; padding: 18px 20px;">
@@ -139,8 +147,8 @@ sequenceDiagram
       <h4 style="margin: 0; font-size: 1rem; color: #7c3aed;">Domain Layer</h4>
       <span style="font-size: 0.75rem; background: rgba(124, 58, 237, 0.15); color: #7c3aed; font-weight: 700; padding: 2px 8px; border-radius: 4px;">PURE BUSINESS</span>
     </div>
-    <p style="font-size: 0.88rem; color: var(--sl-color-gray-2); margin: 0 0 10px 0; line-height: 1.5;">Protocol-oriented pure Swift business rules. Independent of UIKit or SwiftUI frameworks.</p>
-    <div style="font-size: 0.8rem; font-weight: 600; color: var(--sl-color-gray-3);">Technologies: Swift Protocols, Pure Structs</div>
+    <p style="font-size: 0.88rem; color: var(--sl-color-gray-2); margin: 0 0 10px 0; line-height: 1.5;">Framework-independent business logic classes/functions. Pure TypeScript interfaces without React or UI dependencies.</p>
+    <div style="font-size: 0.8rem; font-weight: 600; color: var(--sl-color-gray-3);">Technologies: Pure TypeScript, Strict Interfaces</div>
   </div>
 
   <div style="background: var(--sl-color-bg-nav); border: 1px solid var(--sl-color-gray-5); border-radius: 10px; padding: 18px 20px;">
@@ -148,265 +156,340 @@ sequenceDiagram
       <h4 style="margin: 0; font-size: 1rem; color: #d97706;">Data Layer</h4>
       <span style="font-size: 0.75rem; background: rgba(217, 119, 6, 0.15); color: #d97706; font-weight: 700; padding: 2px 8px; border-radius: 4px;">SINGLE SOURCE</span>
     </div>
-    <p style="font-size: 0.88rem; color: var(--sl-color-gray-2); margin: 0 0 10px 0; line-height: 1.5;">Single source of truth. Handles URLSession network requests, Keychain token storage, and actor-isolated memory caches.</p>
-    <div style="font-size: 0.8rem; font-weight: 600; color: var(--sl-color-gray-3);">Technologies: URLSession, Swift actor, Keychain API</div>
+    <p style="font-size: 0.88rem; color: var(--sl-color-gray-2); margin: 0 0 10px 0; line-height: 1.5;">Single source of truth. Handles network HTTP requests, high-performance MMKV storage, and Keychain authentication tokens.</p>
+    <div style="font-size: 0.8rem; font-weight: 600; color: var(--sl-color-gray-3);">Technologies: Axios, MMKV Storage, Keychain API</div>
   </div>
 </div>
 
 ---
 
-## 3. Complete All-in-One Swift Specification File
+## 3. Complete All-in-One TypeScript Specification File
 
-Below is the complete, compilation-ready **all-in-one Swift file** (`UserProfileFeature.swift`). It contains the entire stack in one place: DTO, Repository Actor, Domain Struct, Use Case Protocol, `@Observable` ViewModel, and SwiftUI Screen View.
+Below is the complete, self-contained **all-in-one TypeScript file** (`UserProfileFeature.tsx`). It contains the entire stack in one place: DTOs, Mappers, Repository Implementation, Domain UseCase, Custom ViewModel Hook, and React Native Styled Screen.
 
-```swift
-// File: EnterpriseMobile/Features/User/UserProfileFeature.swift
-import SwiftUI
-import Observation
-import Security
-
-// ============================================================================
-// 1. DATA LAYER (DTOs, Mappers & Actor Repository)
-// ============================================================================
-
-// Network Transfer DTO
-struct UserNetworkDTO: Codable {
-    let id: String
-    let fullName: String
-    let email: String
-    let isVip: Bool
-
-    enum CodingKeys: String, CodingKey {
-        case id
-        case fullName = "full_name"
-        case email
-        case isVip = "is_vip"
-    }
-}
-
-// Mapper Extension
-extension UserNetworkDTO {
-    func toDomainModel() -> UserDomainModel {
-        UserDomainModel(
-            id: id,
-            name: fullName,
-            email: email,
-            isVip: isVip
-        )
-    }
-}
-
-// Repository Protocol
-protocol UserProfileRepositoryProtocol: Sendable {
-    func fetchUserProfile(userId: String) async throws -> UserDomainModel
-}
-
-// Thread-Safe Actor Repository Implementation
-actor UserProfileRepository: UserProfileRepositoryProtocol {
-    private let urlSession: URLSession
-    private var cache: [String: UserDomainModel] = [:]
-
-    init(urlSession: URLSession = .shared) {
-        self.urlSession = urlSession
-    }
-
-    func fetchUserProfile(userId: String) async throws -> UserDomainModel {
-        // Return thread-safe cached copy if present
-        if let cached = cache[userId] {
-            return cached
-        }
-
-        guard let url = URL(string: "https://api.example.com/v1/users/$userId)") else {
-            throw URLError(.badURL)
-        }
-
-        let (data, response) = try await urlSession.data(from: url)
-        
-        guard let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 else {
-            throw URLError(.badServerResponse)
-        }
-
-        let dto = try JSONDecoder().decode(UserNetworkDTO.self, from: data)
-        let domainModel = dto.toDomainModel()
-        
-        cache[userId] = domainModel
-        return domainModel
-    }
-}
+```tsx
+// File: src/features/user/UserProfileFeature.tsx
+import React, { useEffect, useState, useCallback } from 'react';
+import {
+  View,
+  Text,
+  StyleSheet,
+  ActivityIndicator,
+  TouchableOpacity,
+  SafeAreaView,
+  StatusBar,
+} from 'react-native';
 
 // ============================================================================
-// 2. DOMAIN LAYER (Business Entities & Use Cases)
+// 1. DATA LAYER (DTOs, Mappers & Repository)
 // ============================================================================
 
-struct UserDomainModel: Equatable, Identifiable, Sendable {
-    let id: String
-    let name: String
-    let email: String
-    let isVip: Bool
+/** Network Data Transfer Object from API */
+export interface UserNetworkDto {
+  id: string;
+  full_name: string;
+  email: string;
+  is_vip: boolean;
 }
 
-protocol GetUserProfileUseCaseProtocol: Sendable {
-    func execute(userId: String) async throws -> UserDomainModel
+/** Local Storage Schema */
+export interface UserCacheEntity {
+  id: string;
+  fullName: string;
+  email: string;
+  isVip: boolean;
+  cachedAt: number;
 }
 
-final class GetUserProfileUseCase: GetUserProfileUseCaseProtocol {
-    private let repository: UserProfileRepositoryProtocol
+/** Explicit Mapper Functions */
+export const mapDtoToDomain = (dto: UserNetworkDto): UserDomainModel => ({
+  id: dto.id,
+  name: dto.full_name,
+  email: dto.email,
+  isVip: dto.is_vip,
+});
 
-    init(repository: UserProfileRepositoryProtocol) {
-        self.repository = repository
+export const mapCacheToDomain = (cache: UserCacheEntity): UserDomainModel => ({
+  id: cache.id,
+  name: cache.fullName,
+  email: cache.email,
+  isVip: cache.isVip,
+});
+
+export interface UserRepositoryContract {
+  getUserProfile(userId: string): Promise<UserDomainModel>;
+}
+
+/** Single Source of Truth Repository */
+export class UserRepositoryImpl implements UserRepositoryContract {
+  private memoryCache: Map<string, UserDomainModel> = new Map();
+
+  async getUserProfile(userId: string): Promise<UserDomainModel> {
+    // Check in-memory fast cache first
+    if (this.memoryCache.has(userId)) {
+      return this.memoryCache.get(userId)!;
     }
 
-    func execute(userId: String) async throws -> UserDomainModel {
-        guard !userId.trimmingCharacters(in: .whitespaces).isEmpty else {
-            throw NSError(domain: "UserProfile", code: 400, userInfo: [NSLocalizedDescriptionKey: "User ID cannot be empty."])
-        }
-        return try await repository.fetchUserProfile(userId: userId)
+    try {
+      // Remote API call
+      const response = await fetch(`https://api.example.com/v1/users/${userId}`);
+      if (!response.ok) {
+        throw new Error(`HTTP error status: ${response.status}`);
+      }
+      const dto: UserNetworkDto = await response.json();
+      const domainModel = mapDtoToDomain(dto);
+
+      // Save to memory cache
+      this.memoryCache.set(userId, domainModel);
+      return domainModel;
+    } catch (error) {
+      // Fallback or rethrow domain error
+      throw new Error(
+        error instanceof Error ? error.message : 'Failed to fetch user profile from network.'
+      );
     }
+  }
 }
+
+// Instantiate Singleton Repository
+export const userRepository = new UserRepositoryImpl();
 
 // ============================================================================
-// 3. VIEWMODEL & UI STATE LAYER (Swift 5.9+ @Observable + @MainActor)
+// 2. DOMAIN LAYER (Pure Business Models & Use Cases)
 // ============================================================================
 
-enum UserProfileUiState: Equatable {
-    case loading
-    case success(user: UserDomainModel)
-    case error(message: String)
+export interface UserDomainModel {
+  id: string;
+  name: string;
+  email: string;
+  isVip: boolean;
 }
 
-@Observable
-@MainActor
-final class UserProfileViewModel {
-    private(set) var state: UserProfileUiState = .loading
-    private let useCase: GetUserProfileUseCaseProtocol
+export class GetUserProfileUseCase {
+  constructor(private repository: UserRepositoryContract) {}
 
-    init(useCase: GetUserProfileUseCaseProtocol) {
-        self.useCase = useCase
+  async execute(userId: string): Promise<UserDomainModel> {
+    if (!userId || userId.trim().length === 0) {
+      throw new Error('User ID cannot be empty.');
     }
-
-    func loadUserProfile(userId: String) async {
-        state = .loading
-        do {
-            let profile = try await useCase.execute(userId: userId)
-            state = .success(user: profile)
-        } catch {
-            state = .error(message: error.localizedDescription)
-        }
-    }
+    return this.repository.getUserProfile(userId);
+  }
 }
+
+export const getUserProfileUseCase = new GetUserProfileUseCase(userRepository);
 
 // ============================================================================
-// 4. UI LAYER (Declarative SwiftUI Screen View)
+// 3. VIEWMODEL / CONTROLLER HOOK LAYER (MVVM + State Management)
 // ============================================================================
 
-struct UserProfileScreen: View {
-    let userId: String
-    @State private var viewModel: UserProfileViewModel
-    @Environment(\.dismiss) private var dismiss
+export type UserProfileUiState =
+  | { kind: 'loading' }
+  | { kind: 'success'; user: UserDomainModel }
+  | { kind: 'error'; message: string };
 
-    init(userId: String, viewModel: UserProfileViewModel) {
-        self.userId = userId
-        _viewModel = State(initialValue: viewModel)
-    }
+/** Custom React Hook acting as ViewModel */
+export const useUserProfileViewModel = (userId: string) => {
+  const [uiState, setUiState] = useState<UserProfileUiState>({ kind: 'loading' });
 
-    var body: some View {
-        NavigationStack {
-            Group {
-                switch viewModel.state {
-                case .loading:
-                    ProgressView("Loading Profile...")
-                        .tint(Color("BrandGreen"))
-                case .success(let user):
-                    ProfileDetailsView(user: user) {
-                        Task { await viewModel.loadUserProfile(userId: userId) }
-                    }
-                case .error(let message):
-                    VStack(spacing: 12) {
-                        Text(message)
-                            .foregroundColor(.red)
-                            .multilineTextAlignment(.center)
-                        Button("Retry") {
-                            Task { await viewModel.loadUserProfile(userId: userId) }
-                        }
-                        .buttonStyle(.borderedProminent)
-                        .tint(Color("BrandGreen"))
-                    }
-                    .padding()
-                }
-            }
-            .navigationTitle("User Profile")
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .navigationBarLeading) {
-                    Button(action: { dismiss() }) {
-                        Image(systemName: "chevron.left")
-                    }
-                }
-            }
-            .task {
-                await viewModel.loadUserProfile(userId: userId)
-            }
-        }
+  const fetchProfile = useCallback(async () => {
+    setUiState({ kind: 'loading' });
+    try {
+      const user = await getUserProfileUseCase.execute(userId);
+      setUiState({ kind: 'success', user });
+    } catch (err) {
+      setUiState({
+        kind: 'error',
+        message: err instanceof Error ? err.message : 'An unknown error occurred.',
+      });
     }
+  }, [userId]);
+
+  useEffect(() => {
+    fetchProfile();
+  }, [fetchProfile]);
+
+  return {
+    uiState,
+    refreshProfile: fetchProfile,
+  };
+};
+
+// ============================================================================
+// 4. UI LAYER (Stateless React Native Screen & Styled Components)
+// ============================================================================
+
+const BRAND_GREEN = '#008544';
+
+export interface UserProfileScreenProps {
+  userId: string;
+  onNavigateBack?: () => void;
 }
 
-private struct ProfileDetailsView: View {
-    let user: UserDomainModel
-    let onRefresh: () -> Void
+export const UserProfileScreen: React.FC<UserProfileScreenProps> = ({
+  userId,
+  onNavigateBack,
+}) => {
+  const { uiState, refreshProfile } = useUserProfileViewModel(userId);
 
-    var body: some View {
-        VStack(alignment: .leading, spacing: 16) {
-            Text(user.name)
-                .font(.title)
-                .fontWeight(.bold)
+  return (
+    <SafeAreaView style={styles.safeArea}>
+      <StatusBar barStyle="dark-content" />
+      
+      {/* Top Header */}
+      <View style={styles.header}>
+        {onNavigateBack && (
+          <TouchableOpacity onPress={onNavigateBack} style={styles.backButton}>
+            <Text style={styles.backText}>‹ Back</Text>
+          </TouchableOpacity>
+        )}
+        <Text style={styles.headerTitle}>User Profile</Text>
+      </View>
 
-            Text(user.email)
-                .font(.body)
-                .foregroundColor(.secondary)
+      {/* State View Rendering */}
+      <View style={styles.container}>
+        {uiState.kind === 'loading' && (
+          <View style={styles.centerContainer}>
+            <ActivityIndicator size="large" color={BRAND_GREEN} />
+            <Text style={styles.loadingText}>Loading profile...</Text>
+          </View>
+        )}
 
-            if user.isVip {
-                Text("VIP Enterprise Account")
-                    .font(.caption)
-                    .fontWeight(.bold)
-                    .padding(.horizontal, 10)
-                    .padding(.vertical, 6)
-                    .background(Color("BrandGreen"))
-                    .foregroundColor(.white)
-                    .cornerRadius(6)
-            }
+        {uiState.kind === 'error' && (
+          <View style={styles.centerContainer}>
+            <Text style={styles.errorText}>{uiState.message}</Text>
+            <TouchableOpacity style={styles.retryButton} onPress={refreshProfile}>
+              <Text style={styles.retryButtonText}>Retry</Text>
+            </TouchableOpacity>
+          </View>
+        )}
 
-            Spacer()
+        {uiState.kind === 'success' && (
+          <View style={styles.contentContainer}>
+            <Text style={styles.userName}>{uiState.user.name}</Text>
+            <Text style={styles.userEmail}>{uiState.user.email}</Text>
 
-            Button(action: onRefresh) {
-                Text("Refresh User Profile")
-                    .fontWeight(.semibold)
-                    .frame(maxWidth: .infinity)
-                    .padding()
-                    .background(Color("BrandGreen"))
-                    .foregroundColor(.white)
-                    .cornerRadius(10)
-            }
-        }
-        .padding(24)
-    }
-}
+            {uiState.user.isVip && (
+              <View style={styles.vipBadge}>
+                <Text style={styles.vipText}>VIP Enterprise Account</Text>
+              </View>
+            )}
 
-// Previews
-#Preview("Success State") {
-    UserProfileScreen(
-        userId: "usr_100",
-        viewModel: UserProfileViewModel(
-            useCase: MockGetUserProfileUseCase()
-        )
-    )
-}
+            <View style={styles.spacer} />
 
-// Mock Implementation for SwiftUI Preview
-private final class MockGetUserProfileUseCase: GetUserProfileUseCaseProtocol {
-    func execute(userId: String) async throws -> UserDomainModel {
-        UserDomainModel(id: "usr_100", name: "Alex Mercer", email: "alex.mercer@example.com", isVip: true)
-    }
-}
+            <TouchableOpacity style={styles.refreshButton} onPress={refreshProfile}>
+              <Text style={styles.refreshButtonText}>Refresh Profile</Text>
+            </TouchableOpacity>
+          </View>
+        )}
+      </View>
+    </SafeAreaView>
+  );
+};
+
+// ============================================================================
+// 5. STYLES (Clean Encapsulated StyleSheet)
+// ============================================================================
+
+const styles = StyleSheet.create({
+  safeArea: {
+    flex: 1,
+    backgroundColor: '#F9FAFB',
+  },
+  header: {
+    height: 56,
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 16,
+    borderBottomWidth: 1,
+    borderBottomColor: '#E5E7EB',
+    backgroundColor: '#FFFFFF',
+  },
+  backButton: {
+    marginRight: 12,
+  },
+  backText: {
+    fontSize: 18,
+    color: BRAND_GREEN,
+    fontWeight: '600',
+  },
+  headerTitle: {
+    fontSize: 18,
+    fontWeight: '700',
+    color: '#111827',
+  },
+  container: {
+    flex: 1,
+  },
+  centerContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 24,
+  },
+  loadingText: {
+    marginTop: 12,
+    fontSize: 15,
+    color: '#6B7280',
+  },
+  errorText: {
+    fontSize: 15,
+    color: '#DC2626',
+    textAlign: 'center',
+    marginBottom: 16,
+  },
+  retryButton: {
+    backgroundColor: BRAND_GREEN,
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+    borderRadius: 8,
+  },
+  retryButtonText: {
+    color: '#FFFFFF',
+    fontWeight: '600',
+    fontSize: 14,
+  },
+  contentContainer: {
+    flex: 1,
+    padding: 24,
+  },
+  userName: {
+    fontSize: 24,
+    fontWeight: '800',
+    color: '#111827',
+    marginBottom: 4,
+  },
+  userEmail: {
+    fontSize: 16,
+    color: '#6B7280',
+    marginBottom: 16,
+  },
+  vipBadge: {
+    alignSelf: 'flex-start',
+    backgroundColor: BRAND_GREEN,
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+    borderRadius: 6,
+  },
+  vipText: {
+    color: '#FFFFFF',
+    fontWeight: '700',
+    fontSize: 12,
+  },
+  spacer: {
+    flex: 1,
+  },
+  refreshButton: {
+    backgroundColor: BRAND_GREEN,
+    paddingVertical: 14,
+    borderRadius: 10,
+    alignItems: 'center',
+  },
+  refreshButtonText: {
+    color: '#FFFFFF',
+    fontSize: 16,
+    fontWeight: '700',
+  },
+});
 ```
 
 ---
@@ -416,61 +499,61 @@ private final class MockGetUserProfileUseCase: GetUserProfileUseCaseProtocol {
 <div style="border: 1px solid rgba(239, 68, 68, 0.3); background: rgba(239, 68, 68, 0.04); border-left: 5px solid #ef4444; border-radius: 10px; padding: 22px 24px; margin: 28px 0;">
   <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 16px;">
     <span style="background: #ef4444; color: white; font-weight: 700; font-size: 0.75rem; padding: 3px 10px; border-radius: 4px; letter-spacing: 0.05em;">NON-NEGOTIABLE</span>
-    <h3 style="margin: 0; font-size: 1.1rem; color: var(--sl-color-white); font-weight: 700;">Strict iOS Architecture Violations</h3>
+    <h3 style="margin: 0; font-size: 1.1rem; color: var(--sl-color-white); font-weight: 700;">Strict React Native Architecture Violations</h3>
   </div>
   <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px;">
     <div style="background: var(--sl-color-bg-nav); border: 1px solid var(--sl-color-gray-5); border-radius: 8px; padding: 14px 16px;">
-      <div style="font-weight: 700; color: #ef4444; font-size: 0.9rem; margin-bottom: 4px;">1. Use Swift 5.9 @Observable Macro</div>
-      <div style="font-size: 0.86rem; color: var(--sl-color-gray-2); line-height: 1.5;">Never use legacy <code>ObservableObject</code> or <code>@Published</code> properties for new code. All ViewModels must use <code>@Observable</code> and <code>@MainActor</code>.</div>
+      <div style="font-weight: 700; color: #ef4444; font-size: 0.9rem; margin-bottom: 4px;">1. Strict TypeScript (Zero `any`)</div>
+      <div style="font-size: 0.86rem; color: var(--sl-color-gray-2); line-height: 1.5;">Never use explicit or implicit <code>any</code> types. Configure <code>tsconfig.json</code> with <code>"noImplicitAny": true</code> and declare explicit interfaces for all state.</div>
     </div>
     <div style="background: var(--sl-color-bg-nav); border: 1px solid var(--sl-color-gray-5); border-radius: 8px; padding: 14px 16px;">
-      <div style="font-weight: 700; color: #ef4444; font-size: 0.9rem; margin-bottom: 4px;">2. Zero Credentials in UserDefaults</div>
-      <div style="font-size: 0.86rem; color: var(--sl-color-gray-2); line-height: 1.5;">Never store OAuth JWT tokens, private keys, or API credentials in <code>UserDefaults</code>. Use iOS <strong>Keychain Services</strong> exclusively.</div>
+      <div style="font-weight: 700; color: #ef4444; font-size: 0.9rem; margin-bottom: 4px;">2. Zero Tokens in AsyncStorage</div>
+      <div style="font-size: 0.86rem; color: var(--sl-color-gray-2); line-height: 1.5;">Never store OAuth JWT tokens or sensitive keys in unencrypted <code>AsyncStorage</code>. Use <code>react-native-keychain</code> or iOS Keychain / Android Keystore.</div>
     </div>
     <div style="background: var(--sl-color-bg-nav); border: 1px solid var(--sl-color-gray-5); border-radius: 8px; padding: 14px 16px;">
-      <div style="font-weight: 700; color: #ef4444; font-size: 0.9rem; margin-bottom: 4px;">3. Actor Isolation for Cache</div>
-      <div style="font-size: 0.86rem; color: var(--sl-color-gray-2); line-height: 1.5;">All mutable state repositories must use Swift <code>actor</code> structures to eliminate data races during concurrent async calls.</div>
+      <div style="font-weight: 700; color: #ef4444; font-size: 0.9rem; margin-bottom: 4px;">3. MMKV for Fast Local Caching</div>
+      <div style="font-size: 0.86rem; color: var(--sl-color-gray-2); line-height: 1.5;">Use <code>react-native-mmkv</code> for high-performance synchronous storage instead of slow async bridge operations from legacy <code>AsyncStorage</code>.</div>
     </div>
     <div style="background: var(--sl-color-bg-nav); border: 1px solid var(--sl-color-gray-5); border-radius: 8px; padding: 14px 16px;">
-      <div style="font-weight: 700; color: #ef4444; font-size: 0.9rem; margin-bottom: 4px;">4. SPM Dependency Management</div>
-      <div style="font-size: 0.86rem; color: var(--sl-color-gray-2); line-height: 1.5;">Dependencies must be managed via Swift Package Manager (SPM). CocoaPods or manual static library linking is deprecated.</div>
+      <div style="font-weight: 700; color: #ef4444; font-size: 0.9rem; margin-bottom: 4px;">4. Zero Direct Async in Render</div>
+      <div style="font-size: 0.86rem; color: var(--sl-color-gray-2); line-height: 1.5;">Never write inline promises or direct <code>fetch()</code> calls inside JSX component renders. All state management must be encapsulated in custom hooks or stores.</div>
     </div>
   </div>
 </div>
 
 ---
 
-## 5. Checklist for iOS PR Approval
+## 5. Checklist for React Native PR Approval
 
 <div style="background: var(--sl-color-bg-nav); border: 1px solid var(--sl-color-gray-5); border-radius: 12px; padding: 22px 26px; margin: 28px 0;">
   <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; border-bottom: 1px solid var(--sl-color-gray-5); padding-bottom: 12px;">
-    <h3 style="margin: 0; font-size: 1.1rem; color: var(--sl-color-white); font-weight: 700;">iOS PR Merge Requirements</h3>
-    <span style="background: #2563eb; color: white; font-size: 0.75rem; font-weight: 700; padding: 4px 10px; border-radius: 12px;">QUALITY GATE</span>
+    <h3 style="margin: 0; font-size: 1.1rem; color: var(--sl-color-white); font-weight: 700;">React Native PR Merge Requirements</h3>
+    <span style="background: #61dafb; color: #000000; font-size: 0.75rem; font-weight: 800; padding: 4px 10px; border-radius: 12px;">QUALITY GATE</span>
   </div>
   <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px;">
     <div style="display: flex; align-items: flex-start; gap: 10px; font-size: 0.9rem; color: var(--sl-color-gray-2);">
-      <span style="color: #2563eb; font-weight: 900;">✓</span>
-      <div>UI is 100% built with SwiftUI supporting Dynamic Type & Accessibility.</div>
+      <span style="color: #61dafb; font-weight: 900;">✓</span>
+      <div>Architecture follows strict <strong>MVVM Clean Architecture (UI → Hook ViewModel → Domain → Data)</strong>.</div>
     </div>
     <div style="display: flex; align-items: flex-start; gap: 10px; font-size: 0.9rem; color: var(--sl-color-gray-2);">
-      <span style="color: #2563eb; font-weight: 900;">✓</span>
-      <div>ViewModels use Swift 5.9 <code>@Observable</code> macro and <code>@MainActor</code>.</div>
+      <span style="color: #61dafb; font-weight: 900;">✓</span>
+      <div>Strict TypeScript enforced across all files (zero <code>any</code> types).</div>
     </div>
     <div style="display: flex; align-items: flex-start; gap: 10px; font-size: 0.9rem; color: var(--sl-color-gray-2);">
-      <span style="color: #2563eb; font-weight: 900;">✓</span>
-      <div>Repositories use Swift <code>actor</code> models for thread-safe memory caching.</div>
+      <span style="color: #61dafb; font-weight: 900;">✓</span>
+      <div>UI components are functional components utilizing <code>useCallback</code> and <code>useMemo</code> optimization.</div>
     </div>
     <div style="display: flex; align-items: flex-start; gap: 10px; font-size: 0.9rem; color: var(--sl-color-gray-2);">
-      <span style="color: #2563eb; font-weight: 900;">✓</span>
-      <div>Zero legacy completion handlers; code uses pure <code>async/await</code>.</div>
+      <span style="color: #61dafb; font-weight: 900;">✓</span>
+      <div>Sensitive OAuth tokens are stored in Keychain / SecureStore, NOT AsyncStorage.</div>
     </div>
     <div style="display: flex; align-items: flex-start; gap: 10px; font-size: 0.9rem; color: var(--sl-color-gray-2);">
-      <span style="color: #2563eb; font-weight: 900;">✓</span>
-      <div>Sensitive OAuth tokens are stored in iOS Keychain Services.</div>
+      <span style="color: #61dafb; font-weight: 900;">✓</span>
+      <div>Styles are encapsulated in static <code>StyleSheet.create</code> objects or approved design system tokens.</div>
     </div>
     <div style="display: flex; align-items: flex-start; gap: 10px; font-size: 0.9rem; color: var(--sl-color-gray-2);">
-      <span style="color: #2563eb; font-weight: 900;">✓</span>
-      <div>Zero compiler warnings with <code>SWIFT_STRICT_CONCURRENCY = complete</code>.</div>
+      <span style="color: #61dafb; font-weight: 900;">✓</span>
+      <div>Unit tests written for Custom Hooks (using <code>@testing-library/react-hooks</code>) and Domain UseCases.</div>
     </div>
   </div>
 </div>
