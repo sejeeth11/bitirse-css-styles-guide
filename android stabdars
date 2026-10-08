@@ -1,559 +1,156 @@
 ---
-title: React Native Development Standards & Architecture
-description: Enterprise guidelines, TypeScript 5.0+ MVVM Clean Architecture, Unidirectional Data Flow, custom hooks, and production React Native standards.
+title: App Foundations Overview
+description: Architectural pillars, core cross-platform foundation services, design tokens, security baseline, and enterprise mobile foundations.
 sidebar:
-  order: 4
+  order: 1
 ---
 
-Welcome to the **Enterprise React Native Development Standards**. React Native is a primary cross-platform mobile framework in our enterprise ecosystem. This document defines our mandatory **MVVM Clean Architecture** pattern using **TypeScript**, **Custom Hooks**, and **Unidirectional Data Flow**.
+Welcome to the **Enterprise App Foundations**. Foundations provide the core infrastructure, shared services, design system tokens, and non-negotiable operational standards that every enterprise mobile app (Android, iOS, and React Native) must integrate.
 
-<div style="border: 2px solid #61dafb; border-radius: 12px; padding: 22px 26px; background-color: var(--sl-color-bg-nav); margin: 24px 0; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);">
+<div style="border: 2px solid var(--sl-color-accent); border-radius: 12px; padding: 22px 26px; background-color: var(--sl-color-bg-nav); margin: 24px 0; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);">
   <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 12px;">
-    <span style="background: #61dafb; color: #000000; padding: 4px 12px; border-radius: 20px; font-weight: 800; font-size: 0.8rem; letter-spacing: 0.05em;">ARCHITECTURE MANDATE</span>
-    <strong style="font-size: 1.15rem; color: var(--sl-color-white);">TypeScript MVVM Clean Architecture + Custom Hooks</strong>
+    <span style="background: var(--sl-color-accent); color: white; padding: 4px 12px; border-radius: 20px; font-weight: 700; font-size: 0.8rem; letter-spacing: 0.05em;">FOUNDATION MANDATE</span>
+    <strong style="font-size: 1.15rem; color: var(--sl-color-white);">Unified Enterprise App Foundations</strong>
   </div>
   <p style="margin: 0 0 16px 0; color: var(--sl-color-gray-2); font-size: 0.98rem; line-height: 1.6;">
-    All enterprise React Native applications must strictly enforce MVVM Clean Architecture with strict TypeScript (<code>noImplicitAny: true</code>), Custom Hook Controllers, and Unidirectional Data Flow. Writing direct API calls inside JSX renders is strictly prohibited.
+    Every mobile application must build upon our 7 standardized foundation pillars to guarantee consistent branding, hardened security, real-time observability, and seamless production readiness across platforms.
   </p>
-  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px;">
-    <div style="background: var(--sl-color-gray-6); padding: 14px 16px; border-radius: 8px; border-left: 4px solid #61dafb;">
-      <div style="font-weight: 700; font-size: 0.92rem; color: var(--sl-color-white);">1. UI & State</div>
-      <div style="font-size: 0.84rem; color: var(--sl-color-gray-3); margin-top: 3px;">React Native Components + Custom Hooks</div>
+  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px;">
+    <div style="background: var(--sl-color-gray-6); padding: 12px 14px; border-radius: 8px; border-left: 4px solid #008544;">
+      <div style="font-weight: 700; font-size: 0.88rem; color: var(--sl-color-white);">1. Design System</div>
+      <div style="font-size: 0.8rem; color: var(--sl-color-gray-3); margin-top: 2px;">Tokens & Components</div>
     </div>
-    <div style="background: var(--sl-color-gray-6); padding: 14px 16px; border-radius: 8px; border-left: 4px solid #2563eb;">
-      <div style="font-weight: 700; font-size: 0.92rem; color: var(--sl-color-white);">2. Pure Domain</div>
-      <div style="font-size: 0.84rem; color: var(--sl-color-gray-3); margin-top: 3px;">TypeScript Business UseCases</div>
+    <div style="background: var(--sl-color-gray-6); padding: 12px 14px; border-radius: 8px; border-left: 4px solid #2563eb;">
+      <div style="font-weight: 700; font-size: 0.88rem; color: var(--sl-color-white);">2. Configuration</div>
+      <div style="font-size: 0.8rem; color: var(--sl-color-gray-3); margin-top: 2px;">Feature Flags & Env</div>
     </div>
-    <div style="background: var(--sl-color-gray-6); padding: 14px 16px; border-radius: 8px; border-left: 4px solid #d97706;">
-      <div style="font-weight: 700; font-size: 0.92rem; color: var(--sl-color-white);">3. Data & Storage</div>
-      <div style="font-size: 0.84rem; color: var(--sl-color-gray-3); margin-top: 3px;">Repository (TanStack Query + MMKV/Keychain)</div>
+    <div style="background: var(--sl-color-gray-6); padding: 12px 14px; border-radius: 8px; border-left: 4px solid #d97706;">
+      <div style="font-weight: 700; font-size: 0.88rem; color: var(--sl-color-white);">3. Security</div>
+      <div style="font-size: 0.8rem; color: var(--sl-color-gray-3); margin-top: 2px;">Keychain & Crypto</div>
+    </div>
+    <div style="background: var(--sl-color-gray-6); padding: 12px 14px; border-radius: 8px; border-left: 4px solid #7c3aed;">
+      <div style="font-weight: 700; font-size: 0.88rem; color: var(--sl-color-white);">4. Observability</div>
+      <div style="font-size: 0.8rem; color: var(--sl-color-gray-3); margin-top: 2px;">Logs, Metrics, Traces</div>
     </div>
   </div>
 </div>
 
 ---
 
-## 1. MVVM Clean Architecture Diagrams
+## 1. Enterprise Foundation Architecture
 
-### Layered Architecture Flowchart
-
-The diagram below illustrates how data and control flow between the **UI Layer (React Native)**, **ViewModel Layer (Custom Hooks)**, **Domain Layer (Pure TypeScript)**, and **Data Layer**.
+The diagram below illustrates how App Foundations fit into the core layer of your mobile apps, serving feature modules across **Android**, **iOS**, and **React Native**.
 
 ```mermaid
 graph TD
-    subgraph UI_Layer ["1. UI Layer (Presentation)"]
-        View["React Native Screen View (FC Component)"]
-        State["UserProfileUiState (Discriminated Union)"]
-        Styles["StyleSheet / Encapsulated Theme"]
+    subgraph Features ["Feature Layer (User, Orders, Catalog)"]
+        F1["Feature A Screen"]
+        F2["Feature B ViewModel"]
     end
 
-    subgraph ViewModel_Layer ["2. ViewModel / Controller Layer"]
-        Hook["Custom ViewModel Hook (useUserProfileViewModel)"]
-        Zustand["Zustand Store / TanStack Query"]
+    subgraph Foundations ["Core App Foundations Layer"]
+        DS["Design System & Theme Tokens"]
+        CFG["Config & Feature Flags"]
+        SEC["Security & Keychain Services"]
+        OBS["Observability & Logging"]
+        I18N["Localization & i18n Engine"]
     end
 
-    subgraph Domain_Layer ["3. Domain Layer (Pure Business Logic)"]
-        UC["Use Cases (e.g. GetUserProfileUseCase)"]
-        Model["Domain Models (Pure TypeScript Interfaces)"]
+    subgraph Platforms ["Target Platforms"]
+        Android["Android (Compose + Hilt Core)"]
+        iOS["iOS (SwiftUI + SPM Core)"]
+        RN["React Native (TypeScript Core)"]
     end
 
-    subgraph Data_Layer ["4. Data Layer (Single Source of Truth)"]
-        Repo["UserRepositoryImpl"]
-        Remote["Remote Axios / Fetch Client"]
-        Local["Local Storage (MMKV / Keychain)"]
-    end
+    F1 --> Foundations
+    F2 --> Foundations
+    Foundations --> Android
+    Foundations --> iOS
+    Foundations --> RN
 
-    %% Flow interactions
-    View -- "1. Invokes Handler Callback" --> Hook
-    Hook -- "2. Dispatches State Transition" --> Zustand
-    Hook -- "3. Executes Business Use Case" --> UC
-    UC -- "4. Requests Repository Data" --> Repo
-    Repo -- "5a. Fetches Remote API" --> Remote
-    Repo -- "5b. Caches in MMKV / Keychain" --> Local
-    Repo -- "6. Returns Domain Model" --> UC
-    UC -- "7. Delivers Domain Result" --> Hook
-    Hook -- "8. Updates State Hook" --> State
-    State -- "9. Re-renders UI Screen" --> View
+    classDef featStyle fill:#f2fbf5,stroke:#008544,stroke-width:2px;
+    classDef foundStyle fill:#eff6ff,stroke:#2563eb,stroke-width:2px;
+    classDef platStyle fill:#fef3c7,stroke:#d97706,stroke-width:2px;
 
-    %% Styling
-    classDef uiStyle fill:#f2fbf5,stroke:#008544,stroke-width:2px;
-    classDef vmStyle fill:#fefce8,stroke:#ca8a04,stroke-width:2px;
-    classDef domainStyle fill:#eff6ff,stroke:#2563eb,stroke-width:2px;
-    classDef dataStyle fill:#fef3c7,stroke:#d97706,stroke-width:2px;
-
-    class View,State,Styles uiStyle;
-    class Hook,Zustand vmStyle;
-    class UC,Model domainStyle;
-    class Repo,Remote,Local dataStyle;
+    class F1,F2 featStyle;
+    class DS,CFG,SEC,OBS,I18N foundStyle;
+    class Android,iOS,RN platStyle;
 ```
 
 ---
 
-### Unidirectional Data Flow (UDF) Sequence Diagram
+## 2. Platform Foundation Mapping Matrix
 
-This sequence diagram illustrates the step-by-step lifecycle of an asynchronous user request in React Native.
-
-```mermaid
-sequenceDiagram
-    autonumber
-    actor User
-    participant Screen as React Native Screen
-    participant Hook as Custom ViewModel Hook
-    participant UseCase as GetUserProfileUseCase
-    participant Repo as UserRepositoryImpl
-    participant API as Fetch / Network API
-
-    User->>Screen: Tap "Refresh Profile" Button
-    Screen->>Hook: refreshProfile()
-    Hook->>Hook: setUiState({ kind: 'loading' })
-    Screen-->>User: Render ActivityIndicator Spinner
-    Hook->>UseCase: execute(userId)
-    UseCase->>Repo: getUserProfile(userId)
-    Repo->>API: fetch('/v1/users/{id}')
-    API-->>Repo: Return UserNetworkDto JSON
-    Repo->>Repo: Map DTO to Domain Model & Memory Cache
-    Repo-->>UseCase: Return UserDomainModel
-    UseCase-->>Hook: Return UserDomainModel
-    Hook->>Hook: setUiState({ kind: 'success', user })
-    Hook-->>Screen: Re-render Functional Component
-    Screen-->>User: Display Profile Details & Badges
-```
+| Foundation Pillar | Android Implementation | iOS Implementation | React Native Implementation |
+| :--- | :--- | :--- | :--- |
+| **Design System & Theme** | Material 3 `@Composable` Tokens | SwiftUI `Theme` Environment | Encapsulated StyleSheet Design Tokens |
+| **Config & Feature Flags** | Hilt `AppConfig` + RemoteConfig | SPM `AppConfig` + RemoteConfig | Context Provider `useConfig()` |
+| **Security & Cryptography** | Android KeyStore + EncryptedPrefs | iOS Keychain Services | `react-native-keychain` / SecureStore |
+| **Localization (i18n)** | `res/values/strings.xml` | `Localizable.xcstrings` (Catalog) | `i18next` / `react-i18next` |
+| **Observability & Logging** | Timber / OpenTelemetry SDK | OSLog / Unified Logging System | Sentry / Datadog RN SDK |
 
 ---
 
-## 2. Layer-by-Layer Responsibilities
-
-<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; margin: 24px 0;">
-  <div style="background: var(--sl-color-bg-nav); border: 1px solid var(--sl-color-gray-5); border-radius: 10px; padding: 18px 20px;">
-    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
-      <h4 style="margin: 0; font-size: 1rem; color: #61dafb;">UI Layer</h4>
-      <span style="font-size: 0.75rem; background: rgba(97, 218, 251, 0.15); color: #61dafb; font-weight: 700; padding: 2px 8px; border-radius: 4px;">PRESENTATION</span>
-    </div>
-    <p style="font-size: 0.88rem; color: var(--sl-color-gray-2); margin: 0 0 10px 0; line-height: 1.5;">Declarative React Native components. Renders UI states and triggers event callbacks. Must contain zero async logic.</p>
-    <div style="font-size: 0.8rem; font-weight: 600; color: var(--sl-color-gray-3);">Technologies: React Native 0.73+, FC Hooks, StyleSheet</div>
-  </div>
-
-  <div style="background: var(--sl-color-bg-nav); border: 1px solid var(--sl-color-gray-5); border-radius: 10px; padding: 18px 20px;">
-    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
-      <h4 style="margin: 0; font-size: 1rem; color: #2563eb;">ViewModel Layer</h4>
-      <span style="font-size: 0.75rem; background: rgba(37, 99, 235, 0.15); color: #2563eb; font-weight: 700; padding: 2px 8px; border-radius: 4px;">STATE HOLDER</span>
-    </div>
-    <p style="font-size: 0.88rem; color: var(--sl-color-gray-2); margin: 0 0 10px 0; line-height: 1.5;">Custom Hooks (`useViewModel`) and Zustand stores. Encapsulates state mutations, async requests, and side effects.</p>
-    <div style="font-size: 0.8rem; font-weight: 600; color: var(--sl-color-gray-3);">Technologies: Custom React Hooks, Zustand, TanStack Query</div>
-  </div>
-
-  <div style="background: var(--sl-color-bg-nav); border: 1px solid var(--sl-color-gray-5); border-radius: 10px; padding: 18px 20px;">
-    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
-      <h4 style="margin: 0; font-size: 1rem; color: #7c3aed;">Domain Layer</h4>
-      <span style="font-size: 0.75rem; background: rgba(124, 58, 237, 0.15); color: #7c3aed; font-weight: 700; padding: 2px 8px; border-radius: 4px;">PURE BUSINESS</span>
-    </div>
-    <p style="font-size: 0.88rem; color: var(--sl-color-gray-2); margin: 0 0 10px 0; line-height: 1.5;">Framework-independent business logic classes/functions. Pure TypeScript interfaces without React or UI dependencies.</p>
-    <div style="font-size: 0.8rem; font-weight: 600; color: var(--sl-color-gray-3);">Technologies: Pure TypeScript, Strict Interfaces</div>
-  </div>
-
-  <div style="background: var(--sl-color-bg-nav); border: 1px solid var(--sl-color-gray-5); border-radius: 10px; padding: 18px 20px;">
-    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
-      <h4 style="margin: 0; font-size: 1rem; color: #d97706;">Data Layer</h4>
-      <span style="font-size: 0.75rem; background: rgba(217, 119, 6, 0.15); color: #d97706; font-weight: 700; padding: 2px 8px; border-radius: 4px;">SINGLE SOURCE</span>
-    </div>
-    <p style="font-size: 0.88rem; color: var(--sl-color-gray-2); margin: 0 0 10px 0; line-height: 1.5;">Single source of truth. Handles network HTTP requests, high-performance MMKV storage, and Keychain authentication tokens.</p>
-    <div style="font-size: 0.8rem; font-weight: 600; color: var(--sl-color-gray-3);">Technologies: Axios, MMKV Storage, Keychain API</div>
-  </div>
-</div>
-
----
-
-## 3. Complete All-in-One TypeScript Specification File
-
-Below is the complete, self-contained **all-in-one TypeScript file** (`UserProfileFeature.tsx`). It contains the entire stack in one place: DTOs, Mappers, Repository Implementation, Domain UseCase, Custom ViewModel Hook, and React Native Styled Screen.
-
-```tsx
-// File: src/features/user/UserProfileFeature.tsx
-import React, { useEffect, useState, useCallback } from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  ActivityIndicator,
-  TouchableOpacity,
-  SafeAreaView,
-  StatusBar,
-} from 'react-native';
-
-// ============================================================================
-// 1. DATA LAYER (DTOs, Mappers & Repository)
-// ============================================================================
-
-/** Network Data Transfer Object from API */
-export interface UserNetworkDto {
-  id: string;
-  full_name: string;
-  email: string;
-  is_vip: boolean;
-}
-
-/** Local Storage Schema */
-export interface UserCacheEntity {
-  id: string;
-  fullName: string;
-  email: string;
-  isVip: boolean;
-  cachedAt: number;
-}
-
-/** Explicit Mapper Functions */
-export const mapDtoToDomain = (dto: UserNetworkDto): UserDomainModel => ({
-  id: dto.id,
-  name: dto.full_name,
-  email: dto.email,
-  isVip: dto.is_vip,
-});
-
-export const mapCacheToDomain = (cache: UserCacheEntity): UserDomainModel => ({
-  id: cache.id,
-  name: cache.fullName,
-  email: cache.email,
-  isVip: cache.isVip,
-});
-
-export interface UserRepositoryContract {
-  getUserProfile(userId: string): Promise<UserDomainModel>;
-}
-
-/** Single Source of Truth Repository */
-export class UserRepositoryImpl implements UserRepositoryContract {
-  private memoryCache: Map<string, UserDomainModel> = new Map();
-
-  async getUserProfile(userId: string): Promise<UserDomainModel> {
-    // Check in-memory fast cache first
-    if (this.memoryCache.has(userId)) {
-      return this.memoryCache.get(userId)!;
-    }
-
-    try {
-      // Remote API call
-      const response = await fetch(`https://api.example.com/v1/users/${userId}`);
-      if (!response.ok) {
-        throw new Error(`HTTP error status: ${response.status}`);
-      }
-      const dto: UserNetworkDto = await response.json();
-      const domainModel = mapDtoToDomain(dto);
-
-      // Save to memory cache
-      this.memoryCache.set(userId, domainModel);
-      return domainModel;
-    } catch (error) {
-      // Fallback or rethrow domain error
-      throw new Error(
-        error instanceof Error ? error.message : 'Failed to fetch user profile from network.'
-      );
-    }
-  }
-}
-
-// Instantiate Singleton Repository
-export const userRepository = new UserRepositoryImpl();
-
-// ============================================================================
-// 2. DOMAIN LAYER (Pure Business Models & Use Cases)
-// ============================================================================
-
-export interface UserDomainModel {
-  id: string;
-  name: string;
-  email: string;
-  isVip: boolean;
-}
-
-export class GetUserProfileUseCase {
-  constructor(private repository: UserRepositoryContract) {}
-
-  async execute(userId: string): Promise<UserDomainModel> {
-    if (!userId || userId.trim().length === 0) {
-      throw new Error('User ID cannot be empty.');
-    }
-    return this.repository.getUserProfile(userId);
-  }
-}
-
-export const getUserProfileUseCase = new GetUserProfileUseCase(userRepository);
-
-// ============================================================================
-// 3. VIEWMODEL / CONTROLLER HOOK LAYER (MVVM + State Management)
-// ============================================================================
-
-export type UserProfileUiState =
-  | { kind: 'loading' }
-  | { kind: 'success'; user: UserDomainModel }
-  | { kind: 'error'; message: string };
-
-/** Custom React Hook acting as ViewModel */
-export const useUserProfileViewModel = (userId: string) => {
-  const [uiState, setUiState] = useState<UserProfileUiState>({ kind: 'loading' });
-
-  const fetchProfile = useCallback(async () => {
-    setUiState({ kind: 'loading' });
-    try {
-      const user = await getUserProfileUseCase.execute(userId);
-      setUiState({ kind: 'success', user });
-    } catch (err) {
-      setUiState({
-        kind: 'error',
-        message: err instanceof Error ? err.message : 'An unknown error occurred.',
-      });
-    }
-  }, [userId]);
-
-  useEffect(() => {
-    fetchProfile();
-  }, [fetchProfile]);
-
-  return {
-    uiState,
-    refreshProfile: fetchProfile,
-  };
-};
-
-// ============================================================================
-// 4. UI LAYER (Stateless React Native Screen & Styled Components)
-// ============================================================================
-
-const BRAND_GREEN = '#008544';
-
-export interface UserProfileScreenProps {
-  userId: string;
-  onNavigateBack?: () => void;
-}
-
-export const UserProfileScreen: React.FC<UserProfileScreenProps> = ({
-  userId,
-  onNavigateBack,
-}) => {
-  const { uiState, refreshProfile } = useUserProfileViewModel(userId);
-
-  return (
-    <SafeAreaView style={styles.safeArea}>
-      <StatusBar barStyle="dark-content" />
-      
-      {/* Top Header */}
-      <View style={styles.header}>
-        {onNavigateBack && (
-          <TouchableOpacity onPress={onNavigateBack} style={styles.backButton}>
-            <Text style={styles.backText}>‹ Back</Text>
-          </TouchableOpacity>
-        )}
-        <Text style={styles.headerTitle}>User Profile</Text>
-      </View>
-
-      {/* State View Rendering */}
-      <View style={styles.container}>
-        {uiState.kind === 'loading' && (
-          <View style={styles.centerContainer}>
-            <ActivityIndicator size="large" color={BRAND_GREEN} />
-            <Text style={styles.loadingText}>Loading profile...</Text>
-          </View>
-        )}
-
-        {uiState.kind === 'error' && (
-          <View style={styles.centerContainer}>
-            <Text style={styles.errorText}>{uiState.message}</Text>
-            <TouchableOpacity style={styles.retryButton} onPress={refreshProfile}>
-              <Text style={styles.retryButtonText}>Retry</Text>
-            </TouchableOpacity>
-          </View>
-        )}
-
-        {uiState.kind === 'success' && (
-          <View style={styles.contentContainer}>
-            <Text style={styles.userName}>{uiState.user.name}</Text>
-            <Text style={styles.userEmail}>{uiState.user.email}</Text>
-
-            {uiState.user.isVip && (
-              <View style={styles.vipBadge}>
-                <Text style={styles.vipText}>VIP Enterprise Account</Text>
-              </View>
-            )}
-
-            <View style={styles.spacer} />
-
-            <TouchableOpacity style={styles.refreshButton} onPress={refreshProfile}>
-              <Text style={styles.refreshButtonText}>Refresh Profile</Text>
-            </TouchableOpacity>
-          </View>
-        )}
-      </View>
-    </SafeAreaView>
-  );
-};
-
-// ============================================================================
-// 5. STYLES (Clean Encapsulated StyleSheet)
-// ============================================================================
-
-const styles = StyleSheet.create({
-  safeArea: {
-    flex: 1,
-    backgroundColor: '#F9FAFB',
-  },
-  header: {
-    height: 56,
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: 16,
-    borderBottomWidth: 1,
-    borderBottomColor: '#E5E7EB',
-    backgroundColor: '#FFFFFF',
-  },
-  backButton: {
-    marginRight: 12,
-  },
-  backText: {
-    fontSize: 18,
-    color: BRAND_GREEN,
-    fontWeight: '600',
-  },
-  headerTitle: {
-    fontSize: 18,
-    fontWeight: '700',
-    color: '#111827',
-  },
-  container: {
-    flex: 1,
-  },
-  centerContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 24,
-  },
-  loadingText: {
-    marginTop: 12,
-    fontSize: 15,
-    color: '#6B7280',
-  },
-  errorText: {
-    fontSize: 15,
-    color: '#DC2626',
-    textAlign: 'center',
-    marginBottom: 16,
-  },
-  retryButton: {
-    backgroundColor: BRAND_GREEN,
-    paddingHorizontal: 20,
-    paddingVertical: 10,
-    borderRadius: 8,
-  },
-  retryButtonText: {
-    color: '#FFFFFF',
-    fontWeight: '600',
-    fontSize: 14,
-  },
-  contentContainer: {
-    flex: 1,
-    padding: 24,
-  },
-  userName: {
-    fontSize: 24,
-    fontWeight: '800',
-    color: '#111827',
-    marginBottom: 4,
-  },
-  userEmail: {
-    fontSize: 16,
-    color: '#6B7280',
-    marginBottom: 16,
-  },
-  vipBadge: {
-    alignSelf: 'flex-start',
-    backgroundColor: BRAND_GREEN,
-    paddingHorizontal: 10,
-    paddingVertical: 4,
-    borderRadius: 6,
-  },
-  vipText: {
-    color: '#FFFFFF',
-    fontWeight: '700',
-    fontSize: 12,
-  },
-  spacer: {
-    flex: 1,
-  },
-  refreshButton: {
-    backgroundColor: BRAND_GREEN,
-    paddingVertical: 14,
-    borderRadius: 10,
-    alignItems: 'center',
-  },
-  refreshButtonText: {
-    color: '#FFFFFF',
-    fontSize: 16,
-    fontWeight: '700',
-  },
-});
-```
-
----
-
-## 4. Mandatory Architectural Rules
+## 3. Mandatory Foundation Rules
 
 <div style="border: 1px solid rgba(239, 68, 68, 0.3); background: rgba(239, 68, 68, 0.04); border-left: 5px solid #ef4444; border-radius: 10px; padding: 22px 24px; margin: 28px 0;">
   <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 16px;">
     <span style="background: #ef4444; color: white; font-weight: 700; font-size: 0.75rem; padding: 3px 10px; border-radius: 4px; letter-spacing: 0.05em;">NON-NEGOTIABLE</span>
-    <h3 style="margin: 0; font-size: 1.1rem; color: var(--sl-color-white); font-weight: 700;">Strict React Native Architecture Violations</h3>
+    <h3 style="margin: 0; font-size: 1.1rem; color: var(--sl-color-white); font-weight: 700;">Foundation Compliance Violations</h3>
   </div>
   <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px;">
     <div style="background: var(--sl-color-bg-nav); border: 1px solid var(--sl-color-gray-5); border-radius: 8px; padding: 14px 16px;">
-      <div style="font-weight: 700; color: #ef4444; font-size: 0.9rem; margin-bottom: 4px;">1. Strict TypeScript (Zero `any`)</div>
-      <div style="font-size: 0.86rem; color: var(--sl-color-gray-2); line-height: 1.5;">Never use explicit or implicit <code>any</code> types. Configure <code>tsconfig.json</code> with <code>"noImplicitAny": true</code> and declare explicit interfaces for all state.</div>
+      <div style="font-weight: 700; color: #ef4444; font-size: 0.9rem; margin-bottom: 4px;">1. Zero Hardcoded Raw Colors</div>
+      <div style="font-size: 0.86rem; color: var(--sl-color-gray-2); line-height: 1.5;">Never hardcode hex values like <code>#008544</code> inside UI views. Always reference design tokens from the core theme provider.</div>
     </div>
     <div style="background: var(--sl-color-bg-nav); border: 1px solid var(--sl-color-gray-5); border-radius: 8px; padding: 14px 16px;">
-      <div style="font-weight: 700; color: #ef4444; font-size: 0.9rem; margin-bottom: 4px;">2. Zero Tokens in AsyncStorage</div>
-      <div style="font-size: 0.86rem; color: var(--sl-color-gray-2); line-height: 1.5;">Never store OAuth JWT tokens or sensitive keys in unencrypted <code>AsyncStorage</code>. Use <code>react-native-keychain</code> or iOS Keychain / Android Keystore.</div>
+      <div style="font-weight: 700; color: #ef4444; font-size: 0.9rem; margin-bottom: 4px;">2. Zero Unencrypted Key-Value Storage</div>
+      <div style="font-size: 0.86rem; color: var(--sl-color-gray-2); line-height: 1.5;">Never store OAuth tokens or secret keys in unencrypted storage (SharedPreferences, UserDefaults, or AsyncStorage). Use Keychain/KeyStore.</div>
     </div>
     <div style="background: var(--sl-color-bg-nav); border: 1px solid var(--sl-color-gray-5); border-radius: 8px; padding: 14px 16px;">
-      <div style="font-weight: 700; color: #ef4444; font-size: 0.9rem; margin-bottom: 4px;">3. MMKV for Fast Local Caching</div>
-      <div style="font-size: 0.86rem; color: var(--sl-color-gray-2); line-height: 1.5;">Use <code>react-native-mmkv</code> for high-performance synchronous storage instead of slow async bridge operations from legacy <code>AsyncStorage</code>.</div>
+      <div style="font-weight: 700; color: #ef4444; font-size: 0.9rem; margin-bottom: 4px;">3. Zero Hardcoded String Literals</div>
+      <div style="font-size: 0.86rem; color: var(--sl-color-gray-2); line-height: 1.5;">UI text must never contain raw English strings. All text must be sourced from localization resource files for multi-language support.</div>
     </div>
     <div style="background: var(--sl-color-bg-nav); border: 1px solid var(--sl-color-gray-5); border-radius: 8px; padding: 14px 16px;">
-      <div style="font-weight: 700; color: #ef4444; font-size: 0.9rem; margin-bottom: 4px;">4. Zero Direct Async in Render</div>
-      <div style="font-size: 0.86rem; color: var(--sl-color-gray-2); line-height: 1.5;">Never write inline promises or direct <code>fetch()</code> calls inside JSX component renders. All state management must be encapsulated in custom hooks or stores.</div>
+      <div style="font-weight: 700; color: #ef4444; font-size: 0.9rem; margin-bottom: 4px;">4. Mandatory Error Tracking & Logging</div>
+      <div style="font-size: 0.86rem; color: var(--sl-color-gray-2); line-height: 1.5;">All non-fatal exceptions and network failure states must be logged through the centralized telemetry foundation wrapper.</div>
     </div>
   </div>
 </div>
 
 ---
 
-## 5. Checklist for React Native PR Approval
+## 4. App Foundations Checklist for PR Approval
 
 <div style="background: var(--sl-color-bg-nav); border: 1px solid var(--sl-color-gray-5); border-radius: 12px; padding: 22px 26px; margin: 28px 0;">
   <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; border-bottom: 1px solid var(--sl-color-gray-5); padding-bottom: 12px;">
-    <h3 style="margin: 0; font-size: 1.1rem; color: var(--sl-color-white); font-weight: 700;">React Native PR Merge Requirements</h3>
-    <span style="background: #61dafb; color: #000000; font-size: 0.75rem; font-weight: 800; padding: 4px 10px; border-radius: 12px;">QUALITY GATE</span>
+    <h3 style="margin: 0; font-size: 1.1rem; color: var(--sl-color-white); font-weight: 700;">Foundation Quality Gate</h3>
+    <span style="background: var(--sl-color-accent); color: white; font-size: 0.75rem; font-weight: 700; padding: 4px 10px; border-radius: 12px;">PRE-MERGE CHECK</span>
   </div>
   <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px;">
     <div style="display: flex; align-items: flex-start; gap: 10px; font-size: 0.9rem; color: var(--sl-color-gray-2);">
-      <span style="color: #61dafb; font-weight: 900;">✓</span>
-      <div>Architecture follows strict <strong>MVVM Clean Architecture (UI → Hook ViewModel → Domain → Data)</strong>.</div>
+      <span style="color: var(--sl-color-accent); font-weight: 900;">✓</span>
+      <div>Design System tokens used for all colors, fonts, and grid spacing.</div>
     </div>
     <div style="display: flex; align-items: flex-start; gap: 10px; font-size: 0.9rem; color: var(--sl-color-gray-2);">
-      <span style="color: #61dafb; font-weight: 900;">✓</span>
-      <div>Strict TypeScript enforced across all files (zero <code>any</code> types).</div>
+      <span style="color: var(--sl-color-accent); font-weight: 900;">✓</span>
+      <div>Configuration & Feature Flags controlled via centralized remote config.</div>
     </div>
     <div style="display: flex; align-items: flex-start; gap: 10px; font-size: 0.9rem; color: var(--sl-color-gray-2);">
-      <span style="color: #61dafb; font-weight: 900;">✓</span>
-      <div>UI components are functional components utilizing <code>useCallback</code> and <code>useMemo</code> optimization.</div>
+      <span style="color: var(--sl-color-accent); font-weight: 900;">✓</span>
+      <div>Tokens and sensitive state stored exclusively in encrypted KeyStore/Keychain.</div>
     </div>
     <div style="display: flex; align-items: flex-start; gap: 10px; font-size: 0.9rem; color: var(--sl-color-gray-2);">
-      <span style="color: #61dafb; font-weight: 900;">✓</span>
-      <div>Sensitive OAuth tokens are stored in Keychain / SecureStore, NOT AsyncStorage.</div>
+      <span style="color: var(--sl-color-accent); font-weight: 900;">✓</span>
+      <div>All UI string resources localized for internationalization (i18n).</div>
     </div>
     <div style="display: flex; align-items: flex-start; gap: 10px; font-size: 0.9rem; color: var(--sl-color-gray-2);">
-      <span style="color: #61dafb; font-weight: 900;">✓</span>
-      <div>Styles are encapsulated in static <code>StyleSheet.create</code> objects or approved design system tokens.</div>
+      <span style="color: var(--sl-color-accent); font-weight: 900;">✓</span>
+      <div>Telemetry, crash logs, and network metrics reported to observability pipeline.</div>
     </div>
     <div style="display: flex; align-items: flex-start; gap: 10px; font-size: 0.9rem; color: var(--sl-color-gray-2);">
-      <span style="color: #61dafb; font-weight: 900;">✓</span>
-      <div>Unit tests written for Custom Hooks (using <code>@testing-library/react-hooks</code>) and Domain UseCases.</div>
+      <span style="color: var(--sl-color-accent); font-weight: 900;">✓</span>
+      <div>Production readiness checklist verified before build release.</div>
     </div>
   </div>
 </div>
