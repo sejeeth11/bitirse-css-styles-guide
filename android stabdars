@@ -1,32 +1,32 @@
 ---
-title: iOS Development Standards & Architecture
-description: Enterprise guidelines, Swift 5.9+ @Observable MVVM Architecture, Swift Concurrency, and production Swift code standards for iOS Mobile Applications.
+title: Android Development Standards & MVVM Architecture
+description: Enterprise guidelines, MVVM Clean Architecture, Unidirectional Data Flow diagrams, and production Kotlin code standards for Android Mobile Applications.
 sidebar:
-  order: 3
+  order: 2
 ---
 
-Welcome to the **Enterprise iOS Development Standards**. Architecture is the foundation of our mobile engineering strategy. This document provides a comprehensive specification of our mandatory **Swift 5.9+ MVVM Architecture** pattern.
+Welcome to the **Enterprise Android Development Standards**. Architecture is the foundation of our mobile engineering strategy. This document provides a comprehensive specification of our mandatory **MVVM Clean Architecture** pattern.
 
-<div style="border: 2px solid var(--sl-color-accent); border-radius: 12px; padding: 20px 24px; background-color: var(--sl-color-bg-nav); margin: 24px 0;">
+<div style="border: 2px solid #008544; border-radius: 12px; padding: 22px 26px; background-color: var(--sl-color-bg-nav); margin: 24px 0; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);">
   <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 12px;">
-    <span style="background: #2563eb; color: white; padding: 4px 10px; border-radius: 20px; font-weight: 700; font-size: 0.85rem; letter-spacing: 0.05em;">MANDATE</span>
-    <strong style="font-size: 1.1rem; color: var(--sl-color-white);">MVVM Clean Architecture + Swift Concurrency</strong>
+    <span style="background: #008544; color: white; padding: 4px 12px; border-radius: 20px; font-weight: 700; font-size: 0.8rem; letter-spacing: 0.05em;">ARCHITECTURE MANDATE</span>
+    <strong style="font-size: 1.15rem; color: var(--sl-color-white);">MVVM Clean Architecture + Unidirectional Data Flow</strong>
   </div>
   <p style="margin: 0 0 16px 0; color: var(--sl-color-gray-2); font-size: 0.98rem; line-height: 1.6;">
-    All enterprise iOS applications must strictly enforce MVVM with Clean Architecture using Swift 5.9+ <code>@Observable</code> and Swift Concurrency (<code>async/await</code>, <code>actor</code>). Direct UI data mutations or legacy completion callbacks are prohibited.
+    All enterprise Android applications must strictly enforce MVVM with Clean Architecture using Jetpack Compose and Kotlin StateFlow. Direct UI-to-database communication or state mutation outside ViewModels is strictly forbidden.
   </p>
   <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px;">
-    <div style="background: var(--sl-color-gray-6); padding: 12px 16px; border-radius: 8px; border-left: 4px solid #008544;">
-      <div style="font-weight: 600; font-size: 0.9rem;">1. UI & State</div>
-      <div style="font-size: 0.82rem; color: var(--sl-color-gray-3); margin-top: 2px;">SwiftUI + @Observable ViewModel</div>
+    <div style="background: var(--sl-color-gray-6); padding: 14px 16px; border-radius: 8px; border-left: 4px solid #008544;">
+      <div style="font-weight: 700; font-size: 0.92rem; color: var(--sl-color-white);">1. UI & State</div>
+      <div style="font-size: 0.84rem; color: var(--sl-color-gray-3); margin-top: 3px;">Jetpack Compose + StateFlow</div>
     </div>
-    <div style="background: var(--sl-color-gray-6); padding: 12px 16px; border-radius: 8px; border-left: 4px solid #2563eb;">
-      <div style="font-weight: 600; font-size: 0.9rem;">2. Pure Domain</div>
-      <div style="font-size: 0.82rem; color: var(--sl-color-gray-3); margin-top: 2px;">Protocol-Oriented UseCases</div>
+    <div style="background: var(--sl-color-gray-6); padding: 14px 16px; border-radius: 8px; border-left: 4px solid #2563eb;">
+      <div style="font-weight: 700; font-size: 0.92rem; color: var(--sl-color-white);">2. Pure Domain</div>
+      <div style="font-size: 0.84rem; color: var(--sl-color-gray-3); margin-top: 3px;">Kotlin UseCases (Result&lt;T&gt;)</div>
     </div>
-    <div style="background: var(--sl-color-gray-6); padding: 12px 16px; border-radius: 8px; border-left: 4px solid #d97706;">
-      <div style="font-weight: 600; font-size: 0.9rem;">3. Data & Cache</div>
-      <div style="font-size: 0.82rem; color: var(--sl-color-gray-3); margin-top: 2px;">Actor Isolation + Keychain</div>
+    <div style="background: var(--sl-color-gray-6); padding: 14px 16px; border-radius: 8px; border-left: 4px solid #d97706;">
+      <div style="font-weight: 700; font-size: 0.92rem; color: var(--sl-color-white);">3. Data Source</div>
+      <div style="font-size: 0.84rem; color: var(--sl-color-gray-3); margin-top: 3px;">Repository (Room + Retrofit)</div>
     </div>
   </div>
 </div>
@@ -42,39 +42,41 @@ The diagram below illustrates how data and control flow between the **UI Layer**
 ```mermaid
 graph TD
     subgraph UI_Layer ["1. UI Layer (Presentation)"]
-        View["SwiftUI Screen View"]
-        VM["MVVM ViewModel (@Observable / @MainActor)"]
-        State["ProfileUiState (Enum Contract)"]
+        View["Jetpack Compose Screen (@Composable)"]
+        VM["MVVM ViewModel (Hilt Injected)"]
+        State["UiState (StateFlow / Sealed Interface)"]
+        Event["UiEvent (User Actions / Callbacks)"]
     end
 
     subgraph Domain_Layer ["2. Domain Layer (Pure Business Logic)"]
-        UC["Use Cases (e.g. GetUserProfileUseCaseProtocol)"]
-        Model["Domain Models (Pure Swift Structs)"]
+        UC["Use Cases (e.g. GetUserProfileUseCase)"]
+        Model["Domain Models (Pure Kotlin Data Classes)"]
     end
 
     subgraph Data_Layer ["3. Data Layer (Single Source of Truth)"]
-        Repo["Actor UserProfileRepository"]
-        Remote["Remote DataSource (URLSession API)"]
-        Local["Local DataSource (Keychain / SwiftData)"]
+        Repo["UserRepositoryImpl"]
+        Remote["Remote DataSource (Retrofit API)"]
+        Local["Local DataSource (Room DB)"]
     end
 
     %% Flow interactions
-    View -- "1. Triggers User Action" --> VM
-    VM -- "2. Executes Use Case" --> UC
-    UC -- "3. Requests Data" --> Repo
-    Repo -- "4a. Fetches Remote API" --> Remote
-    Repo -- "4b. Caches in Keychain/SwiftData" --> Local
-    Repo -- "5. Returns Domain Model" --> UC
-    UC -- "6. Delivers Result" --> VM
-    VM -- "7. Updates State Property" --> State
-    State -- "8. Recomposes SwiftUI Body" --> View
+    View -- "1. Emits User Event" --> Event
+    Event -- "2. Triggers Event Function" --> VM
+    VM -- "3. Executes Use Case" --> UC
+    UC -- "4. Requests Data" --> Repo
+    Repo -- "5a. Fetches API Data" --> Remote
+    Repo -- "5b. Caches / Queries Local DB" --> Local
+    Repo -- "6. Returns Domain Model" --> UC
+    UC -- "7. Delivers Result" --> VM
+    VM -- "8. Updates StateFlow" --> State
+    State -- "9. Recomposes UI" --> View
 
     %% Styling
     classDef uiStyle fill:#f2fbf5,stroke:#008544,stroke-width:2px;
     classDef domainStyle fill:#eff6ff,stroke:#2563eb,stroke-width:2px;
     classDef dataStyle fill:#fef3c7,stroke:#d97706,stroke-width:2px;
 
-    class View,VM,State uiStyle;
+    class View,VM,State,Event uiStyle;
     class UC,Model domainStyle;
     class Repo,Remote,Local dataStyle;
 ```
@@ -83,320 +85,461 @@ graph TD
 
 ### Unidirectional Data Flow (UDF) Sequence Diagram
 
-This sequence diagram illustrates the step-by-step lifecycle of an asynchronous user request using Swift Concurrency.
+This sequence diagram illustrates the step-by-step lifecycle of an asynchronous user request from the UI down to the network and back.
 
 ```mermaid
 sequenceDiagram
     autonumber
     actor User
-    participant View as SwiftUI UserProfileView
-    participant VM as UserProfileViewModel (@MainActor)
-    participant UC as GetUserProfileUseCase
-    participant Repo as UserProfileRepository (Actor)
-    participant API as URLSession Network API
+    participant ComposeView as Jetpack Compose Screen
+    participant ViewModel as UserProfileViewModel
+    participant UseCase as GetUserProfileUseCase
+    participant Repository as UserRepositoryImpl
+    participant API as Retrofit API
 
-    User->>View: Tap "Refresh Profile" Button
-    View->>VM: loadUserProfile()
-    VM->>VM: Set state = .loading
-    View-->>User: Render ProgressView Spinner
-    VM->>UC: execute(userId)
-    UC->>Repo: fetchProfile(userId)
-    Repo->>API: URLSession.shared.data(from: url)
-    API-->>Repo: Return Data & HTTPURLResponse
-    Repo->>Repo: Decode JSON & Update Actor Memory Cache
-    Repo-->>UC: Return UserProfile Struct
-    UC-->>VM: Return UserProfile Struct
-    VM->>VM: Set state = .success(user)
-    VM-->>View: Recompose View Body
-    View-->>User: Render Profile Details & Badges
+    User->>ComposeView: Tap "Refresh Profile" Button
+    ComposeView->>ViewModel: onEvent(RefreshProfile(userId))
+    ViewModel->>ViewModel: Emit StateFlow(Loading)
+    ComposeView-->>User: Render CircularProgressIndicator
+    ViewModel->>UseCase: invoke(userId)
+    UseCase->>Repository: getUserProfile(userId)
+    Repository->>API: GET /v1/users/{userId}
+    API-->>Repository: Return UserNetworkDto JSON
+    Repository->>Repository: Map DTO to Entity & Cache in Room DB
+    Repository-->>UseCase: Return Result.success(UserDomainModel)
+    UseCase-->>ViewModel: Return Result.success(UserDomainModel)
+    ViewModel->>ViewModel: Emit StateFlow(Success(user))
+    ViewModel-->>ComposeView: Recompose Screen with Profile Data
+    ComposeView-->>User: Display Profile Details & VIP Badges
 ```
 
 ---
 
 ## 2. Layer-by-Layer Responsibilities
 
-| Layer | Responsibility | Key Technologies |
-| :--- | :--- | :--- |
-| **UI Layer** | Declarative UI views. Must never execute data manipulation directly. | SwiftUI, `@Observable`, Environment |
-| **ViewModel** | Manages UI state, transforms domain entities, guarantees thread safety via `@MainActor`. | Swift 5.9 `@Observable`, `@MainActor` |
-| **Domain Layer** | Protocol-oriented pure Swift business rules. Independent of UIKit or SwiftUI. | Swift Protocols, Pure Structs |
-| **Data Layer** | Single source of truth. Handles network requests, Keychain token persistence, and thread-safe caching. | URLSession, Swift `actor`, Keychain API |
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; margin: 24px 0;">
+  <div style="background: var(--sl-color-bg-nav); border: 1px solid var(--sl-color-gray-5); border-radius: 10px; padding: 18px 20px;">
+    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
+      <h4 style="margin: 0; font-size: 1rem; color: #008544;">UI Layer</h4>
+      <span style="font-size: 0.75rem; background: rgba(0, 133, 68, 0.15); color: #008544; font-weight: 700; padding: 2px 8px; border-radius: 4px;">PRESENTATION</span>
+    </div>
+    <p style="font-size: 0.88rem; color: var(--sl-color-gray-2); margin: 0 0 10px 0; line-height: 1.5;">Renders stateless UI components and captures user actions. Must never execute business logic directly.</p>
+    <div style="font-size: 0.8rem; font-weight: 600; color: var(--sl-color-gray-3);">Technologies: Jetpack Compose, Material 3, @Composable</div>
+  </div>
+
+  <div style="background: var(--sl-color-bg-nav); border: 1px solid var(--sl-color-gray-5); border-radius: 10px; padding: 18px 20px;">
+    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
+      <h4 style="margin: 0; font-size: 1rem; color: #2563eb;">ViewModel Layer</h4>
+      <span style="font-size: 0.75rem; background: rgba(37, 99, 235, 0.15); color: #2563eb; font-weight: 700; padding: 2px 8px; border-radius: 4px;">STATE HOLDER</span>
+    </div>
+    <p style="font-size: 0.88rem; color: var(--sl-color-gray-2); margin: 0 0 10px 0; line-height: 1.5;">Manages UI state, transforms domain models into StateFlow&lt;UiState&gt;, and handles coroutine scopes.</p>
+    <div style="font-size: 0.8rem; font-weight: 600; color: var(--sl-color-gray-3);">Technologies: Kotlin StateFlow, Hilt (@HiltViewModel)</div>
+  </div>
+
+  <div style="background: var(--sl-color-bg-nav); border: 1px solid var(--sl-color-gray-5); border-radius: 10px; padding: 18px 20px;">
+    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
+      <h4 style="margin: 0; font-size: 1rem; color: #7c3aed;">Domain Layer</h4>
+      <span style="font-size: 0.75rem; background: rgba(124, 58, 237, 0.15); color: #7c3aed; font-weight: 700; padding: 2px 8px; border-radius: 4px;">PURE BUSINESS</span>
+    </div>
+    <p style="font-size: 0.88rem; color: var(--sl-color-gray-2); margin: 0 0 10px 0; line-height: 1.5;">Encapsulates pure business rules into single-purpose UseCases. Independent of Android framework classes.</p>
+    <div style="font-size: 0.8rem; font-weight: 600; color: var(--sl-color-gray-3);">Technologies: Pure Kotlin, Result&lt;T&gt;</div>
+  </div>
+
+  <div style="background: var(--sl-color-bg-nav); border: 1px solid var(--sl-color-gray-5); border-radius: 10px; padding: 18px 20px;">
+    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
+      <h4 style="margin: 0; font-size: 1rem; color: #d97706;">Data Layer</h4>
+      <span style="font-size: 0.75rem; background: rgba(217, 119, 6, 0.15); color: #d97706; font-weight: 700; padding: 2px 8px; border-radius: 4px;">SINGLE SOURCE</span>
+    </div>
+    <p style="font-size: 0.88rem; color: var(--sl-color-gray-2); margin: 0 0 10px 0; line-height: 1.5;">Single source of truth. Manages network API requests, Room local caching, and entity data mappers.</p>
+    <div style="font-size: 0.8rem; font-weight: 600; color: var(--sl-color-gray-3);">Technologies: Retrofit, OkHttp, Room DB, EncryptedPrefs</div>
+  </div>
+</div>
 
 ---
 
-## 3. Complete All-in-One Swift Specification File
+## 3. Complete All-in-One Kotlin Specification File
 
-Below is the complete, compilation-ready **all-in-one Swift file** (`UserProfileFeature.swift`). It contains the entire stack in one place: DTO, Repository Actor, Domain Struct, Use Case Protocol, `@Observable` ViewModel, and SwiftUI Screen View.
+Below is the complete, self-contained **all-in-one Kotlin file** (`UserProfileFeature.kt`). It contains the entire stack in one place: DTO, Room Database Entity, Room DAO, Mappers, Repository, Domain Entity, Use Case, ViewModel, UI State, and Jetpack Compose View.
 
-```swift
-// File: EnterpriseMobile/Features/User/UserProfileFeature.swift
-import SwiftUI
-import Observation
-import Security
+```kotlin
+// File: com/enterprise/mobile/feature/user/UserProfileFeature.kt
+package com.enterprise.mobile.feature.user
 
-// ============================================================================
-// 1. DATA LAYER (DTOs, Mappers & Actor Repository)
-// ============================================================================
-
-// Network Transfer DTO
-struct UserNetworkDTO: Codable {
-    let id: String
-    let fullName: String
-    let email: String
-    let isVip: Bool
-
-    enum CodingKeys: String, CodingKey {
-        case id
-        case fullName = "full_name"
-        case email
-        case isVip = "is_vip"
-    }
-}
-
-// Mapper Extension
-extension UserNetworkDTO {
-    func toDomainModel() -> UserDomainModel {
-        UserDomainModel(
-            id: id,
-            name: fullName,
-            email: email,
-            isVip: isVip
-        )
-    }
-}
-
-// Repository Protocol
-protocol UserProfileRepositoryProtocol: Sendable {
-    func fetchUserProfile(userId: String) async throws -> UserDomainModel
-}
-
-// Thread-Safe Actor Repository Implementation
-actor UserProfileRepository: UserProfileRepositoryProtocol {
-    private let urlSession: URLSession
-    private var cache: [String: UserDomainModel] = [:]
-
-    init(urlSession: URLSession = .shared) {
-        self.urlSession = urlSession
-    }
-
-    func fetchUserProfile(userId: String) async throws -> UserDomainModel {
-        // Return thread-safe cached copy if present
-        if let cached = cache[userId] {
-            return cached
-        }
-
-        guard let url = URL(string: "https://api.example.com/v1/users/$userId)") else {
-            throw URLError(.badURL)
-        }
-
-        let (data, response) = try await urlSession.data(from: url)
-        
-        guard let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 else {
-            throw URLError(.badServerResponse)
-        }
-
-        let dto = try JSONDecoder().decode(UserNetworkDTO.self, from: data)
-        let domainModel = dto.toDomainModel()
-        
-        cache[userId] = domainModel
-        return domainModel
-    }
-}
+import androidx.compose.foundation.layout.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewModelScope
+import androidx.room.*
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
+import retrofit2.http.GET
+import retrofit2.http.Path
+import javax.inject.Inject
+import javax.inject.Singleton
 
 // ============================================================================
-// 2. DOMAIN LAYER (Business Entities & Use Cases)
+// 1. DATA LAYER (DTOs, Room Entity, DAO, Mappers & Repository)
 // ============================================================================
 
-struct UserDomainModel: Equatable, Identifiable, Sendable {
-    let id: String
-    let name: String
-    let email: String
-    let isVip: Bool
+// Retrofit API Transfer Object (DTO)
+@Serializable
+data class UserNetworkDto(
+    @SerialName("id") val id: String,
+    @SerialName("full_name") val fullName: String,
+    @SerialName("email") val email: String,
+    @SerialName("is_vip") val isVip: Boolean
+)
+
+// Retrofit Service Contract
+interface ApiService {
+    @GET("v1/users/{id}")
+    suspend fun getUser(@Path("id") id: String): UserNetworkDto
 }
 
-protocol GetUserProfileUseCaseProtocol: Sendable {
-    func execute(userId: String) async throws -> UserDomainModel
+// Room Database Local Entity
+@Entity(tableName = "users")
+data class UserEntity(
+    @PrimaryKey val id: String,
+    val fullName: String,
+    val email: String,
+    val isVip: Boolean
+)
+
+// Room DAO Interface
+@Dao
+interface UserDao {
+    @Query("SELECT * FROM users WHERE id = :id")
+    suspend fun getUserById(id: String): UserEntity?
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertUser(user: UserEntity)
 }
 
-final class GetUserProfileUseCase: GetUserProfileUseCaseProtocol {
-    private let repository: UserProfileRepositoryProtocol
+// Mapper Extension Functions (Explicit Conversion between Layers)
+fun UserNetworkDto.toEntity() = UserEntity(
+    id = id,
+    fullName = fullName,
+    email = email,
+    isVip = isVip
+)
 
-    init(repository: UserProfileRepositoryProtocol) {
-        self.repository = repository
-    }
+fun UserNetworkDto.toDomainModel() = UserDomainModel(
+    id = id,
+    name = fullName,
+    email = email,
+    isVip = isVip
+)
 
-    func execute(userId: String) async throws -> UserDomainModel {
-        guard !userId.trimmingCharacters(in: .whitespaces).isEmpty else {
-            throw NSError(domain: "UserProfile", code: 400, userInfo: [NSLocalizedDescriptionKey: "User ID cannot be empty."])
-        }
-        return try await repository.fetchUserProfile(userId: userId)
-    }
+fun UserEntity.toDomainModel() = UserDomainModel(
+    id = id,
+    name = fullName,
+    email = email,
+    isVip = isVip
+)
+
+// Repository Interface Contract
+interface UserRepository {
+    suspend fun getUserProfile(userId: String): Result<UserDomainModel>
 }
 
-// ============================================================================
-// 3. VIEWMODEL & UI STATE LAYER (Swift 5.9+ @Observable + @MainActor)
-// ============================================================================
+// Single Source of Truth Repository Implementation
+@Singleton
+class UserRepositoryImpl @Inject constructor(
+    private val apiService: ApiService,
+    private val userDao: UserDao,
+    private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
+) : UserRepository {
 
-enum UserProfileUiState: Equatable {
-    case loading
-    case success(user: UserDomainModel)
-    case error(message: String)
-}
-
-@Observable
-@MainActor
-final class UserProfileViewModel {
-    private(set) var state: UserProfileUiState = .loading
-    private let useCase: GetUserProfileUseCaseProtocol
-
-    init(useCase: GetUserProfileUseCaseProtocol) {
-        self.useCase = useCase
-    }
-
-    func loadUserProfile(userId: String) async {
-        state = .loading
-        do {
-            let profile = try await useCase.execute(userId: userId)
-            state = .success(user: profile)
-        } catch {
-            state = .error(message: error.localizedDescription)
-        }
-    }
-}
-
-// ============================================================================
-// 4. UI LAYER (Declarative SwiftUI Screen View)
-// ============================================================================
-
-struct UserProfileScreen: View {
-    let userId: String
-    @State private var viewModel: UserProfileViewModel
-    @Environment(\.dismiss) private var dismiss
-
-    init(userId: String, viewModel: UserProfileViewModel) {
-        self.userId = userId
-        _viewModel = State(initialValue: viewModel)
-    }
-
-    var body: some View {
-        NavigationStack {
-            Group {
-                switch viewModel.state {
-                case .loading:
-                    ProgressView("Loading Profile...")
-                        .tint(Color("BrandGreen"))
-                case .success(let user):
-                    ProfileDetailsView(user: user) {
-                        Task { await viewModel.loadUserProfile(userId: userId) }
-                    }
-                case .error(let message):
-                    VStack(spacing: 12) {
-                        Text(message)
-                            .foregroundColor(.red)
-                            .multilineTextAlignment(.center)
-                        Button("Retry") {
-                            Task { await viewModel.loadUserProfile(userId: userId) }
-                        }
-                        .buttonStyle(.borderedProminent)
-                        .tint(Color("BrandGreen"))
-                    }
-                    .padding()
+    override suspend fun getUserProfile(userId: String): Result<UserDomainModel> {
+        return withContext(ioDispatcher) {
+            try {
+                // Fetch fresh remote data from API
+                val dto = apiService.getUser(userId)
+                
+                // Cache into local database
+                userDao.insertUser(dto.toEntity())
+                
+                Result.success(dto.toDomainModel())
+            } catch (e: Exception) {
+                // Fallback to local Room DB cache if network fails
+                val localEntity = userDao.getUserById(userId)
+                if (localEntity != null) {
+                    Result.success(localEntity.toDomainModel())
+                } else {
+                    Result.failure(e)
                 }
             }
-            .navigationTitle("User Profile")
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .navigationBarLeading) {
-                    Button(action: { dismiss() }) {
-                        Image(systemName: "chevron.left")
+        }
+    }
+}
+
+// ============================================================================
+// 2. DOMAIN LAYER (Pure Business Entities & Use Cases)
+// ============================================================================
+
+// Pure Domain Model (Framework-Independent)
+data class UserDomainModel(
+    val id: String,
+    val name: String,
+    val email: String,
+    val isVip: Boolean
+)
+
+// Pure Business UseCase
+class GetUserProfileUseCase @Inject constructor(
+    private val userRepository: UserRepository
+) {
+    suspend operator fun invoke(userId: String): Result<UserDomainModel> {
+        if (userId.isBlank()) {
+            return Result.failure(IllegalArgumentException("User ID cannot be empty."))
+        }
+        return userRepository.getUserProfile(userId)
+    }
+}
+
+// ============================================================================
+// 3. VIEWMODEL & UI STATE LAYER (MVVM + StateFlow + UDF)
+// ============================================================================
+
+// Sealed UI State Contract (Guarantees atomic UI representation)
+sealed interface UserProfileUiState {
+    data object Loading : UserProfileUiState
+    data class Success(val user: UserDomainModel) : UserProfileUiState
+    data class Error(val errorMessage: String) : UserProfileUiState
+}
+
+// Sealed User Action Intents
+sealed interface UserProfileUiEvent {
+    data class RefreshProfile(val userId: String) : UserProfileUiEvent
+}
+
+@HiltViewModel
+class UserProfileViewModel @Inject constructor(
+    private val getUserProfileUseCase: GetUserProfileUseCase
+) : ViewModel() {
+
+    private val _uiState = MutableStateFlow<UserProfileUiState>(UserProfileUiState.Loading)
+    val uiState: StateFlow<UserProfileUiState> = _uiState.asStateFlow()
+
+    fun onEvent(event: UserProfileUiEvent) {
+        when (event) {
+            is UserProfileUiEvent.RefreshProfile -> fetchProfile(event.userId)
+        }
+    }
+
+    private fun fetchProfile(userId: String) {
+        viewModelScope.launch {
+            _uiState.value = UserProfileUiState.Loading
+            getUserProfileUseCase(userId)
+                .onSuccess { domainUser ->
+                    _uiState.value = UserProfileUiState.Success(user = domainUser)
+                }
+                .onFailure { throwable ->
+                    _uiState.value = UserProfileUiState.Error(
+                        errorMessage = throwable.localizedMessage ?: "An unexpected error occurred."
+                    )
+                }
+        }
+    }
+}
+
+// ============================================================================
+// 4. UI LAYER (Stateless Jetpack Compose Screen & Components)
+// ============================================================================
+
+private val BrandGreen = Color(0xFF008544)
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun UserProfileScreen(
+    userId: String,
+    viewModel: UserProfileViewModel = hiltViewModel(),
+    onNavigateBack: () -> Unit
+) {
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
+    LaunchedEffect(userId) {
+        viewModel.onEvent(UserProfileUiEvent.RefreshProfile(userId))
+    }
+
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = { Text("User Profile") },
+                navigationIcon = {
+                    IconButton(onClick = onNavigateBack) {
+                        Icon(Icons.Default.ArrowBack, contentDescription = "Back")
                     }
+                },
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = MaterialTheme.colorScheme.surfaceVariant
+                )
+            )
+        }
+    ) { paddingValues ->
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(paddingValues),
+            contentAlignment = Alignment.Center
+        ) {
+            when (val state = uiState) {
+                is UserProfileUiState.Loading -> {
+                    CircularProgressIndicator(color = BrandGreen)
+                }
+                is UserProfileUiState.Success -> {
+                    ProfileDetailsView(
+                        user = state.user,
+                        onRefresh = { viewModel.onEvent(UserProfileUiEvent.RefreshProfile(userId)) }
+                    )
+                }
+                is UserProfileUiState.Error -> {
+                    ErrorView(
+                        message = state.errorMessage,
+                        onRetry = { viewModel.onEvent(UserProfileUiEvent.RefreshProfile(userId)) }
+                    )
                 }
             }
-            .task {
-                await viewModel.loadUserProfile(userId: userId)
-            }
         }
     }
 }
 
-private struct ProfileDetailsView: View {
-    let user: UserDomainModel
-    let onRefresh: () -> Void
+@Composable
+private fun ProfileDetailsView(
+    user: UserDomainModel,
+    onRefresh: () -> Unit
+) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(24.dp),
+        verticalArrangement = Arrangement.spacedBy(16.dp)
+    ) {
+        Text(text = user.name, style = MaterialTheme.typography.headlineMedium)
+        Text(text = user.email, style = MaterialTheme.typography.bodyLarge, color = Color.Gray)
 
-    var body: some View {
-        VStack(alignment: .leading, spacing: 16) {
-            Text(user.name)
-                .font(.title)
-                .fontWeight(.bold)
-
-            Text(user.email)
-                .font(.body)
-                .foregroundColor(.secondary)
-
-            if user.isVip {
-                Text("VIP Enterprise Account")
-                    .font(.caption)
-                    .fontWeight(.bold)
-                    .padding(.horizontal, 10)
-                    .padding(.vertical, 6)
-                    .background(Color("BrandGreen"))
-                    .foregroundColor(.white)
-                    .cornerRadius(6)
-            }
-
-            Spacer()
-
-            Button(action: onRefresh) {
-                Text("Refresh User Profile")
-                    .fontWeight(.semibold)
-                    .frame(maxWidth: .infinity)
-                    .padding()
-                    .background(Color("BrandGreen"))
-                    .foregroundColor(.white)
-                    .cornerRadius(10)
+        if (user.isVip) {
+            Surface(
+                color = BrandGreen,
+                shape = MaterialTheme.shapes.small
+            ) {
+                Text(
+                    text = "VIP Enterprise Account",
+                    color = Color.White,
+                    style = MaterialTheme.typography.labelMedium,
+                    modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp)
+                )
             }
         }
-        .padding(24)
+
+        Spacer(modifier = Modifier.weight(1f))
+
+        Button(
+            onClick = onRefresh,
+            modifier = Modifier.fillMaxWidth(),
+            colors = ButtonDefaults.buttonColors(containerColor = BrandGreen)
+        ) {
+            Text("Refresh User Profile")
+        }
     }
 }
 
-// Previews
-#Preview("Success State") {
-    UserProfileScreen(
-        userId: "usr_100",
-        viewModel: UserProfileViewModel(
-            useCase: MockGetUserProfileUseCase()
-        )
-    )
-}
-
-// Mock Implementation for SwiftUI Preview
-private final class MockGetUserProfileUseCase: GetUserProfileUseCaseProtocol {
-    func execute(userId: String) async throws -> UserDomainModel {
-        UserDomainModel(id: "usr_100", name: "Alex Mercer", email: "alex.mercer@example.com", isVip: true)
+@Composable
+private fun ErrorView(
+    message: String,
+    onRetry: () -> Unit
+) {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(12.dp)
+    ) {
+        Text(text = message, color = MaterialTheme.colorScheme.error)
+        Button(onClick = onRetry) {
+            Text("Retry")
+        }
     }
 }
 ```
 
 ---
 
-## 4. Mandatory iOS Architecture Rules
+## 4. Mandatory Architectural Rules
 
-:::caution[Architectural Rules]
-1. **ViewModels must use `@Observable` and `@MainActor`:** Never use deprecated `ObservableObject` or `@Published` for new Swift 5.9+ code.
-2. **Never store OAuth Tokens in `UserDefaults`:** Store JWT tokens and sensitive keys exclusively inside iOS **Keychain**.
-3. **Thread Safety via Actors:** Mutable repository caching logic must be encapsulated inside Swift **`actor`** boundaries to prevent data races.
-4. **Swift Package Manager (SPM):** Dependencies must be managed via SPM. CocoaPods is deprecated for new enterprise projects.
-:::
+<div style="border: 1px solid rgba(239, 68, 68, 0.3); background: rgba(239, 68, 68, 0.04); border-left: 5px solid #ef4444; border-radius: 10px; padding: 22px 24px; margin: 28px 0;">
+  <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 16px;">
+    <span style="background: #ef4444; color: white; font-weight: 700; font-size: 0.75rem; padding: 3px 10px; border-radius: 4px; letter-spacing: 0.05em;">NON-NEGOTIABLE</span>
+    <h3 style="margin: 0; font-size: 1.1rem; color: var(--sl-color-white); font-weight: 700;">Strict Android Architecture Violations</h3>
+  </div>
+  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px;">
+    <div style="background: var(--sl-color-bg-nav); border: 1px solid var(--sl-color-gray-5); border-radius: 8px; padding: 14px 16px;">
+      <div style="font-weight: 700; color: #ef4444; font-size: 0.9rem; margin-bottom: 4px;">1. Never Pass Context to ViewModels</div>
+      <div style="font-size: 0.86rem; color: var(--sl-color-gray-2); line-height: 1.5;">Passing Android <code>Context</code> or Activity references into ViewModels causes severe memory leaks. Use AndroidViewModel only when application context is mandatory.</div>
+    </div>
+    <div style="background: var(--sl-color-bg-nav); border: 1px solid var(--sl-color-gray-5); border-radius: 8px; padding: 14px 16px;">
+      <div style="font-weight: 700; color: #ef4444; font-size: 0.9rem; margin-bottom: 4px;">2. Never Expose MutableStateFlow</div>
+      <div style="font-size: 0.86rem; color: var(--sl-color-gray-2); line-height: 1.5;">Always expose read-only <code>StateFlow&lt;UiState&gt;</code> to the UI via <code>asStateFlow()</code>. UI components must never mutate state directly.</div>
+    </div>
+    <div style="background: var(--sl-color-bg-nav); border: 1px solid var(--sl-color-gray-5); border-radius: 8px; padding: 14px 16px;">
+      <div style="font-weight: 700; color: #ef4444; font-size: 0.9rem; margin-bottom: 4px;">3. Lifecycle-Aware Collection</div>
+      <div style="font-size: 0.86rem; color: var(--sl-color-gray-2); line-height: 1.5;">Always use <code>collectAsStateWithLifecycle()</code> inside Composables to suspend flow emissions when the app is in the background.</div>
+    </div>
+    <div style="background: var(--sl-color-bg-nav); border: 1px solid var(--sl-color-gray-5); border-radius: 8px; padding: 14px 16px;">
+      <div style="font-weight: 700; color: #ef4444; font-size: 0.9rem; margin-bottom: 4px;">4. Zero Compose Imports in ViewModel</div>
+      <div style="font-size: 0.86rem; color: var(--sl-color-gray-2); line-height: 1.5;">ViewModels must remain pure state containers and never import <code>androidx.compose.*</code> or <code>@Composable</code> elements.</div>
+    </div>
+  </div>
+</div>
 
 ---
 
-## Checklist for iOS PR Approval
+## 5. Checklist for Android PR Approval
 
-- [ ] UI is 100% built with SwiftUI and supports Dynamic Type & VoiceOver accessibility.
-- [ ] ViewModels use Swift 5.9 `@Observable` macro and `@MainActor` attribute.
-- [ ] Repositories use Swift `actor` models for thread-safe memory caching.
-- [ ] No completion handlers or `DispatchQueue.main.async` calls; code uses `async`/`await`.
-- [ ] Sensitive tokens are stored in Keychain.
-- [ ] Swift Testing or XCTest cases verify ViewModel state transitions.
-- [ ] Zero compiler warnings with `SWIFT_STRICT_CONCURRENCY = complete`.
+<div style="background: var(--sl-color-bg-nav); border: 1px solid var(--sl-color-gray-5); border-radius: 12px; padding: 22px 26px; margin: 28px 0;">
+  <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; border-bottom: 1px solid var(--sl-color-gray-5); padding-bottom: 12px;">
+    <h3 style="margin: 0; font-size: 1.1rem; color: var(--sl-color-white); font-weight: 700;">Android PR Merge Requirements</h3>
+    <span style="background: #008544; color: white; font-size: 0.75rem; font-weight: 700; padding: 4px 10px; border-radius: 12px;">QUALITY GATE</span>
+  </div>
+  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px;">
+    <div style="display: flex; align-items: flex-start; gap: 10px; font-size: 0.9rem; color: var(--sl-color-gray-2);">
+      <span style="color: #008544; font-weight: 900;">✓</span>
+      <div>Architecture follows strict <strong>Clean Architecture (UI → Domain → Data)</strong>.</div>
+    </div>
+    <div style="display: flex; align-items: flex-start; gap: 10px; font-size: 0.9rem; color: var(--sl-color-gray-2);">
+      <span style="color: #008544; font-weight: 900;">✓</span>
+      <div>ViewModel uses <code>StateFlow</code> and immutable Sealed Interface for UI state.</div>
+    </div>
+    <div style="display: flex; align-items: flex-start; gap: 10px; font-size: 0.9rem; color: var(--sl-color-gray-2);">
+      <span style="color: #008544; font-weight: 900;">✓</span>
+      <div>Jetpack Compose uses <code>collectAsStateWithLifecycle()</code> for all state streams.</div>
+    </div>
+    <div style="display: flex; align-items: flex-start; gap: 10px; font-size: 0.9rem; color: var(--sl-color-gray-2);">
+      <span style="color: #008544; font-weight: 900;">✓</span>
+      <div>UseCases are pure Kotlin classes with zero <code>android.*</code> dependencies.</div>
+    </div>
+    <div style="display: flex; align-items: flex-start; gap: 10px; font-size: 0.9rem; color: var(--sl-color-gray-2);">
+      <span style="color: #008544; font-weight: 900;">✓</span>
+      <div>Repository acts as Single Source of Truth handling Room DB fallback.</div>
+    </div>
+    <div style="display: flex; align-items: flex-start; gap: 10px; font-size: 0.9rem; color: var(--sl-color-gray-2);">
+      <span style="color: #008544; font-weight: 900;">✓</span>
+      <div>Unit tests written for ViewModel state transitions and UseCases.</div>
+    </div>
+  </div>
+</div>
