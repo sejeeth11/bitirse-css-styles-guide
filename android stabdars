@@ -1,199 +1,154 @@
 ---
-title: Design System & Theming
-description: Enterprise design tokens, color palette contracts, typography scale, spacing grids, and cross-platform UI component standards for Android, iOS, and React Native.
+title: Configuration Management
+description: Enterprise guidelines, environment configuration, remote feature flags, build variants, and runtime config standards for Android, iOS, and React Native.
 sidebar:
-  order: 2
+  order: 3
 ---
 
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 
-Welcome to the **Enterprise Design System & Theming Standards**. A unified design system guarantees brand consistency, accessibility compliance, and rapid UI development across mobile platforms.
+Welcome to the **Enterprise Configuration Management Standards**. Centralized configuration management separates environment-specific settings (Development, Staging, Production) from application source code and provides real-time **Feature Flagging** capabilities.
 
-<div style="border: 2px solid #008544; border-radius: 12px; padding: 22px 26px; background-color: var(--sl-color-bg-nav); margin: 24px 0; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);">
+<div style="border: 2px solid #2563eb; border-radius: 12px; padding: 22px 26px; background-color: var(--sl-color-bg-nav); margin: 24px 0; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);">
   <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 12px;">
-    <span style="background: #008544; color: white; padding: 4px 12px; border-radius: 20px; font-weight: 700; font-size: 0.8rem; letter-spacing: 0.05em;">DESIGN SYSTEM MANDATE</span>
-    <strong style="font-size: 1.15rem; color: var(--sl-color-white);">Strict Token-Based UI Architecture</strong>
+    <span style="background: #2563eb; color: white; padding: 4px 12px; border-radius: 20px; font-weight: 700; font-size: 0.8rem; letter-spacing: 0.05em;">CONFIG MANDATE</span>
+    <strong style="font-size: 1.15rem; color: var(--sl-color-white);">Strict Environment Separation & Remote Feature Gating</strong>
   </div>
   <p style="margin: 0 0 16px 0; color: var(--sl-color-gray-2); font-size: 0.98rem; line-height: 1.6;">
-    All enterprise mobile applications must consume centralized <strong>Design Tokens</strong> (Colors, Typography, Spacing, Elevation) rather than hardcoding raw styling values. Direct pixel offsets or unmapped hex colors in UI views are strictly forbidden.
+    All mobile applications must decouple environment settings (API endpoints, timeout thresholds, telemetry keys) from feature logic. Hardcoding API endpoints or secret keys in source code is strictly prohibited.
   </p>
   <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px;">
     <div style="background: var(--sl-color-gray-6); padding: 14px 16px; border-radius: 8px; border-left: 4px solid #008544;">
-      <div style="font-weight: 700; font-size: 0.92rem; color: var(--sl-color-white);">🎨 Color Tokens</div>
-      <div style="font-size: 0.84rem; color: var(--sl-color-gray-3); margin-top: 3px;">Semantic Palette & Dark Mode</div>
+      <div style="font-weight: 700; font-size: 0.92rem; color: var(--sl-color-white);">🌐 Build Environments</div>
+      <div style="font-size: 0.84rem; color: var(--sl-color-gray-3); margin-top: 3px;">Dev, Staging, Prod Profiles</div>
     </div>
     <div style="background: var(--sl-color-gray-6); padding: 14px 16px; border-radius: 8px; border-left: 4px solid #2563eb;">
-      <div style="font-weight: 700; font-size: 0.92rem; color: var(--sl-color-white);">🔤 Typography</div>
-      <div style="font-size: 0.84rem; color: var(--sl-color-gray-3); margin-top: 3px;">Dynamic Type & Scale</div>
+      <div style="font-weight: 700; font-size: 0.92rem; color: var(--sl-color-white);">🚩 Feature Flags</div>
+      <div style="font-size: 0.84rem; color: var(--sl-color-gray-3); margin-top: 3px;">Dynamic Remote Rollouts</div>
     </div>
     <div style="background: var(--sl-color-gray-6); padding: 14px 16px; border-radius: 8px; border-left: 4px solid #d97706;">
-      <div style="font-weight: 700; font-size: 0.92rem; color: var(--sl-color-white);">📐 Spacing Grid</div>
-      <div style="font-size: 0.84rem; color: var(--sl-color-gray-3); margin-top: 3px;">8pt Base Grid System</div>
+      <div style="font-weight: 700; font-size: 0.92rem; color: var(--sl-color-white);">🛡️ Secure Ingestion</div>
+      <div style="font-size: 0.84rem; color: var(--sl-color-gray-3); margin-top: 3px;">Obfuscated Key Storage</div>
     </div>
   </div>
 </div>
 
 ---
 
-## 1. Color Palette & Theme Tokens
+## 1. Configuration & Feature Flag Flowchart
 
-Our color token architecture separates **primitive brand colors** from **semantic functional roles** (Primary, Surface, On-Surface, Error).
+```mermaid
+graph TD
+    subgraph Build_Time ["Build-Time Injection"]
+        Env["Build Profile (Dev / Staging / Prod)"]
+        BuildConfig["Native Build Config Files"]
+    end
 
-<Tabs>
-  <TabItem label="Android (Compose)">
+    subgraph Runtime ["Runtime Core Foundation"]
+        Manager["Feature Flag Manager"]
+        Remote["Remote Config Engine / CDN"]
+        Cache["Encrypted Local Config Cache"]
+    end
 
-```kotlin
-// File: core/designsystem/theme/Color.kt
-package com.enterprise.mobile.core.designsystem.theme
+    subgraph App_Layers ["Application Consumers"]
+        VM["ViewModel / Custom Hook"]
+        UI["UI View (Gated Component)"]
+    end
 
-import androidx.compose.ui.graphics.Color
+    Env --> BuildConfig
+    BuildConfig --> Manager
+    Manager <--> Remote
+    Manager <--> Cache
+    Manager --> VM
+    VM --> UI
 
-// Primitive Brand Tokens
-val BrandGreenPrimary = Color(0xFF008544)
-val BrandGreenDark = Color(0xFF005C2E)
-val NeutralLightBackground = Color(0xFFF9FAFB)
-val NeutralDarkBackground = Color(0xFF0D1117)
-val SignalError = Color(0xFFDC2626)
+    classDef buildStyle fill:#f2fbf5,stroke:#008544,stroke-width:2px;
+    classDef runStyle fill:#eff6ff,stroke:#2563eb,stroke-width:2px;
+    classDef appStyle fill:#fef3c7,stroke:#d97706,stroke-width:2px;
 
-// File: core/designsystem/theme/Theme.kt
-import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
-import androidx.compose.foundation.isSystemInDarkTheme
-
-private val DarkColorScheme = darkColorScheme(
-    primary = BrandGreenPrimary,
-    background = NeutralDarkBackground,
-    surface = Color(0xFF161B22),
-    error = SignalError
-)
-
-private val LightColorScheme = lightColorScheme(
-    primary = BrandGreenPrimary,
-    background = NeutralLightBackground,
-    surface = Color.White,
-    error = SignalError
-)
-
-@Composable
-fun EnterpriseTheme(
-    darkTheme: Boolean = isSystemInDarkTheme(),
-    content: @Composable () -> Unit
-) {
-    val colors = if (darkTheme) DarkColorScheme else LightColorScheme
-    MaterialTheme(
-        colorScheme = colors,
-        typography = EnterpriseTypography,
-        content = content
-    )
-}
+    class Env,BuildConfig buildStyle;
+    class Manager,Remote,Cache runStyle;
+    class VM,UI appStyle;
 ```
-
-  </TabItem>
-  <TabItem label="iOS (SwiftUI)">
-
-```swift
-// File: Core/DesignSystem/Theme/ColorTokens.swift
-import SwiftUI
-
-public extension Color {
-    // Primitive Brand Colors
-    static let brandGreenPrimary = Color(red: 0.0, green: 0.52, blue: 0.27)
-    static let brandGreenDark = Color(red: 0.0, green: 0.36, blue: 0.18)
-    static let signalError = Color(red: 0.86, green: 0.15, blue: 0.15)
-    
-    // Semantic Contextual Theme Tokens
-    static var themeBackground: Color {
-        Color("ThemeBackground") // Assets.xcassets adaptive color
-    }
-    
-    static var themeSurface: Color {
-        Color("ThemeSurface")
-    }
-}
-```
-
-  </TabItem>
-  <TabItem label="React Native (TypeScript)">
-
-```typescript
-// File: src/core/theme/colors.ts
-export const BrandColors = {
-  primary: '#008544',
-  primaryDark: '#005C2E',
-  error: '#DC2626',
-} as const;
-
-export const SemanticColors = {
-  light: {
-    background: '#F9FAFB',
-    surface: '#FFFFFF',
-    textPrimary: '#111827',
-    border: '#E5E7EB',
-  },
-  dark: {
-    background: '#0D1117',
-    surface: '#161B22',
-    textPrimary: '#F0F6FC',
-    border: '#30363D',
-  },
-} as const;
-```
-
-  </TabItem>
-</Tabs>
 
 ---
 
-## 2. Typography & Dynamic Type Scale
+## 2. Environment Configuration Contracts
 
-All typography tokens follow strict scale hierarchies supporting system accessibility settings (Android Font Scaling, iOS Dynamic Type).
+Each platform consumes strongly typed environment contracts backed by native build configurations (Android BuildVariants, iOS Xcode Schemes, React Native `.env` files).
 
 <Tabs>
   <TabItem label="Android (Compose)">
 
 ```kotlin
-// File: core/designsystem/theme/Type.kt
-package com.enterprise.mobile.core.designsystem.theme
+// File: core/config/AppConfig.kt
+package com.enterprise.mobile.core.config
 
-import androidx.compose.material3.Typography
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.sp
+import javax.inject.Inject
+import javax.inject.Singleton
 
-val EnterpriseTypography = Typography(
-    headlineMedium = TextStyle(
-        fontFamily = FontFamily.Default,
-        fontWeight = FontWeight.Bold,
-        fontSize = 24.sp,
-        lineHeight = 32.sp
-    ),
-    bodyLarge = TextStyle(
-        fontFamily = FontFamily.Default,
-        fontWeight = FontWeight.Normal,
-        fontSize = 16.sp,
-        lineHeight = 24.sp
-    ),
-    labelMedium = TextStyle(
-        fontFamily = FontFamily.Default,
-        fontWeight = FontWeight.SemiBold,
-        fontSize = 12.sp,
-        lineHeight = 16.sp
-    )
+enum class EnvironmentType { DEV, STAGING, PROD }
+
+data class AppConfig(
+    val environment: EnvironmentType,
+    val apiBaseUrl: String,
+    val connectTimeoutSeconds: Long,
+    val enableVerboseLogging: Boolean
 )
+
+@Singleton
+class AppConfigProvider @Inject constructor() {
+    val currentConfig: AppConfig = AppConfig(
+        environment = when (BuildConfig.BUILD_TYPE) {
+            "debug" -> EnvironmentType.DEV
+            "staging" -> EnvironmentType.STAGING
+            else -> EnvironmentType.PROD
+        },
+        apiBaseUrl = BuildConfig.API_BASE_URL,
+        connectTimeoutSeconds = 30L,
+        enableVerboseLogging = BuildConfig.DEBUG
+    )
+}
 ```
 
   </TabItem>
   <TabItem label="iOS (SwiftUI)">
 
 ```swift
-// File: Core/DesignSystem/Theme/TypographyTokens.swift
-import SwiftUI
+// File: Core/Config/AppConfig.swift
+import Foundation
 
-public extension Font {
-    static let enterpriseHeadline = Font.system(.title2, design: .default).weight(.bold)
-    static let enterpriseBody = Font.system(.body, design: .default).weight(.regular)
-    static let enterpriseLabel = Font.system(.caption, design: .default).weight(.semibold)
+public enum EnvironmentType: String {
+    case dev
+    case staging
+    case prod
+}
+
+public struct AppConfig: Sendable {
+    public let environment: EnvironmentType
+    public let apiBaseUrl: URL
+    public let connectTimeout: TimeInterval
+    public let enableVerboseLogging: Bool
+
+    public static let current: AppConfig = {
+        #if DEBUG
+        let env = EnvironmentType.dev
+        let urlString = "https://api-dev.example.com"
+        #elseif STAGING
+        let env = EnvironmentType.staging
+        let urlString = "https://api-staging.example.com"
+        #else
+        let env = EnvironmentType.prod
+        let urlString = "https://api.example.com"
+        #endif
+
+        return AppConfig(
+            environment: env,
+            apiBaseUrl: URL(string: urlString)!,
+            connectTimeout: 30.0,
+            enableVerboseLogging: env != .prod
+        )
+    }()
 }
 ```
 
@@ -201,25 +156,23 @@ public extension Font {
   <TabItem label="React Native (TypeScript)">
 
 ```typescript
-// File: src/core/theme/typography.ts
-import { TextStyle } from 'react-native';
+// File: src/core/config/appConfig.ts
+import Config from 'react-native-config';
 
-export const Typography: Record<string, TextStyle> = {
-  headlineMedium: {
-    fontSize: 24,
-    lineHeight: 32,
-    fontWeight: '700',
-  },
-  bodyLarge: {
-    fontSize: 16,
-    lineHeight: 24,
-    fontWeight: '400',
-  },
-  labelMedium: {
-    fontSize: 12,
-    lineHeight: 16,
-    fontWeight: '600',
-  },
+export type EnvironmentType = 'DEV' | 'STAGING' | 'PROD';
+
+export interface AppConfig {
+  environment: EnvironmentType;
+  apiBaseUrl: string;
+  connectTimeoutMs: number;
+  enableVerboseLogging: boolean;
+}
+
+export const appConfig: AppConfig = {
+  environment: (Config.APP_ENV as EnvironmentType) || 'PROD',
+  apiBaseUrl: Config.API_BASE_URL || 'https://api.example.com',
+  connectTimeoutMs: 30000,
+  enableVerboseLogging: Config.APP_ENV !== 'PROD',
 };
 ```
 
@@ -228,26 +181,47 @@ export const Typography: Record<string, TextStyle> = {
 
 ---
 
-## 3. Spacing Grid Tokens (8pt Grid)
+## 3. Remote Feature Flag Manager
 
-All layout paddings, margins, and gaps must strictly align with the **8-point spatial grid** (`4dp`, `8dp`, `16dp`, `24dp`, `32dp`).
+Feature flags allow runtime evaluation of experimental features, emergency kill switches, and gradual percentage rollouts.
 
 <Tabs>
   <TabItem label="Android (Compose)">
 
 ```kotlin
-// File: core/designsystem/theme/Spacing.kt
-package com.enterprise.mobile.core.designsystem.theme
+// File: core/config/FeatureFlagManager.kt
+package com.enterprise.mobile.core.config
 
-import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.dp
+import javax.inject.Inject
+import javax.inject.Singleton
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 
-object Spacing {
-  val xs: Dp = 4.dp
-  val sm: Dp = 8.dp
-  val md: Dp = 16.dp
-  val lg: Dp = 24.dp
-  val xl: Dp = 32.dp
+enum class FeatureKey(val keyString: String, val defaultValue: Boolean) {
+  NEW_USER_PROFILE_UI("feature_new_profile_ui", false),
+  BIOMETRIC_AUTH("feature_biometric_auth", true)
+}
+
+@Singleton
+class FeatureFlagManager @Inject constructor() {
+  private val _flags = MutableStateFlow<Map<FeatureKey, Boolean>>(
+    FeatureKey.values().associateWith { it.defaultValue }
+  )
+  val flags: StateFlow<Map<FeatureKey, Boolean>> = _flags.asStateFlow()
+
+  fun isFeatureEnabled(key: FeatureKey): Boolean {
+    return _flags.value[key] ?: key.defaultValue
+  }
+
+  suspend fun fetchLatestRemoteFlags() {
+    // Simulated remote config fetch & local cache update
+    val remoteMap = mapOf(
+      FeatureKey.NEW_USER_PROFILE_UI to true,
+      FeatureKey.BIOMETRIC_AUTH to true
+    )
+    _flags.value = remoteMap
+  }
 }
 ```
 
@@ -255,15 +229,41 @@ object Spacing {
   <TabItem label="iOS (SwiftUI)">
 
 ```swift
-// File: Core/DesignSystem/Theme/SpacingTokens.swift
-import CoreGraphics
+// File: Core/Config/FeatureFlagManager.swift
+import Foundation
+import Observation
 
-public enum Spacing {
-    public static let xs: CGFloat = 4
-    public static let sm: CGFloat = 8
-    public static let md: CGFloat = 16
-    public static let lg: CGFloat = 24
-    public static let xl: CGFloat = 32
+public enum FeatureKey: String, CaseIterable, Sendable {
+    case newUserProfileUI = "feature_new_profile_ui"
+    case biometricAuth = "feature_biometric_auth"
+
+    var defaultValue: Bool {
+        switch self {
+        case .newUserProfileUI: return false
+        case .biometricAuth: return true
+        }
+    }
+}
+
+@Observable
+@MainActor
+public final class FeatureFlagManager {
+    public private(set) var flagStates: [FeatureKey: Bool] = [:]
+
+    public init() {
+        for key in FeatureKey.allCases {
+            flagStates[key] = key.defaultValue
+        }
+    }
+
+    public func isEnabled(_ key: FeatureKey) -> Bool {
+        return flagStates[key] ?? key.defaultValue
+    }
+
+    public func fetchRemoteFlags() async {
+        // Fetch from Remote Config & update MainActor state
+        flagStates[.newUserProfileUI] = true
+    }
 }
 ```
 
@@ -271,14 +271,46 @@ public enum Spacing {
   <TabItem label="React Native (TypeScript)">
 
 ```typescript
-// File: src/core/theme/spacing.ts
-export const Spacing = {
-  xs: 4,
-  sm: 8,
-  md: 16,
-  lg: 24,
-  xl: 32,
-} as const;
+// File: src/core/config/useFeatureFlags.ts
+import { useState, useEffect, useCallback } from 'react';
+
+export enum FeatureKey {
+  NEW_USER_PROFILE_UI = 'feature_new_profile_ui',
+  BIOMETRIC_AUTH = 'feature_biometric_auth',
+}
+
+const DEFAULT_FLAGS: Record<FeatureKey, boolean> = {
+  [FeatureKey.NEW_USER_PROFILE_UI]: false,
+  [FeatureKey.BIOMETRIC_AUTH]: true,
+};
+
+export const useFeatureFlags = () => {
+  const [flags, setFlags] = useState<Record<FeatureKey, boolean>>(DEFAULT_FLAGS);
+
+  const isEnabled = useCallback(
+    (key: FeatureKey): boolean => flags[key] ?? DEFAULT_FLAGS[key],
+    [flags]
+  );
+
+  const fetchRemoteFlags = useCallback(async () => {
+    try {
+      // Remote config fetch simulation
+      const remote = {
+        [FeatureKey.NEW_USER_PROFILE_UI]: true,
+        [FeatureKey.BIOMETRIC_AUTH]: true,
+      };
+      setFlags(remote);
+    } catch {
+      // Retain fallback defaults on network error
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchRemoteFlags();
+  }, [fetchRemoteFlags]);
+
+  return { isEnabled, fetchRemoteFlags };
+};
 ```
 
   </TabItem>
@@ -286,45 +318,25 @@ export const Spacing = {
 
 ---
 
-## 4. Atomic UI Component Example: Primary Button
+## 4. UI Feature Gating Example
 
-Below is an enterprise-ready **Primary Button** component consuming tokens across all platforms.
+Below is an example of evaluating feature flags dynamically in UI views.
 
 <Tabs>
   <TabItem label="Android (Compose)">
 
 ```kotlin
-// File: core/designsystem/component/PrimaryButton.kt
-package com.enterprise.mobile.core.designsystem.component
-
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
-
+// File: feature/user/ui/UserProfileHeader.kt
 @Composable
-fun PrimaryButton(
-    text: String,
-    onClick: () -> Unit,
-    modifier: Modifier = Modifier,
-    enabled: Boolean = true
+fun UserProfileHeader(
+    featureFlagManager: FeatureFlagManager = hiltViewModel()
 ) {
-    Button(
-        onClick = onClick,
-        enabled = enabled,
-        modifier = modifier
-            .fillMaxWidth()
-            .height(48.dp),
-        colors = ButtonDefaults.buttonColors(
-            containerColor = MaterialTheme.colorScheme.primary
-        )
-    ) {
-        Text(
-            text = text,
-            style = MaterialTheme.typography.labelMedium
-        )
+    val isNewUiEnabled = featureFlagManager.isFeatureEnabled(FeatureKey.NEW_USER_PROFILE_UI)
+
+    if (isNewUiEnabled) {
+        NewRedesignedProfileHeader()
+    } else {
+        LegacyProfileHeader()
     }
 }
 ```
@@ -333,32 +345,18 @@ fun PrimaryButton(
   <TabItem label="iOS (SwiftUI)">
 
 ```swift
-// File: Core/DesignSystem/Components/PrimaryButton.swift
-import SwiftUI
+// File: Features/UserProfile/Views/UserProfileHeader.swift
+struct UserProfileHeaderView: View {
+    @Environment(FeatureFlagManager.self) private var flagManager
 
-public struct PrimaryButton: View {
-    let title: String
-    let action: () -> Void
-    var isEnabled: Bool = true
-
-    public init(title: String, isEnabled: Bool = true, action: @escaping () -> Void) {
-        self.title = title
-        self.isEnabled = isEnabled
-        self.action = action
-    }
-
-    public var body: some View {
-        Button(action: action) {
-            Text(title)
-                .font(.enterpriseLabel)
-                .fontWeight(.bold)
-                .frame(maxWidth: .infinity)
-                .frame(height: 48)
-                .background(isEnabled ? Color.brandGreenPrimary : Color.gray)
-                .foregroundColor(.white)
-                .cornerRadius(8)
+    var body: some View {
+        Group {
+            if flagManager.isEnabled(.newUserProfileUI) {
+                NewRedesignedProfileHeader()
+            } else {
+                LegacyProfileHeader()
+            }
         }
-        .disabled(!isEnabled)
     }
 }
 ```
@@ -367,53 +365,18 @@ public struct PrimaryButton: View {
   <TabItem label="React Native (TypeScript)">
 
 ```tsx
-// File: src/core/components/PrimaryButton.tsx
+// File: src/features/user/presentation/UserProfileHeader.tsx
 import React from 'react';
-import { TouchableOpacity, Text, StyleSheet } from 'react-native';
-import { BrandColors } from '../theme/colors';
-import { Spacing } from '../theme/spacing';
+import { useFeatureFlags, FeatureKey } from '../../../core/config/useFeatureFlags';
 
-export interface PrimaryButtonProps {
-  title: string;
-  onPress: () => void;
-  disabled?: boolean;
-}
+export const UserProfileHeader: React.FC = () => {
+  const { isEnabled } = useFeatureFlags();
 
-export const PrimaryButton: React.FC<PrimaryButtonProps> = ({
-  title,
-  onPress,
-  disabled = false,
-}) => {
-  return (
-    <TouchableOpacity
-      style={[styles.button, disabled && styles.disabled]}
-      onPress={onPress}
-      disabled={disabled}
-      activeOpacity={0.8}
-    >
-      <Text style={styles.text}>{title}</Text>
-    </TouchableOpacity>
-  );
+  if (isEnabled(FeatureKey.NEW_USER_PROFILE_UI)) {
+    return <NewRedesignedProfileHeader />;
+  }
+  return <LegacyProfileHeader />;
 };
-
-const styles = StyleSheet.create({
-  button: {
-    height: 48,
-    backgroundColor: BrandColors.primary,
-    borderRadius: 8,
-    justifyContent: 'center',
-    alignItems: 'center',
-    paddingHorizontal: Spacing.md,
-  },
-  disabled: {
-    backgroundColor: '#9CA3AF',
-  },
-  text: {
-    color: '#FFFFFF',
-    fontSize: 16,
-    fontWeight: '700',
-  },
-});
 ```
 
   </TabItem>
@@ -421,58 +384,58 @@ const styles = StyleSheet.create({
 
 ---
 
-## 5. Mandatory Design System Rules
+## 5. Mandatory Configuration Rules
 
 <div style="border: 1px solid rgba(239, 68, 68, 0.3); background: rgba(239, 68, 68, 0.04); border-left: 5px solid #ef4444; border-radius: 10px; padding: 22px 24px; margin: 28px 0;">
   <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 16px;">
     <span style="background: #ef4444; color: white; font-weight: 700; font-size: 0.75rem; padding: 3px 10px; border-radius: 4px; letter-spacing: 0.05em;">NON-NEGOTIABLE</span>
-    <h3 style="margin: 0; font-size: 1.1rem; color: var(--sl-color-white); font-weight: 700;">Design System Violations</h3>
+    <h3 style="margin: 0; font-size: 1.1rem; color: var(--sl-color-white); font-weight: 700;">Configuration Violations</h3>
   </div>
   <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px;">
     <div style="background: var(--sl-color-bg-nav); border: 1px solid var(--sl-color-gray-5); border-radius: 8px; padding: 14px 16px;">
-      <div style="font-weight: 700; color: #ef4444; font-size: 0.9rem; margin-bottom: 4px;">1. Zero Hardcoded Color Codes</div>
-      <div style="font-size: 0.86rem; color: var(--sl-color-gray-2); line-height: 1.5;">Never write inline hex codes (e.g., <code>Color(0xFF008544)</code> or <code>#008544</code>) directly inside UI screens. Reference token aliases.</div>
+      <div style="font-weight: 700; color: #ef4444; font-size: 0.9rem; margin-bottom: 4px;">1. Zero Hardcoded Endpoints</div>
+      <div style="font-size: 0.86rem; color: var(--sl-color-gray-2); line-height: 1.5;">API URLs must never be hardcoded in HTTP clients or repository implementations. Inject via <code>AppConfig</code>.</div>
     </div>
     <div style="background: var(--sl-color-bg-nav); border: 1px solid var(--sl-color-gray-5); border-radius: 8px; padding: 14px 16px;">
-      <div style="font-weight: 700; color: #ef4444; font-size: 0.9rem; margin-bottom: 4px;">2. Zero Custom Component Duplication</div>
-      <div style="font-size: 0.86rem; color: var(--sl-color-gray-2); line-height: 1.5;">Never build ad-hoc buttons or text inputs in feature modules. Always import core design system atomic components.</div>
+      <div style="font-weight: 700; color: #ef4444; font-size: 0.9rem; margin-bottom: 4px;">2. Mandatory Local Fallback Defaults</div>
+      <div style="font-size: 0.86rem; color: var(--sl-color-gray-2); line-height: 1.5;">Every feature flag must have a hardcoded local fallback default value to guarantee stability if offline.</div>
     </div>
     <div style="background: var(--sl-color-bg-nav); border: 1px solid var(--sl-color-gray-5); border-radius: 8px; padding: 14px 16px;">
-      <div style="font-weight: 700; color: #ef4444; font-size: 0.9rem; margin-bottom: 4px;">3. 8pt Grid Enforcement</div>
-      <div style="font-size: 0.86rem; color: var(--sl-color-gray-2); line-height: 1.5;">Layout offsets must be multiples of 4 or 8 (e.g. 4, 8, 16, 24). Arbitrary padding like <code>11.5px</code> is strictly rejected during PR review.</div>
+      <div style="font-weight: 700; color: #ef4444; font-size: 0.9rem; margin-bottom: 4px;">3. Post-Rollout Flag Cleanup</div>
+      <div style="font-size: 0.86rem; color: var(--sl-color-gray-2); line-height: 1.5;">Feature flags must be removed within 30 days after 100% production rollout to prevent dead code clutter.</div>
     </div>
     <div style="background: var(--sl-color-bg-nav); border: 1px solid var(--sl-color-gray-5); border-radius: 8px; padding: 14px 16px;">
-      <div style="font-weight: 700; color: #ef4444; font-size: 0.9rem; margin-bottom: 4px;">4. Accessibility & Contrast Verification</div>
-      <div style="font-size: 0.86rem; color: var(--sl-color-gray-2); line-height: 1.5;">Text-to-background contrast must satisfy WCAG AA (4.5:1 ratio minimum). Dynamic Type and VoiceOver scaling must be tested.</div>
+      <div style="font-weight: 700; color: #ef4444; font-size: 0.9rem; margin-bottom: 4px;">4. Zero Secret Keys in Source Code</div>
+      <div style="font-size: 0.86rem; color: var(--sl-color-gray-2); line-height: 1.5;">Private API keys or OAuth secrets must never be committed to Git. Store in CI/CD secrets environment.</div>
     </div>
   </div>
 </div>
 
 ---
 
-## 6. Design System PR Checklist
+## 6. Configuration PR Checklist
 
 <div style="background: var(--sl-color-bg-nav); border: 1px solid var(--sl-color-gray-5); border-radius: 12px; padding: 22px 26px; margin: 28px 0;">
   <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; border-bottom: 1px solid var(--sl-color-gray-5); padding-bottom: 12px;">
-    <h3 style="margin: 0; font-size: 1.1rem; color: var(--sl-color-white); font-weight: 700;">Design System Quality Gate</h3>
-    <span style="background: #008544; color: white; font-size: 0.75rem; font-weight: 700; padding: 4px 10px; border-radius: 12px;">PRE-MERGE CHECK</span>
+    <h3 style="margin: 0; font-size: 1.1rem; color: var(--sl-color-white); font-weight: 700;">Configuration Quality Gate</h3>
+    <span style="background: #2563eb; color: white; font-size: 0.75rem; font-weight: 700; padding: 4px 10px; border-radius: 12px;">PRE-MERGE CHECK</span>
   </div>
   <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px;">
     <div style="display: flex; align-items: flex-start; gap: 10px; font-size: 0.9rem; color: var(--sl-color-gray-2);">
-      <span style="color: #008544; font-weight: 900;">✓</span>
-      <div>All UI colors consume theme token references (Light & Dark mode verified).</div>
+      <span style="color: #2563eb; font-weight: 900;">✓</span>
+      <div>Environment endpoints configured via native build profiles (Dev, Staging, Prod).</div>
     </div>
     <div style="display: flex; align-items: flex-start; gap: 10px; font-size: 0.9rem; color: var(--sl-color-gray-2);">
-      <span style="color: #008544; font-weight: 900;">✓</span>
-      <div>Typography scales automatically with system font sizing settings.</div>
+      <span style="color: #2563eb; font-weight: 900;">✓</span>
+      <div>Feature flags evaluate with safe local fallback values when offline.</div>
     </div>
     <div style="display: flex; align-items: flex-start; gap: 10px; font-size: 0.9rem; color: var(--sl-color-gray-2);">
-      <span style="color: #008544; font-weight: 900;">✓</span>
-      <div>Layout margins and paddings adhere to 8pt spatial tokens.</div>
+      <span style="color: #2563eb; font-weight: 900;">✓</span>
+      <div>Sensitive keys injected securely via build-time environment variables.</div>
     </div>
     <div style="display: flex; align-items: flex-start; gap: 10px; font-size: 0.9rem; color: var(--sl-color-gray-2);">
-      <span style="color: #008544; font-weight: 900;">✓</span>
-      <div>Atomic components imported from core design system module.</div>
+      <span style="color: #2563eb; font-weight: 900;">✓</span>
+      <div>Dead/stale feature flags pruned from codebase.</div>
     </div>
   </div>
 </div>
