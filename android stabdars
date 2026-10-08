@@ -1,268 +1,210 @@
 ---
-title: Configuration Management
-description: Enterprise guidelines, environment configuration, remote feature flags, build variants, and runtime config standards for Android, iOS, and React Native.
+title: Branding & Assets
+description: Enterprise guidelines for asset pipelines, vector icons, splash screens, custom typography, dynamic app icons, and branding token management across Android, iOS, and React Native.
 sidebar:
-  order: 3
+  order: 4
 ---
 
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 
-Welcome to the **Enterprise Configuration Management Standards**. Centralized configuration management separates environment-specific settings (Development, Staging, Production) from application source code and provides real-time **Feature Flagging** capabilities.
+Welcome to the **Enterprise Branding & Assets Standards**. Asset management standardizes how visual brand elements—vector icons, dynamic splash screens, image assets, typography files, and app launcher icons—are cataloged, optimized, and consumed across all mobile platforms.
 
-<div style="border: 2px solid #2563eb; border-radius: 12px; padding: 22px 26px; background-color: var(--sl-color-bg-nav); margin: 24px 0; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);">
+<div style="border: 2px solid #8b5cf6; border-radius: 12px; padding: 22px 26px; background-color: var(--sl-color-bg-nav); margin: 24px 0; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);">
   <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 12px;">
-    <span style="background: #2563eb; color: white; padding: 4px 12px; border-radius: 20px; font-weight: 700; font-size: 0.8rem; letter-spacing: 0.05em;">CONFIG MANDATE</span>
-    <strong style="font-size: 1.15rem; color: var(--sl-color-white);">Strict Environment Separation & Remote Feature Gating</strong>
+    <span style="background: #8b5cf6; color: white; padding: 4px 12px; border-radius: 20px; font-weight: 700; font-size: 0.8rem; letter-spacing: 0.05em;">BRANDING MANDATE</span>
+    <strong style="font-size: 1.15rem; color: var(--sl-color-white);">Optimized Vector Assets & Scalable Brand Resources</strong>
   </div>
   <p style="margin: 0 0 16px 0; color: var(--sl-color-gray-2); font-size: 0.98rem; line-height: 1.6;">
-    All mobile applications must decouple environment settings (API endpoints, timeout thresholds, telemetry keys) from feature logic. Hardcoding API endpoints or secret keys in source code is strictly prohibited.
+    All enterprise applications must consume centralized vector assets (SVG/VectorDrawables), compressed WebP raster images, and system-scalable typography. Uncompressed raw PNGs, hardcoded asset paths, or unoptimized asset bundles are strictly forbidden.
   </p>
   <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px;">
-    <div style="background: var(--sl-color-gray-6); padding: 14px 16px; border-radius: 8px; border-left: 4px solid #008544;">
-      <div style="font-weight: 700; font-size: 0.92rem; color: var(--sl-color-white);">🌐 Build Environments</div>
-      <div style="font-size: 0.84rem; color: var(--sl-color-gray-3); margin-top: 3px;">Dev, Staging, Prod Profiles</div>
+    <div style="background: var(--sl-color-gray-6); padding: 14px 16px; border-radius: 8px; border-left: 4px solid #8b5cf6;">
+      <div style="font-weight: 700; font-size: 0.92rem; color: var(--sl-color-white);">🎨 Vector Icons</div>
+      <div style="font-size: 0.84rem; color: var(--sl-color-gray-3); margin-top: 3px;">Resolution-Independent SVGs</div>
     </div>
     <div style="background: var(--sl-color-gray-6); padding: 14px 16px; border-radius: 8px; border-left: 4px solid #2563eb;">
-      <div style="font-weight: 700; font-size: 0.92rem; color: var(--sl-color-white);">🚩 Feature Flags</div>
-      <div style="font-size: 0.84rem; color: var(--sl-color-gray-3); margin-top: 3px;">Dynamic Remote Rollouts</div>
+      <div style="font-weight: 700; font-size: 0.92rem; color: var(--sl-color-white);">🔤 Custom Typography</div>
+      <div style="font-size: 0.84rem; color: var(--sl-color-gray-3); margin-top: 3px;">Dynamic Type Scalable Fonts</div>
     </div>
-    <div style="background: var(--sl-color-gray-6); padding: 14px 16px; border-radius: 8px; border-left: 4px solid #d97706;">
-      <div style="font-weight: 700; font-size: 0.92rem; color: var(--sl-color-white);">🛡️ Secure Ingestion</div>
-      <div style="font-size: 0.84rem; color: var(--sl-color-gray-3); margin-top: 3px;">Obfuscated Key Storage</div>
+    <div style="background: var(--sl-color-gray-6); padding: 14px 16px; border-radius: 8px; border-left: 4px solid #008544;">
+      <div style="font-weight: 700; font-size: 0.92rem; color: var(--sl-color-white);">📱 App Launch Icons</div>
+      <div style="font-size: 0.84rem; color: var(--sl-color-gray-3); margin-top: 3px;">Adaptive & Dynamic Icons</div>
     </div>
   </div>
 </div>
 
 ---
 
-## 1. Configuration & Feature Flag Flowchart
+## 1. Enterprise Asset Pipeline Architecture
 
 ```mermaid
 graph TD
-    subgraph Build_Time ["Build-Time Injection"]
-        Env["Build Profile (Dev / Staging / Prod)"]
-        BuildConfig["Native Build Config Files"]
+    subgraph Design_Figma ["Design & Asset Source"]
+        Figma["Central Figma Brand Library"]
+        Tokens["Design System Asset Manifest"]
     end
 
-    subgraph Runtime ["Runtime Core Foundation"]
-        Manager["Feature Flag Manager"]
-        Remote["Remote Config Engine / CDN"]
-        Cache["Encrypted Local Config Cache"]
+    subgraph Optimization ["Build Optimization Engine"]
+        SVG["Vector SVGs & WebP Compression"]
+        Generator["Platform Asset Compiler"]
     end
 
-    subgraph App_Layers ["Application Consumers"]
-        VM["ViewModel / Custom Hook"]
-        UI["UI View (Gated Component)"]
+    subgraph Target_Platforms ["Native Platform Artifacts"]
+        AndroidRes["Android VectorDrawables & Xml Font Provider"]
+        AssetsCatalog["iOS Asset Catalog (.xcassets & Custom Fonts)"]
+        RNBundle["React Native Metro SVG Transformer"]
     end
 
-    Env --> BuildConfig
-    BuildConfig --> Manager
-    Manager <--> Remote
-    Manager <--> Cache
-    Manager --> VM
-    VM --> UI
+    Figma --> Tokens
+    Tokens --> SVG
+    SVG --> Generator
+    Generator --> AndroidRes
+    Generator --> AssetsCatalog
+    Generator --> RNBundle
 
-    classDef buildStyle fill:#f2fbf5,stroke:#008544,stroke-width:2px;
-    classDef runStyle fill:#eff6ff,stroke:#2563eb,stroke-width:2px;
-    classDef appStyle fill:#fef3c7,stroke:#d97706,stroke-width:2px;
+    classDef designStyle fill:#f5f3ff,stroke:#8b5cf6,stroke-width:2px;
+    classDef optStyle fill:#eff6ff,stroke:#2563eb,stroke-width:2px;
+    classDef platformStyle fill:#f2fbf5,stroke:#008544,stroke-width:2px;
 
-    class Env,BuildConfig buildStyle;
-    class Manager,Remote,Cache runStyle;
-    class VM,UI appStyle;
+    class Figma,Tokens designStyle;
+    class SVG,Generator optStyle;
+    class AndroidRes,AssetsCatalog,RNBundle platformStyle;
 ```
 
 ---
 
-## 2. Environment Configuration Contracts
+## 2. Strongly-Typed Asset Contracts
 
-Each platform consumes strongly typed environment contracts backed by native build configurations (Android BuildVariants, iOS Xcode Schemes, React Native `.env` files).
+Centralizing asset references in strongly-typed code modules prevents runtime string misspellings and missing resource crashes.
 
 <Tabs>
   <TabItem label="Android (Compose)">
 
 ```kotlin
-// File: core/config/AppConfig.kt
-package com.enterprise.mobile.core.config
+// File: core/designsystem/theme/BrandIcons.kt
+package com.enterprise.mobile.core.designsystem.theme
 
-import javax.inject.Inject
-import javax.inject.Singleton
+import androidx.annotation.DrawableRes
+import androidx.compose.ui.graphics.vector.ImageVector
 
-enum class EnvironmentType { DEV, STAGING, PROD }
+object BrandIcons {
+    // Vector Drawable Resource Enums
+    val AppLogo: Int = R.drawable.ic_brand_logo
+    val UserAvatarPlaceholder: Int = R.drawable.ic_avatar_placeholder
+    val SecurityShield: Int = R.drawable.ic_security_shield
+    
+    // System Status Icons
+    val CheckmarkCircle: Int = R.drawable.ic_check_circle
+    val WarningTriangle: Int = R.drawable.ic_warning_triangle
+}
+```
 
-data class AppConfig(
-    val environment: EnvironmentType,
-    val apiBaseUrl: String,
-    val connectTimeoutSeconds: Long,
-    val enableVerboseLogging: Boolean
+  </TabItem>
+  <TabItem label="iOS (SwiftUI)">
+
+```swift
+// File: Core/DesignSystem/Theme/BrandAssets.swift
+import SwiftUI
+
+public enum BrandAssets {
+    // Strongly-typed Image Asset Catalogs
+    public static let appLogo = Image("BrandLogo", bundle: .main)
+    public static let avatarPlaceholder = Image("AvatarPlaceholder", bundle: .main)
+    public static let securityShield = Image("SecurityShield", bundle: .main)
+    
+    // System Status Image Symbols
+    public static let checkmarkCircle = Image(systemName: "checkmark.circle.fill")
+    public static let warningTriangle = Image(systemName: "exclamationmark.triangle.fill")
+}
+```
+
+  </TabItem>
+  <TabItem label="React Native (TypeScript)">
+
+```typescript
+// File: src/core/designsystem/theme/brandAssets.ts
+import BrandLogoSvg from '../../../assets/vectors/brand-logo.svg';
+import AvatarPlaceholderSvg from '../../../assets/vectors/avatar-placeholder.svg';
+import SecurityShieldSvg from '../../../assets/vectors/security-shield.svg';
+
+export const BrandAssets = {
+  AppLogo: BrandLogoSvg,
+  AvatarPlaceholder: AvatarPlaceholderSvg,
+  SecurityShield: SecurityShieldSvg,
+};
+```
+
+  </TabItem>
+</Tabs>
+
+---
+
+## 3. Custom Font Loading & Dynamic Type Scaling
+
+Custom typography must scale naturally with device accessibility text settings (Android Font Scale / iOS Dynamic Type).
+
+<Tabs>
+  <TabItem label="Android (Compose)">
+
+```kotlin
+// File: core/designsystem/theme/Type.kt
+package com.enterprise.mobile.core.designsystem.theme
+
+import androidx.compose.material3.Typography
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.sp
+import com.enterprise.mobile.core.designsystem.R
+
+// Font Family Definition
+val EnterpriseFontFamily = FontFamily(
+    Font(R.font.enterprise_sans_regular, FontWeight.Normal),
+    Font(R.font.enterprise_sans_medium, FontWeight.Medium),
+    Font(R.font.enterprise_sans_bold, FontWeight.Bold)
 )
 
-@Singleton
-class AppConfigProvider @Inject constructor() {
-    val currentConfig: AppConfig = AppConfig(
-        environment = when (BuildConfig.BUILD_TYPE) {
-            "debug" -> EnvironmentType.DEV
-            "staging" -> EnvironmentType.STAGING
-            else -> EnvironmentType.PROD
-        },
-        apiBaseUrl = BuildConfig.API_BASE_URL,
-        connectTimeoutSeconds = 30L,
-        enableVerboseLogging = BuildConfig.DEBUG
+val EnterpriseTypography = Typography(
+    headlineLarge = TextStyle(
+        fontFamily = EnterpriseFontFamily,
+        fontWeight = FontWeight.Bold,
+        fontSize = 32.sp,
+        lineHeight = 40.sp
+    ),
+    bodyMedium = TextStyle(
+        fontFamily = EnterpriseFontFamily,
+        fontWeight = FontWeight.Normal,
+        fontSize = 16.sp,
+        lineHeight = 24.sp
     )
-}
+)
 ```
 
   </TabItem>
   <TabItem label="iOS (SwiftUI)">
 
 ```swift
-// File: Core/Config/AppConfig.swift
-import Foundation
+// File: Core/DesignSystem/Theme/Typography.swift
+import SwiftUI
 
-public enum EnvironmentType: String {
-    case dev
-    case staging
-    case prod
-}
+public extension Font {
+    static func enterpriseHeadlineLarge() -> Font {
+        return Font.custom("EnterpriseSans-Bold", size: 32, relativeTo: .largeTitle)
+    }
 
-public struct AppConfig: Sendable {
-    public let environment: EnvironmentType
-    public let apiBaseUrl: URL
-    public let connectTimeout: TimeInterval
-    public let enableVerboseLogging: Bool
-
-    public static let current: AppConfig = {
-        #if DEBUG
-        let env = EnvironmentType.dev
-        let urlString = "https://api-dev.example.com"
-        #elseif STAGING
-        let env = EnvironmentType.staging
-        let urlString = "https://api-staging.example.com"
-        #else
-        let env = EnvironmentType.prod
-        let urlString = "https://api.example.com"
-        #endif
-
-        return AppConfig(
-            environment: env,
-            apiBaseUrl: URL(string: urlString)!,
-            connectTimeout: 30.0,
-            enableVerboseLogging: env != .prod
-        )
-    }()
-}
-```
-
-  </TabItem>
-  <TabItem label="React Native (TypeScript)">
-
-```typescript
-// File: src/core/config/appConfig.ts
-import Config from 'react-native-config';
-
-export type EnvironmentType = 'DEV' | 'STAGING' | 'PROD';
-
-export interface AppConfig {
-  environment: EnvironmentType;
-  apiBaseUrl: string;
-  connectTimeoutMs: number;
-  enableVerboseLogging: boolean;
-}
-
-export const appConfig: AppConfig = {
-  environment: (Config.APP_ENV as EnvironmentType) || 'PROD',
-  apiBaseUrl: Config.API_BASE_URL || 'https://api.example.com',
-  connectTimeoutMs: 30000,
-  enableVerboseLogging: Config.APP_ENV !== 'PROD',
-};
-```
-
-  </TabItem>
-</Tabs>
-
----
-
-## 3. Remote Feature Flag Manager
-
-Feature flags allow runtime evaluation of experimental features, emergency kill switches, and gradual percentage rollouts.
-
-<Tabs>
-  <TabItem label="Android (Compose)">
-
-```kotlin
-// File: core/config/FeatureFlagManager.kt
-package com.enterprise.mobile.core.config
-
-import javax.inject.Inject
-import javax.inject.Singleton
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
-
-enum class FeatureKey(val keyString: String, val defaultValue: Boolean) {
-  NEW_USER_PROFILE_UI("feature_new_profile_ui", false),
-  BIOMETRIC_AUTH("feature_biometric_auth", true)
-}
-
-@Singleton
-class FeatureFlagManager @Inject constructor() {
-  private val _flags = MutableStateFlow<Map<FeatureKey, Boolean>>(
-    FeatureKey.values().associateWith { it.defaultValue }
-  )
-  val flags: StateFlow<Map<FeatureKey, Boolean>> = _flags.asStateFlow()
-
-  fun isFeatureEnabled(key: FeatureKey): Boolean {
-    return _flags.value[key] ?: key.defaultValue
-  }
-
-  suspend fun fetchLatestRemoteFlags() {
-    // Simulated remote config fetch & local cache update
-    val remoteMap = mapOf(
-      FeatureKey.NEW_USER_PROFILE_UI to true,
-      FeatureKey.BIOMETRIC_AUTH to true
-    )
-    _flags.value = remoteMap
-  }
-}
-```
-
-  </TabItem>
-  <TabItem label="iOS (SwiftUI)">
-
-```swift
-// File: Core/Config/FeatureFlagManager.swift
-import Foundation
-import Observation
-
-public enum FeatureKey: String, CaseIterable, Sendable {
-    case newUserProfileUI = "feature_new_profile_ui"
-    case biometricAuth = "feature_biometric_auth"
-
-    var defaultValue: Bool {
-        switch self {
-        case .newUserProfileUI: return false
-        case .biometricAuth: return true
-        }
+    static func enterpriseBodyMedium() -> Font {
+        return Font.custom("EnterpriseSans-Regular", size: 16, relativeTo: .body)
     }
 }
 
-@Observable
-@MainActor
-public final class FeatureFlagManager {
-    public private(set) var flagStates: [FeatureKey: Bool] = [:]
-
-    public init() {
-        for key in FeatureKey.allCases {
-            flagStates[key] = key.defaultValue
-        }
-    }
-
-    public func isEnabled(_ key: FeatureKey) -> Bool {
-        return flagStates[key] ?? key.defaultValue
-    }
-
-    public func fetchRemoteFlags() async {
-        // Fetch from Remote Config & update MainActor state
-        flagStates[.newUserProfileUI] = true
+// Custom Font Registration helper
+public struct FontRegistrar {
+    public static func registerFonts() {
+        guard let fontURL = Bundle.main.url(forResource: "EnterpriseSans-Bold", withExtension: "ttf"),
+              let fontDataProvider = CGDataProvider(url: fontURL as CFURL),
+              let font = CGFont(fontDataProvider) else { return }
+        CTFontManagerRegisterGraphicsFont(font, nil)
     }
 }
 ```
@@ -271,45 +213,26 @@ public final class FeatureFlagManager {
   <TabItem label="React Native (TypeScript)">
 
 ```typescript
-// File: src/core/config/useFeatureFlags.ts
-import { useState, useEffect, useCallback } from 'react';
+// File: src/core/designsystem/theme/typography.ts
+import { TextStyle } from 'react-native';
 
-export enum FeatureKey {
-  NEW_USER_PROFILE_UI = 'feature_new_profile_ui',
-  BIOMETRIC_AUTH = 'feature_biometric_auth',
-}
-
-const DEFAULT_FLAGS: Record<FeatureKey, boolean> = {
-  [FeatureKey.NEW_USER_PROFILE_UI]: false,
-  [FeatureKey.BIOMETRIC_AUTH]: true,
+export const fontFamily = {
+  regular: 'EnterpriseSans-Regular',
+  medium: 'EnterpriseSans-Medium',
+  bold: 'EnterpriseSans-Bold',
 };
 
-export const useFeatureFlags = () => {
-  const [flags, setFlags] = useState<Record<FeatureKey, boolean>>(DEFAULT_FLAGS);
-
-  const isEnabled = useCallback(
-    (key: FeatureKey): boolean => flags[key] ?? DEFAULT_FLAGS[key],
-    [flags]
-  );
-
-  const fetchRemoteFlags = useCallback(async () => {
-    try {
-      // Remote config fetch simulation
-      const remote = {
-        [FeatureKey.NEW_USER_PROFILE_UI]: true,
-        [FeatureKey.BIOMETRIC_AUTH]: true,
-      };
-      setFlags(remote);
-    } catch {
-      // Retain fallback defaults on network error
-    }
-  }, []);
-
-  useEffect(() => {
-    fetchRemoteFlags();
-  }, [fetchRemoteFlags]);
-
-  return { isEnabled, fetchRemoteFlags };
+export const typography: Record<string, TextStyle> = {
+  headlineLarge: {
+    fontFamily: fontFamily.bold,
+    fontSize: 32,
+    lineHeight: 40,
+  },
+  bodyMedium: {
+    fontFamily: fontFamily.regular,
+    fontSize: 16,
+    lineHeight: 24,
+  },
 };
 ```
 
@@ -318,25 +241,40 @@ export const useFeatureFlags = () => {
 
 ---
 
-## 4. UI Feature Gating Example
+## 4. UI Asset Component Consumption
 
-Below is an example of evaluating feature flags dynamically in UI views.
+Using strongly-typed brand assets safely inside screen components.
 
 <Tabs>
   <TabItem label="Android (Compose)">
 
 ```kotlin
-// File: feature/user/ui/UserProfileHeader.kt
+// File: feature/branding/ui/BrandHeader.kt
+package com.enterprise.mobile.feature.branding.ui
+
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.size
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.dp
+import com.enterprise.mobile.core.designsystem.theme.BrandIcons
+import com.enterprise.mobile.core.designsystem.theme.EnterpriseTypography
+
 @Composable
-fun UserProfileHeader(
-    featureFlagManager: FeatureFlagManager = hiltViewModel()
-) {
-    val isNewUiEnabled = featureFlagManager.isFeatureEnabled(FeatureKey.NEW_USER_PROFILE_UI)
-
-    if (isNewUiEnabled) {
-        NewRedesignedProfileHeader()
-    } else {
-        LegacyProfileHeader()
+fun BrandHeader(modifier: Modifier = Modifier) {
+    Row(modifier = modifier) {
+        Image(
+            painter = painterResource(id = BrandIcons.AppLogo),
+            contentDescription = "Enterprise Brand Logo",
+            modifier = Modifier.size(40.dp)
+        )
+        Text(
+            text = "Enterprise Mobile",
+            style = EnterpriseTypography.headlineLarge
+        )
     }
 }
 ```
@@ -345,17 +283,20 @@ fun UserProfileHeader(
   <TabItem label="iOS (SwiftUI)">
 
 ```swift
-// File: Features/UserProfile/Views/UserProfileHeader.swift
-struct UserProfileHeaderView: View {
-    @Environment(FeatureFlagManager.self) private var flagManager
+// File: Features/Branding/Views/BrandHeader.swift
+import SwiftUI
 
+struct BrandHeaderView: View {
     var body: some View {
-        Group {
-            if flagManager.isEnabled(.newUserProfileUI) {
-                NewRedesignedProfileHeader()
-            } else {
-                LegacyProfileHeader()
-            }
+        HStack(spacing: 12) {
+            BrandAssets.appLogo
+                .resizable()
+                .scaledToFit()
+                .frame(width: 40, height: 40)
+            
+            Text("Enterprise Mobile")
+                .font(.enterpriseHeadlineLarge())
+                .foregroundColor(.primary)
         }
     }
 }
@@ -365,18 +306,34 @@ struct UserProfileHeaderView: View {
   <TabItem label="React Native (TypeScript)">
 
 ```tsx
-// File: src/features/user/presentation/UserProfileHeader.tsx
+// File: src/features/branding/presentation/BrandHeader.tsx
 import React from 'react';
-import { useFeatureFlags, FeatureKey } from '../../../core/config/useFeatureFlags';
+import { View, Text, StyleSheet } from 'react.style';
+import { BrandAssets } from '../../../core/designsystem/theme/brandAssets';
+import { typography } from '../../../core/designsystem/theme/typography';
 
-export const UserProfileHeader: React.FC = () => {
-  const { isEnabled } = useFeatureFlags();
+export const BrandHeader: React.FC = () => {
+  const AppLogo = BrandAssets.AppLogo;
 
-  if (isEnabled(FeatureKey.NEW_USER_PROFILE_UI)) {
-    return <NewRedesignedProfileHeader />;
-  }
-  return <LegacyProfileHeader />;
+  return (
+    <View style={styles.container}>
+      <AppLogo width={40} height={40} />
+      <Text style={styles.title}>Enterprise Mobile</Text>
+    </View>
+  );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+  },
+  title: {
+    ...typography.headlineLarge,
+    color: '#161b22',
+  },
+});
 ```
 
   </TabItem>
@@ -384,58 +341,58 @@ export const UserProfileHeader: React.FC = () => {
 
 ---
 
-## 5. Mandatory Configuration Rules
+## 5. Mandatory Branding & Asset Rules
 
 <div style="border: 1px solid rgba(239, 68, 68, 0.3); background: rgba(239, 68, 68, 0.04); border-left: 5px solid #ef4444; border-radius: 10px; padding: 22px 24px; margin: 28px 0;">
   <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 16px;">
     <span style="background: #ef4444; color: white; font-weight: 700; font-size: 0.75rem; padding: 3px 10px; border-radius: 4px; letter-spacing: 0.05em;">NON-NEGOTIABLE</span>
-    <h3 style="margin: 0; font-size: 1.1rem; color: var(--sl-color-white); font-weight: 700;">Configuration Violations</h3>
+    <h3 style="margin: 0; font-size: 1.1rem; color: var(--sl-color-white); font-weight: 700;">Asset Architectural Violations</h3>
   </div>
   <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px;">
     <div style="background: var(--sl-color-bg-nav); border: 1px solid var(--sl-color-gray-5); border-radius: 8px; padding: 14px 16px;">
-      <div style="font-weight: 700; color: #ef4444; font-size: 0.9rem; margin-bottom: 4px;">1. Zero Hardcoded Endpoints</div>
-      <div style="font-size: 0.86rem; color: var(--sl-color-gray-2); line-height: 1.5;">API URLs must never be hardcoded in HTTP clients or repository implementations. Inject via <code>AppConfig</code>.</div>
+      <div style="font-weight: 700; color: #ef4444; font-size: 0.9rem; margin-bottom: 4px;">1. Zero Raw Bitmap Bitmaps</div>
+      <div style="font-size: 0.86rem; color: var(--sl-color-gray-2); line-height: 1.5;">All UI iconography must use Vector assets (SVG / VectorDrawable / PDF). Heavy PNG bitmaps are strictly limited to photos.</div>
     </div>
     <div style="background: var(--sl-color-bg-nav); border: 1px solid var(--sl-color-gray-5); border-radius: 8px; padding: 14px 16px;">
-      <div style="font-weight: 700; color: #ef4444; font-size: 0.9rem; margin-bottom: 4px;">2. Mandatory Local Fallback Defaults</div>
-      <div style="font-size: 0.86rem; color: var(--sl-color-gray-2); line-height: 1.5;">Every feature flag must have a hardcoded local fallback default value to guarantee stability if offline.</div>
+      <div style="font-weight: 700; color: #ef4444; font-size: 0.9rem; margin-bottom: 4px;">2. Mandatory WebP Raster Compression</div>
+      <div style="font-size: 0.86rem; color: var(--sl-color-gray-2); line-height: 1.5;">Raster images must be compressed into WebP format with a maximum single image size limit of 250KB.</div>
     </div>
     <div style="background: var(--sl-color-bg-nav); border: 1px solid var(--sl-color-gray-5); border-radius: 8px; padding: 14px 16px;">
-      <div style="font-weight: 700; color: #ef4444; font-size: 0.9rem; margin-bottom: 4px;">3. Post-Rollout Flag Cleanup</div>
-      <div style="font-size: 0.86rem; color: var(--sl-color-gray-2); line-height: 1.5;">Feature flags must be removed within 30 days after 100% production rollout to prevent dead code clutter.</div>
+      <div style="font-weight: 700; color: #ef4444; font-size: 0.9rem; margin-bottom: 4px;">3. No Hardcoded Asset Paths</div>
+      <div style="font-size: 0.86rem; color: var(--sl-color-gray-2); line-height: 1.5;">Asset names must never be hardcoded as string literals in views. Consume exclusively through <code>BrandAssets</code> catalog.</div>
     </div>
     <div style="background: var(--sl-color-bg-nav); border: 1px solid var(--sl-color-gray-5); border-radius: 8px; padding: 14px 16px;">
-      <div style="font-weight: 700; color: #ef4444; font-size: 0.9rem; margin-bottom: 4px;">4. Zero Secret Keys in Source Code</div>
-      <div style="font-size: 0.86rem; color: var(--sl-color-gray-2); line-height: 1.5;">Private API keys or OAuth secrets must never be committed to Git. Store in CI/CD secrets environment.</div>
+      <div style="font-weight: 700; color: #ef4444; font-size: 0.9rem; margin-bottom: 4px;">4. Accessibility Content Descriptions</div>
+      <div style="font-size: 0.86rem; color: var(--sl-color-gray-2); line-height: 1.5;">Every informative brand asset must include localized content descriptions for screen readers (TalkBack / VoiceOver).</div>
     </div>
   </div>
 </div>
 
 ---
 
-## 6. Configuration PR Checklist
+## 6. Branding & Assets PR Checklist
 
 <div style="background: var(--sl-color-bg-nav); border: 1px solid var(--sl-color-gray-5); border-radius: 12px; padding: 22px 26px; margin: 28px 0;">
   <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; border-bottom: 1px solid var(--sl-color-gray-5); padding-bottom: 12px;">
-    <h3 style="margin: 0; font-size: 1.1rem; color: var(--sl-color-white); font-weight: 700;">Configuration Quality Gate</h3>
-    <span style="background: #2563eb; color: white; font-size: 0.75rem; font-weight: 700; padding: 4px 10px; border-radius: 12px;">PRE-MERGE CHECK</span>
+    <h3 style="margin: 0; font-size: 1.1rem; color: var(--sl-color-white); font-weight: 700;">Asset Management Quality Gate</h3>
+    <span style="background: #8b5cf6; color: white; font-size: 0.75rem; font-weight: 700; padding: 4px 10px; border-radius: 12px;">PRE-MERGE CHECK</span>
   </div>
   <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px;">
     <div style="display: flex; align-items: flex-start; gap: 10px; font-size: 0.9rem; color: var(--sl-color-gray-2);">
-      <span style="color: #2563eb; font-weight: 900;">✓</span>
-      <div>Environment endpoints configured via native build profiles (Dev, Staging, Prod).</div>
+      <span style="color: #8b5cf6; font-weight: 900;">✓</span>
+      <div>Icons and vector assets imported from design system manifest.</div>
     </div>
     <div style="display: flex; align-items: flex-start; gap: 10px; font-size: 0.9rem; color: var(--sl-color-gray-2);">
-      <span style="color: #2563eb; font-weight: 900;">✓</span>
-      <div>Feature flags evaluate with safe local fallback values when offline.</div>
+      <span style="color: #8b5cf6; font-weight: 900;">✓</span>
+      <div>Raster images compressed as WebP (under 250KB per file).</div>
     </div>
     <div style="display: flex; align-items: flex-start; gap: 10px; font-size: 0.9rem; color: var(--sl-color-gray-2);">
-      <span style="color: #2563eb; font-weight: 900;">✓</span>
-      <div>Sensitive keys injected securely via build-time environment variables.</div>
+      <span style="color: #8b5cf6; font-weight: 900;">✓</span>
+      <div>Custom typography scales dynamically with system accessibility settings.</div>
     </div>
     <div style="display: flex; align-items: flex-start; gap: 10px; font-size: 0.9rem; color: var(--sl-color-gray-2);">
-      <span style="color: #2563eb; font-weight: 900;">✓</span>
-      <div>Dead/stale feature flags pruned from codebase.</div>
+      <span style="color: #8b5cf6; font-weight: 900;">✓</span>
+      <div>App launcher dynamic adaptive icons generated for all target resolutions.</div>
     </div>
   </div>
 </div>
