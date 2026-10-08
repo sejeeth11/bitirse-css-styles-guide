@@ -1,156 +1,478 @@
 ---
-title: App Foundations Overview
-description: Architectural pillars, core cross-platform foundation services, design tokens, security baseline, and enterprise mobile foundations.
+title: Design System & Theming
+description: Enterprise design tokens, color palette contracts, typography scale, spacing grids, and cross-platform UI component standards for Android, iOS, and React Native.
 sidebar:
-  order: 1
+  order: 2
 ---
 
-Welcome to the **Enterprise App Foundations**. Foundations provide the core infrastructure, shared services, design system tokens, and non-negotiable operational standards that every enterprise mobile app (Android, iOS, and React Native) must integrate.
+import { Tabs, TabItem } from '@astrojs/starlight/components';
 
-<div style="border: 2px solid var(--sl-color-accent); border-radius: 12px; padding: 22px 26px; background-color: var(--sl-color-bg-nav); margin: 24px 0; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);">
+Welcome to the **Enterprise Design System & Theming Standards**. A unified design system guarantees brand consistency, accessibility compliance, and rapid UI development across mobile platforms.
+
+<div style="border: 2px solid #008544; border-radius: 12px; padding: 22px 26px; background-color: var(--sl-color-bg-nav); margin: 24px 0; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);">
   <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 12px;">
-    <span style="background: var(--sl-color-accent); color: white; padding: 4px 12px; border-radius: 20px; font-weight: 700; font-size: 0.8rem; letter-spacing: 0.05em;">FOUNDATION MANDATE</span>
-    <strong style="font-size: 1.15rem; color: var(--sl-color-white);">Unified Enterprise App Foundations</strong>
+    <span style="background: #008544; color: white; padding: 4px 12px; border-radius: 20px; font-weight: 700; font-size: 0.8rem; letter-spacing: 0.05em;">DESIGN SYSTEM MANDATE</span>
+    <strong style="font-size: 1.15rem; color: var(--sl-color-white);">Strict Token-Based UI Architecture</strong>
   </div>
   <p style="margin: 0 0 16px 0; color: var(--sl-color-gray-2); font-size: 0.98rem; line-height: 1.6;">
-    Every mobile application must build upon our 7 standardized foundation pillars to guarantee consistent branding, hardened security, real-time observability, and seamless production readiness across platforms.
+    All enterprise mobile applications must consume centralized <strong>Design Tokens</strong> (Colors, Typography, Spacing, Elevation) rather than hardcoding raw styling values. Direct pixel offsets or unmapped hex colors in UI views are strictly forbidden.
   </p>
-  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px;">
-    <div style="background: var(--sl-color-gray-6); padding: 12px 14px; border-radius: 8px; border-left: 4px solid #008544;">
-      <div style="font-weight: 700; font-size: 0.88rem; color: var(--sl-color-white);">1. Design System</div>
-      <div style="font-size: 0.8rem; color: var(--sl-color-gray-3); margin-top: 2px;">Tokens & Components</div>
+  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px;">
+    <div style="background: var(--sl-color-gray-6); padding: 14px 16px; border-radius: 8px; border-left: 4px solid #008544;">
+      <div style="font-weight: 700; font-size: 0.92rem; color: var(--sl-color-white);">🎨 Color Tokens</div>
+      <div style="font-size: 0.84rem; color: var(--sl-color-gray-3); margin-top: 3px;">Semantic Palette & Dark Mode</div>
     </div>
-    <div style="background: var(--sl-color-gray-6); padding: 12px 14px; border-radius: 8px; border-left: 4px solid #2563eb;">
-      <div style="font-weight: 700; font-size: 0.88rem; color: var(--sl-color-white);">2. Configuration</div>
-      <div style="font-size: 0.8rem; color: var(--sl-color-gray-3); margin-top: 2px;">Feature Flags & Env</div>
+    <div style="background: var(--sl-color-gray-6); padding: 14px 16px; border-radius: 8px; border-left: 4px solid #2563eb;">
+      <div style="font-weight: 700; font-size: 0.92rem; color: var(--sl-color-white);">🔤 Typography</div>
+      <div style="font-size: 0.84rem; color: var(--sl-color-gray-3); margin-top: 3px;">Dynamic Type & Scale</div>
     </div>
-    <div style="background: var(--sl-color-gray-6); padding: 12px 14px; border-radius: 8px; border-left: 4px solid #d97706;">
-      <div style="font-weight: 700; font-size: 0.88rem; color: var(--sl-color-white);">3. Security</div>
-      <div style="font-size: 0.8rem; color: var(--sl-color-gray-3); margin-top: 2px;">Keychain & Crypto</div>
-    </div>
-    <div style="background: var(--sl-color-gray-6); padding: 12px 14px; border-radius: 8px; border-left: 4px solid #7c3aed;">
-      <div style="font-weight: 700; font-size: 0.88rem; color: var(--sl-color-white);">4. Observability</div>
-      <div style="font-size: 0.8rem; color: var(--sl-color-gray-3); margin-top: 2px;">Logs, Metrics, Traces</div>
+    <div style="background: var(--sl-color-gray-6); padding: 14px 16px; border-radius: 8px; border-left: 4px solid #d97706;">
+      <div style="font-weight: 700; font-size: 0.92rem; color: var(--sl-color-white);">📐 Spacing Grid</div>
+      <div style="font-size: 0.84rem; color: var(--sl-color-gray-3); margin-top: 3px;">8pt Base Grid System</div>
     </div>
   </div>
 </div>
 
 ---
 
-## 1. Enterprise Foundation Architecture
+## 1. Color Palette & Theme Tokens
 
-The diagram below illustrates how App Foundations fit into the core layer of your mobile apps, serving feature modules across **Android**, **iOS**, and **React Native**.
+Our color token architecture separates **primitive brand colors** from **semantic functional roles** (Primary, Surface, On-Surface, Error).
 
-```mermaid
-graph TD
-    subgraph Features ["Feature Layer (User, Orders, Catalog)"]
-        F1["Feature A Screen"]
-        F2["Feature B ViewModel"]
-    end
+<Tabs>
+  <TabItem label="Android (Compose)">
 
-    subgraph Foundations ["Core App Foundations Layer"]
-        DS["Design System & Theme Tokens"]
-        CFG["Config & Feature Flags"]
-        SEC["Security & Keychain Services"]
-        OBS["Observability & Logging"]
-        I18N["Localization & i18n Engine"]
-    end
+```kotlin
+// File: core/designsystem/theme/Color.kt
+package com.enterprise.mobile.core.designsystem.theme
 
-    subgraph Platforms ["Target Platforms"]
-        Android["Android (Compose + Hilt Core)"]
-        iOS["iOS (SwiftUI + SPM Core)"]
-        RN["React Native (TypeScript Core)"]
-    end
+import androidx.compose.ui.graphics.Color
 
-    F1 --> Foundations
-    F2 --> Foundations
-    Foundations --> Android
-    Foundations --> iOS
-    Foundations --> RN
+// Primitive Brand Tokens
+val BrandGreenPrimary = Color(0xFF008544)
+val BrandGreenDark = Color(0xFF005C2E)
+val NeutralLightBackground = Color(0xFFF9FAFB)
+val NeutralDarkBackground = Color(0xFF0D1117)
+val SignalError = Color(0xFFDC2626)
 
-    classDef featStyle fill:#f2fbf5,stroke:#008544,stroke-width:2px;
-    classDef foundStyle fill:#eff6ff,stroke:#2563eb,stroke-width:2px;
-    classDef platStyle fill:#fef3c7,stroke:#d97706,stroke-width:2px;
+// File: core/designsystem/theme/Theme.kt
+import androidx.compose.material3.*
+import androidx.compose.runtime.Composable
+import androidx.compose.foundation.isSystemInDarkTheme
 
-    class F1,F2 featStyle;
-    class DS,CFG,SEC,OBS,I18N foundStyle;
-    class Android,iOS,RN platStyle;
+private val DarkColorScheme = darkColorScheme(
+    primary = BrandGreenPrimary,
+    background = NeutralDarkBackground,
+    surface = Color(0xFF161B22),
+    error = SignalError
+)
+
+private val LightColorScheme = lightColorScheme(
+    primary = BrandGreenPrimary,
+    background = NeutralLightBackground,
+    surface = Color.White,
+    error = SignalError
+)
+
+@Composable
+fun EnterpriseTheme(
+    darkTheme: Boolean = isSystemInDarkTheme(),
+    content: @Composable () -> Unit
+) {
+    val colors = if (darkTheme) DarkColorScheme else LightColorScheme
+    MaterialTheme(
+        colorScheme = colors,
+        typography = EnterpriseTypography,
+        content = content
+    )
+}
 ```
 
+  </TabItem>
+  <TabItem label="iOS (SwiftUI)">
+
+```swift
+// File: Core/DesignSystem/Theme/ColorTokens.swift
+import SwiftUI
+
+public extension Color {
+    // Primitive Brand Colors
+    static let brandGreenPrimary = Color(red: 0.0, green: 0.52, blue: 0.27)
+    static let brandGreenDark = Color(red: 0.0, green: 0.36, blue: 0.18)
+    static let signalError = Color(red: 0.86, green: 0.15, blue: 0.15)
+    
+    // Semantic Contextual Theme Tokens
+    static var themeBackground: Color {
+        Color("ThemeBackground") // Assets.xcassets adaptive color
+    }
+    
+    static var themeSurface: Color {
+        Color("ThemeSurface")
+    }
+}
+```
+
+  </TabItem>
+  <TabItem label="React Native (TypeScript)">
+
+```typescript
+// File: src/core/theme/colors.ts
+export const BrandColors = {
+  primary: '#008544',
+  primaryDark: '#005C2E',
+  error: '#DC2626',
+} as const;
+
+export const SemanticColors = {
+  light: {
+    background: '#F9FAFB',
+    surface: '#FFFFFF',
+    textPrimary: '#111827',
+    border: '#E5E7EB',
+  },
+  dark: {
+    background: '#0D1117',
+    surface: '#161B22',
+    textPrimary: '#F0F6FC',
+    border: '#30363D',
+  },
+} as const;
+```
+
+  </TabItem>
+</Tabs>
+
 ---
 
-## 2. Platform Foundation Mapping Matrix
+## 2. Typography & Dynamic Type Scale
 
-| Foundation Pillar | Android Implementation | iOS Implementation | React Native Implementation |
-| :--- | :--- | :--- | :--- |
-| **Design System & Theme** | Material 3 `@Composable` Tokens | SwiftUI `Theme` Environment | Encapsulated StyleSheet Design Tokens |
-| **Config & Feature Flags** | Hilt `AppConfig` + RemoteConfig | SPM `AppConfig` + RemoteConfig | Context Provider `useConfig()` |
-| **Security & Cryptography** | Android KeyStore + EncryptedPrefs | iOS Keychain Services | `react-native-keychain` / SecureStore |
-| **Localization (i18n)** | `res/values/strings.xml` | `Localizable.xcstrings` (Catalog) | `i18next` / `react-i18next` |
-| **Observability & Logging** | Timber / OpenTelemetry SDK | OSLog / Unified Logging System | Sentry / Datadog RN SDK |
+All typography tokens follow strict scale hierarchies supporting system accessibility settings (Android Font Scaling, iOS Dynamic Type).
+
+<Tabs>
+  <TabItem label="Android (Compose)">
+
+```kotlin
+// File: core/designsystem/theme/Type.kt
+package com.enterprise.mobile.core.designsystem.theme
+
+import androidx.compose.material3.Typography
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.sp
+
+val EnterpriseTypography = Typography(
+    headlineMedium = TextStyle(
+        fontFamily = FontFamily.Default,
+        fontWeight = FontWeight.Bold,
+        fontSize = 24.sp,
+        lineHeight = 32.sp
+    ),
+    bodyLarge = TextStyle(
+        fontFamily = FontFamily.Default,
+        fontWeight = FontWeight.Normal,
+        fontSize = 16.sp,
+        lineHeight = 24.sp
+    ),
+    labelMedium = TextStyle(
+        fontFamily = FontFamily.Default,
+        fontWeight = FontWeight.SemiBold,
+        fontSize = 12.sp,
+        lineHeight = 16.sp
+    )
+)
+```
+
+  </TabItem>
+  <TabItem label="iOS (SwiftUI)">
+
+```swift
+// File: Core/DesignSystem/Theme/TypographyTokens.swift
+import SwiftUI
+
+public extension Font {
+    static let enterpriseHeadline = Font.system(.title2, design: .default).weight(.bold)
+    static let enterpriseBody = Font.system(.body, design: .default).weight(.regular)
+    static let enterpriseLabel = Font.system(.caption, design: .default).weight(.semibold)
+}
+```
+
+  </TabItem>
+  <TabItem label="React Native (TypeScript)">
+
+```typescript
+// File: src/core/theme/typography.ts
+import { TextStyle } from 'react-native';
+
+export const Typography: Record<string, TextStyle> = {
+  headlineMedium: {
+    fontSize: 24,
+    lineHeight: 32,
+    fontWeight: '700',
+  },
+  bodyLarge: {
+    fontSize: 16,
+    lineHeight: 24,
+    fontWeight: '400',
+  },
+  labelMedium: {
+    fontSize: 12,
+    lineHeight: 16,
+    fontWeight: '600',
+  },
+};
+```
+
+  </TabItem>
+</Tabs>
 
 ---
 
-## 3. Mandatory Foundation Rules
+## 3. Spacing Grid Tokens (8pt Grid)
+
+All layout paddings, margins, and gaps must strictly align with the **8-point spatial grid** (`4dp`, `8dp`, `16dp`, `24dp`, `32dp`).
+
+<Tabs>
+  <TabItem label="Android (Compose)">
+
+```kotlin
+// File: core/designsystem/theme/Spacing.kt
+package com.enterprise.mobile.core.designsystem.theme
+
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.dp
+
+object Spacing {
+  val xs: Dp = 4.dp
+  val sm: Dp = 8.dp
+  val md: Dp = 16.dp
+  val lg: Dp = 24.dp
+  val xl: Dp = 32.dp
+}
+```
+
+  </TabItem>
+  <TabItem label="iOS (SwiftUI)">
+
+```swift
+// File: Core/DesignSystem/Theme/SpacingTokens.swift
+import CoreGraphics
+
+public enum Spacing {
+    public static let xs: CGFloat = 4
+    public static let sm: CGFloat = 8
+    public static let md: CGFloat = 16
+    public static let lg: CGFloat = 24
+    public static let xl: CGFloat = 32
+}
+```
+
+  </TabItem>
+  <TabItem label="React Native (TypeScript)">
+
+```typescript
+// File: src/core/theme/spacing.ts
+export const Spacing = {
+  xs: 4,
+  sm: 8,
+  md: 16,
+  lg: 24,
+  xl: 32,
+} as const;
+```
+
+  </TabItem>
+</Tabs>
+
+---
+
+## 4. Atomic UI Component Example: Primary Button
+
+Below is an enterprise-ready **Primary Button** component consuming tokens across all platforms.
+
+<Tabs>
+  <TabItem label="Android (Compose)">
+
+```kotlin
+// File: core/designsystem/component/PrimaryButton.kt
+package com.enterprise.mobile.core.designsystem.component
+
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.material3.*
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
+
+@Composable
+fun PrimaryButton(
+    text: String,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    enabled: Boolean = true
+) {
+    Button(
+        onClick = onClick,
+        enabled = enabled,
+        modifier = modifier
+            .fillMaxWidth()
+            .height(48.dp),
+        colors = ButtonDefaults.buttonColors(
+            containerColor = MaterialTheme.colorScheme.primary
+        )
+    ) {
+        Text(
+            text = text,
+            style = MaterialTheme.typography.labelMedium
+        )
+    }
+}
+```
+
+  </TabItem>
+  <TabItem label="iOS (SwiftUI)">
+
+```swift
+// File: Core/DesignSystem/Components/PrimaryButton.swift
+import SwiftUI
+
+public struct PrimaryButton: View {
+    let title: String
+    let action: () -> Void
+    var isEnabled: Bool = true
+
+    public init(title: String, isEnabled: Bool = true, action: @escaping () -> Void) {
+        self.title = title
+        self.isEnabled = isEnabled
+        self.action = action
+    }
+
+    public var body: some View {
+        Button(action: action) {
+            Text(title)
+                .font(.enterpriseLabel)
+                .fontWeight(.bold)
+                .frame(maxWidth: .infinity)
+                .frame(height: 48)
+                .background(isEnabled ? Color.brandGreenPrimary : Color.gray)
+                .foregroundColor(.white)
+                .cornerRadius(8)
+        }
+        .disabled(!isEnabled)
+    }
+}
+```
+
+  </TabItem>
+  <TabItem label="React Native (TypeScript)">
+
+```tsx
+// File: src/core/components/PrimaryButton.tsx
+import React from 'react';
+import { TouchableOpacity, Text, StyleSheet } from 'react-native';
+import { BrandColors } from '../theme/colors';
+import { Spacing } from '../theme/spacing';
+
+export interface PrimaryButtonProps {
+  title: string;
+  onPress: () => void;
+  disabled?: boolean;
+}
+
+export const PrimaryButton: React.FC<PrimaryButtonProps> = ({
+  title,
+  onPress,
+  disabled = false,
+}) => {
+  return (
+    <TouchableOpacity
+      style={[styles.button, disabled && styles.disabled]}
+      onPress={onPress}
+      disabled={disabled}
+      activeOpacity={0.8}
+    >
+      <Text style={styles.text}>{title}</Text>
+    </TouchableOpacity>
+  );
+};
+
+const styles = StyleSheet.create({
+  button: {
+    height: 48,
+    backgroundColor: BrandColors.primary,
+    borderRadius: 8,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingHorizontal: Spacing.md,
+  },
+  disabled: {
+    backgroundColor: '#9CA3AF',
+  },
+  text: {
+    color: '#FFFFFF',
+    fontSize: 16,
+    fontWeight: '700',
+  },
+});
+```
+
+  </TabItem>
+</Tabs>
+
+---
+
+## 5. Mandatory Design System Rules
 
 <div style="border: 1px solid rgba(239, 68, 68, 0.3); background: rgba(239, 68, 68, 0.04); border-left: 5px solid #ef4444; border-radius: 10px; padding: 22px 24px; margin: 28px 0;">
   <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 16px;">
     <span style="background: #ef4444; color: white; font-weight: 700; font-size: 0.75rem; padding: 3px 10px; border-radius: 4px; letter-spacing: 0.05em;">NON-NEGOTIABLE</span>
-    <h3 style="margin: 0; font-size: 1.1rem; color: var(--sl-color-white); font-weight: 700;">Foundation Compliance Violations</h3>
+    <h3 style="margin: 0; font-size: 1.1rem; color: var(--sl-color-white); font-weight: 700;">Design System Violations</h3>
   </div>
   <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px;">
     <div style="background: var(--sl-color-bg-nav); border: 1px solid var(--sl-color-gray-5); border-radius: 8px; padding: 14px 16px;">
-      <div style="font-weight: 700; color: #ef4444; font-size: 0.9rem; margin-bottom: 4px;">1. Zero Hardcoded Raw Colors</div>
-      <div style="font-size: 0.86rem; color: var(--sl-color-gray-2); line-height: 1.5;">Never hardcode hex values like <code>#008544</code> inside UI views. Always reference design tokens from the core theme provider.</div>
+      <div style="font-weight: 700; color: #ef4444; font-size: 0.9rem; margin-bottom: 4px;">1. Zero Hardcoded Color Codes</div>
+      <div style="font-size: 0.86rem; color: var(--sl-color-gray-2); line-height: 1.5;">Never write inline hex codes (e.g., <code>Color(0xFF008544)</code> or <code>#008544</code>) directly inside UI screens. Reference token aliases.</div>
     </div>
     <div style="background: var(--sl-color-bg-nav); border: 1px solid var(--sl-color-gray-5); border-radius: 8px; padding: 14px 16px;">
-      <div style="font-weight: 700; color: #ef4444; font-size: 0.9rem; margin-bottom: 4px;">2. Zero Unencrypted Key-Value Storage</div>
-      <div style="font-size: 0.86rem; color: var(--sl-color-gray-2); line-height: 1.5;">Never store OAuth tokens or secret keys in unencrypted storage (SharedPreferences, UserDefaults, or AsyncStorage). Use Keychain/KeyStore.</div>
+      <div style="font-weight: 700; color: #ef4444; font-size: 0.9rem; margin-bottom: 4px;">2. Zero Custom Component Duplication</div>
+      <div style="font-size: 0.86rem; color: var(--sl-color-gray-2); line-height: 1.5;">Never build ad-hoc buttons or text inputs in feature modules. Always import core design system atomic components.</div>
     </div>
     <div style="background: var(--sl-color-bg-nav); border: 1px solid var(--sl-color-gray-5); border-radius: 8px; padding: 14px 16px;">
-      <div style="font-weight: 700; color: #ef4444; font-size: 0.9rem; margin-bottom: 4px;">3. Zero Hardcoded String Literals</div>
-      <div style="font-size: 0.86rem; color: var(--sl-color-gray-2); line-height: 1.5;">UI text must never contain raw English strings. All text must be sourced from localization resource files for multi-language support.</div>
+      <div style="font-weight: 700; color: #ef4444; font-size: 0.9rem; margin-bottom: 4px;">3. 8pt Grid Enforcement</div>
+      <div style="font-size: 0.86rem; color: var(--sl-color-gray-2); line-height: 1.5;">Layout offsets must be multiples of 4 or 8 (e.g. 4, 8, 16, 24). Arbitrary padding like <code>11.5px</code> is strictly rejected during PR review.</div>
     </div>
     <div style="background: var(--sl-color-bg-nav); border: 1px solid var(--sl-color-gray-5); border-radius: 8px; padding: 14px 16px;">
-      <div style="font-weight: 700; color: #ef4444; font-size: 0.9rem; margin-bottom: 4px;">4. Mandatory Error Tracking & Logging</div>
-      <div style="font-size: 0.86rem; color: var(--sl-color-gray-2); line-height: 1.5;">All non-fatal exceptions and network failure states must be logged through the centralized telemetry foundation wrapper.</div>
+      <div style="font-weight: 700; color: #ef4444; font-size: 0.9rem; margin-bottom: 4px;">4. Accessibility & Contrast Verification</div>
+      <div style="font-size: 0.86rem; color: var(--sl-color-gray-2); line-height: 1.5;">Text-to-background contrast must satisfy WCAG AA (4.5:1 ratio minimum). Dynamic Type and VoiceOver scaling must be tested.</div>
     </div>
   </div>
 </div>
 
 ---
 
-## 4. App Foundations Checklist for PR Approval
+## 6. Design System PR Checklist
 
 <div style="background: var(--sl-color-bg-nav); border: 1px solid var(--sl-color-gray-5); border-radius: 12px; padding: 22px 26px; margin: 28px 0;">
   <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; border-bottom: 1px solid var(--sl-color-gray-5); padding-bottom: 12px;">
-    <h3 style="margin: 0; font-size: 1.1rem; color: var(--sl-color-white); font-weight: 700;">Foundation Quality Gate</h3>
-    <span style="background: var(--sl-color-accent); color: white; font-size: 0.75rem; font-weight: 700; padding: 4px 10px; border-radius: 12px;">PRE-MERGE CHECK</span>
+    <h3 style="margin: 0; font-size: 1.1rem; color: var(--sl-color-white); font-weight: 700;">Design System Quality Gate</h3>
+    <span style="background: #008544; color: white; font-size: 0.75rem; font-weight: 700; padding: 4px 10px; border-radius: 12px;">PRE-MERGE CHECK</span>
   </div>
   <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px;">
     <div style="display: flex; align-items: flex-start; gap: 10px; font-size: 0.9rem; color: var(--sl-color-gray-2);">
-      <span style="color: var(--sl-color-accent); font-weight: 900;">✓</span>
-      <div>Design System tokens used for all colors, fonts, and grid spacing.</div>
+      <span style="color: #008544; font-weight: 900;">✓</span>
+      <div>All UI colors consume theme token references (Light & Dark mode verified).</div>
     </div>
     <div style="display: flex; align-items: flex-start; gap: 10px; font-size: 0.9rem; color: var(--sl-color-gray-2);">
-      <span style="color: var(--sl-color-accent); font-weight: 900;">✓</span>
-      <div>Configuration & Feature Flags controlled via centralized remote config.</div>
+      <span style="color: #008544; font-weight: 900;">✓</span>
+      <div>Typography scales automatically with system font sizing settings.</div>
     </div>
     <div style="display: flex; align-items: flex-start; gap: 10px; font-size: 0.9rem; color: var(--sl-color-gray-2);">
-      <span style="color: var(--sl-color-accent); font-weight: 900;">✓</span>
-      <div>Tokens and sensitive state stored exclusively in encrypted KeyStore/Keychain.</div>
+      <span style="color: #008544; font-weight: 900;">✓</span>
+      <div>Layout margins and paddings adhere to 8pt spatial tokens.</div>
     </div>
     <div style="display: flex; align-items: flex-start; gap: 10px; font-size: 0.9rem; color: var(--sl-color-gray-2);">
-      <span style="color: var(--sl-color-accent); font-weight: 900;">✓</span>
-      <div>All UI string resources localized for internationalization (i18n).</div>
-    </div>
-    <div style="display: flex; align-items: flex-start; gap: 10px; font-size: 0.9rem; color: var(--sl-color-gray-2);">
-      <span style="color: var(--sl-color-accent); font-weight: 900;">✓</span>
-      <div>Telemetry, crash logs, and network metrics reported to observability pipeline.</div>
-    </div>
-    <div style="display: flex; align-items: flex-start; gap: 10px; font-size: 0.9rem; color: var(--sl-color-gray-2);">
-      <span style="color: var(--sl-color-accent); font-weight: 900;">✓</span>
-      <div>Production readiness checklist verified before build release.</div>
+      <span style="color: #008544; font-weight: 900;">✓</span>
+      <div>Atomic components imported from core design system module.</div>
     </div>
   </div>
 </div>
