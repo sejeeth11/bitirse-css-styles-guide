@@ -1,16 +1,16 @@
 ---
 title: Android Development Standards & MVVM Architecture
-description: Enterprise guidelines, MVVM Clean Architecture, Unidirectional Data Flow diagrams, and production Kotlin code standards for Cargill Android Mobile Applications.
+description: Enterprise guidelines, MVVM Clean Architecture, Unidirectional Data Flow diagrams, and production Kotlin code standards for Android Mobile Applications.
 sidebar:
   order: 2
 ---
 
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 
-Welcome to the **Cargill Enterprise Android Development Standards**. Architecture is the foundation of our mobile engineering strategy. This document provides a comprehensive specification of our mandatory **MVVM Clean Architecture** pattern.
+Welcome to the **Enterprise Android Development Standards**. Architecture is the foundation of our mobile engineering strategy. This document provides a comprehensive specification of our mandatory **MVVM Clean Architecture** pattern.
 
 :::tip[Core Architectural Mandate]
-All Cargill Android applications must strictly enforce **MVVM (Model-View-ViewModel)** with **Clean Architecture** and **Unidirectional Data Flow (UDF)** powered by **Jetpack Compose** and **Kotlin StateFlow**.
+All Enterprise Android applications must strictly enforce **MVVM (Model-View-ViewModel)** with **Clean Architecture** and **Unidirectional Data Flow (UDF)** powered by **Jetpack Compose** and **Kotlin StateFlow**.
 :::
 
 ---
@@ -113,8 +113,8 @@ sequenceDiagram
 Below is the complete, self-contained **all-in-one Kotlin file** (`UserProfileFeature.kt`). It contains the entire stack in one place: DTO, Room Database Entity, Room DAO, Mappers, Repository, Domain Entity, Use Case, ViewModel, UI State, and Jetpack Compose View.
 
 ```kotlin
-// File: com/cargill/mobile/feature/user/UserProfileFeature.kt
-package com.cargill.mobile.feature.user
+// File: com/enterprise/mobile/feature/user/UserProfileFeature.kt
+package com.enterprise.mobile.feature.user
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
@@ -159,7 +159,7 @@ data class UserNetworkDto(
 )
 
 // Retrofit Service Contract
-interface CargillApiService {
+interface ApiService {
     @GET("v1/users/{id}")
     suspend fun getUser(@Path("id") id: String): UserNetworkDto
 }
@@ -213,7 +213,7 @@ interface UserRepository {
 // Single Source of Truth Repository Implementation
 @Singleton
 class UserRepositoryImpl @Inject constructor(
-    private val apiService: CargillApiService,
+    private val apiService: ApiService,
     private val userDao: UserDao,
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : UserRepository {
@@ -315,7 +315,7 @@ class UserProfileViewModel @Inject constructor(
 // 4. UI LAYER (Stateless Jetpack Compose Screen & Components)
 // ============================================================================
 
-private val CargillGreen = Color(0xFF008544)
+private val BrandGreen = Color(0xFF008544)
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -353,7 +353,7 @@ fun UserProfileScreen(
         ) {
             when (val state = uiState) {
                 is UserProfileUiState.Loading -> {
-                    CircularProgressIndicator(color = CargillGreen)
+                    CircularProgressIndicator(color = BrandGreen)
                 }
                 is UserProfileUiState.Success -> {
                     ProfileDetailsView(
@@ -388,7 +388,7 @@ private fun ProfileDetailsView(
 
         if (user.isVip) {
             Surface(
-                color = CargillGreen,
+                color = BrandGreen,
                 shape = MaterialTheme.shapes.small
             ) {
                 Text(
@@ -405,7 +405,7 @@ private fun ProfileDetailsView(
         Button(
             onClick = onRefresh,
             modifier = Modifier.fillMaxWidth(),
-            colors = ButtonDefaults.buttonColors(containerColor = CargillGreen)
+            colors = ButtonDefaults.buttonColors(containerColor = BrandGreen)
         ) {
             Text("Refresh User Profile")
         }
