@@ -156,8 +156,8 @@ import androidx.compose.ui.res.stringResource
 import com.enterprise.mobile.R
 
 @Composable
-fun GreetingHeader(userName: String, unreadCount: Int) {
-    val greeting = stringResource(id = R.string.user_greeting, userName)
+fun GreetingHeader(name: String, unreadCount: Int) {
+    val greeting = stringResource(id = R.string.user_greeting, name)
     val notifications = pluralStringResource(
         id = R.plurals.notification_count,
         count = unreadCount,
@@ -176,12 +176,12 @@ fun GreetingHeader(userName: String, unreadCount: Int) {
 import SwiftUI
 
 struct GreetingHeaderView: View {
-    let userName: String
+    let name: String
     let unreadCount: Int
 
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
-            Text("user_greeting \(userName)")
+            Text("user_greeting \(name)")
                 .font(.headline)
             
             Text("^[\(unreadCount) Notification](inflect: true)")
@@ -202,16 +202,16 @@ import { View, Text, StyleSheet } from 'react-native';
 import { useTranslation } from 'react-i18next';
 
 interface GreetingHeaderProps {
-  userName: string;
+  name: string;
   unreadCount: number;
 }
 
-export const GreetingHeader: React.FC<GreetingHeaderProps> = ({ userName, unreadCount }) => {
+export const GreetingHeader: React.FC<GreetingHeaderProps> = ({ name, unreadCount }) => {
   const { t } = useTranslation();
 
   return (
     <View style={styles.container}>
-      <Text style={styles.greeting}>{t('user_greeting', { name: userName })}</Text>
+      <Text style={styles.greeting}>{t('user_greeting', { name })}</Text>
       <Text style={styles.subtitle}>
         {t('notification_count', { count: unreadCount })}
       </Text>
