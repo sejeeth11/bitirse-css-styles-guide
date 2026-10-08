@@ -1,346 +1,162 @@
----
-title: Localization & Internationalization (I18N).
-description: Enterprise guidelines, locale management, dynamic string resource loading, pluralization, RTL support, and multi-language contracts for Android, iOS, and React Native.
-sidebar:
-  order: 5
----
+* ==========================================================================
+   08. CARD
+   ========================================================================== */
 
-import { Tabs, TabItem } from '@astrojs/starlight/components';
+@layer components {
 
-Welcome to the **Enterprise Localization & Internationalization (I18N) Standards**. Global accessibility requires all mobile applications to support seamless multi-language translation, locale-aware date/currency formatting, Right-to-Left (RTL) layouts, and dynamic string key contracts.
+  .card {
+    padding: var(--space-6);
 
-<div style="border: 2px solid #0d9488; border-radius: 12px; padding: 22px 26px; background-color: var(--sl-color-bg-nav); margin: 24px 0; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);">
-  <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 12px;">
-    <span style="background: #0d9488; color: white; padding: 4px 12px; border-radius: 20px; font-weight: 700; font-size: 0.8rem; letter-spacing: 0.05em;">I18N MANDATE</span>
-    <strong style="font-size: 1.15rem; color: var(--sl-color-white);">Strict Localized String Contracts & RTL Architecture</strong>
-  </div>
-  <p style="margin: 0 0 16px 0; color: var(--sl-color-gray-2); font-size: 0.98rem; line-height: 1.6;">
-    All enterprise mobile applications must decouple user-facing strings into localized resource bundles. Hardcoding raw user-facing text strings in source code or string concatenation is strictly forbidden.
-  </p>
-  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px;">
-    <div style="background: var(--sl-color-gray-6); padding: 14px 16px; border-radius: 8px; border-left: 4px solid #0d9488;">
-      <div style="font-weight: 700; font-size: 0.92rem; color: var(--sl-color-white);">🌐 Multi-Language Bundles</div>
-      <div style="font-size: 0.84rem; color: var(--sl-color-gray-3); margin-top: 3px;">Dynamic String Catalog</div>
-    </div>
-    <div style="background: var(--sl-color-gray-6); padding: 14px 16px; border-radius: 8px; border-left: 4px solid #2563eb;">
-      <div style="font-weight: 700; font-size: 0.92rem; color: var(--sl-color-white);">🔄 Right-to-Left (RTL)</div>
-      <div style="font-size: 0.84rem; color: var(--sl-color-gray-3); margin-top: 3px;">Arabic / Hebrew Layouts</div>
-    </div>
-    <div style="background: var(--sl-color-gray-6); padding: 14px 16px; border-radius: 8px; border-left: 4px solid #d97706;">
-      <div style="font-weight: 700; font-size: 0.92rem; color: var(--sl-color-white);">🔢 Plurals & Formatting</div>
-      <div style="font-size: 0.84rem; color: var(--sl-color-gray-3); margin-top: 3px;">Locale Date/Currency Formatters</div>
-    </div>
-  </div>
-</div>
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
 
----
+    box-shadow: var(--shadow-sm);
+  }
 
-## 1. Localization & Locale Flow Architecture
+  .card__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 
-```mermaid
-graph TD
-    subgraph Client_App ["Mobile Application Layer"]
-        UI["UI View Component"]
-        VM["ViewModel / Hook"]
-    end
+    margin-bottom: var(--space-4);
+  }
 
-    subgraph I18N_Engine ["Enterprise Localization Core"]
-        LocaleMgr["Locale & Region Manager"]
-        StringCatalog["Localized String Catalog"]
-        Formatter["Locale-Aware Formatter (Date/Currency)"]
-    end
+  .card__title {
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-semibold);
+  }
 
-    subgraph Config_Bundle ["Resource Bundles"]
-        EN["strings_en.json / Localizable.xcstrings"]
-        ES["strings_es.json / strings-es.xml"]
-        AR["strings_ar.json (RTL Support)"]
-    end
+  .card__description {
+    margin-top: var(--space-2);
 
-    UI --> VM
-    VM --> LocaleMgr
-    LocaleMgr --> StringCatalog
-    LocaleMgr --> Formatter
-    StringCatalog --> EN
-    StringCatalog --> ES
-    StringCatalog --> AR
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-sm);
+  }
 
-    classDef clientStyle fill:#f5f3ff,stroke:#8b5cf6,stroke-width:2px;
-    classDef i18nStyle fill:#eff6ff,stroke:#2563eb,stroke-width:2px;
-    classDef bundleStyle fill:#f2fbf5,stroke:#008544,stroke-width:2px;
+  .card__body {
+    margin-top: var(--space-4);
+  }
 
-    class UI,VM clientStyle;
-    class LocaleMgr,StringCatalog,Formatter i18nStyle;
-    class EN,ES,AR bundleStyle;
-```
+  .card__footer {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
 
----
+    gap: var(--space-3);
 
-## 2. Resource String Catalog Files
+    margin-top: var(--space-6);
+    padding-top: var(--space-4);
 
-String resources must be defined cleanly in standard localization resource files.
+    border-top: 1px solid var(--color-border);
+  }
 
-<Tabs>
-  <TabItem label="Android (Compose)">
+  .card--elevated {
+    box-shadow: var(--shadow-md);
+  }
 
-```xml
-<!-- File: res/values/strings.xml (Default English) -->
-<resources>
-    <string name="app_name">Enterprise Mobile</string>
-    <string name="user_greeting">Hello, %1$s!</string>
-    <string name="button_submit">Submit</string>
-    <plurals name="notification_count">
-        <item quantity="one">You have %d new notification</item>
-        <item quantity="other">You have %d new notifications</item>
-    </plurals>
-</resources>
-```
+  .card--interactive {
+    transition:
+      box-shadow var(--transition-normal),
+      transform var(--transition-normal);
+  }
 
-  </TabItem>
-  <TabItem label="iOS (SwiftUI)">
-
-```json
-// File: Localizable.xcstrings (String Catalog Format)
-{
-  "sourceLanguage" : "en",
-  "strings" : {
-    "user_greeting %@" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Hello, %1$@!" } },
-        "es" : { "stringUnit" : { "state" : "translated", "value" : "¡Hola, %1$@!" } }
-      }
-    },
-    "button_submit" : {
-      "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Submit" } }
-      }
-    }
+  .card--interactive:hover {
+    box-shadow: var(--shadow-lg);
+    transform: translateY(-2px);
   }
 }
-```
 
-  </TabItem>
-  <TabItem label="React Native (TypeScript)">
 
-```json
-// File: src/assets/locales/en.json
-{
-  "app_name": "Enterprise Mobile",
-  "user_greeting": "Hello, {{name}}!",
-  "button_submit": "Submit",
-  "notification_count_one": "You have {{count}} new notification",
-  "notification_count_other": "You have {{count}} new notifications"
-}
-```
+/* ==========================================================================
+   09. BUTTONS
+   ========================================================================== */
 
-  </TabItem>
-</Tabs>
+@layer components {
 
----
+  .button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
 
-## 3. UI Localized String Consumption & Plurals
+    min-height: 40px;
 
-Consuming localized strings safely in composable UI components with parameter injection.
+    padding: 0 var(--space-4);
 
-<Tabs>
-  <TabItem label="Android (Compose)">
+    border: 1px solid transparent;
+    border-radius: var(--radius-md);
 
-```kotlin
-// File: feature/profile/ui/GreetingHeader.kt
-package com.enterprise.mobile.feature.profile.ui
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-medium);
 
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.res.pluralStringResource
-import androidx.compose.ui.res.stringResource
-import com.enterprise.mobile.R
+    transition:
+      background-color var(--transition-fast),
+      border-color var(--transition-fast),
+      color var(--transition-fast),
+      box-shadow var(--transition-fast);
 
-@Composable
-fun GreetingHeader(name: String, unreadCount: Int) {
-    val greeting = stringResource(id = R.string.user_greeting, name)
-    val notifications = pluralStringResource(
-        id = R.plurals.notification_count,
-        count = unreadCount,
-        unreadCount
-    )
-
-    Text(text = "$greeting\n$notifications")
-}
-```
-
-  </TabItem>
-  <TabItem label="iOS (SwiftUI)">
-
-```swift
-// File: Features/Profile/Views/GreetingHeader.swift
-import SwiftUI
-
-struct GreetingHeaderView: View {
-    let name: String
-    let unreadCount: Int
-
-    var body: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            Text("user_greeting \(name)")
-                .font(.headline)
-            
-            Text("^[\(unreadCount) Notification](inflect: true)")
-                .font(.subheadline)
-                .foregroundColor(.secondary)
-        }
-    }
-}
-```
-
-  </TabItem>
-  <TabItem label="React Native (TypeScript)">
-
-```tsx
-// File: src/features/profile/presentation/GreetingHeader.tsx
-import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
-import { useTranslation } from 'react-i18next';
-
-interface GreetingHeaderProps {
-  name: string;
-  unreadCount: number;
-}
-
-export const GreetingHeader: React.FC<GreetingHeaderProps> = ({ name, unreadCount }) => {
-  const { t } = useTranslation();
-
-  return (
-    <View style={styles.container}>
-      <Text style={styles.greeting}>{t('user_greeting', { name })}</Text>
-      <Text style={styles.subtitle}>
-        {t('notification_count', { count: unreadCount })}
-      </Text>
-    </View>
-  );
-};
-
-const styles = StyleSheet.create({
-  container: { padding: 16 },
-  greeting: { fontSize: 20, fontWeight: 'bold' },
-  subtitle: { fontSize: 14, color: '#666' },
-});
-```
-
-  </TabItem>
-</Tabs>
-
----
-
-## 4. Right-to-Left (RTL) Layout Adaptation
-
-Handling directionality (LTR / RTL) for Arabic, Hebrew, and Persian layouts dynamically.
-
-<Tabs>
-  <TabItem label="Android (Compose)">
-
-```kotlin
-// File: core/designsystem/RtlContainer.kt
-package com.enterprise.mobile.core.designsystem
-
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.ui.platform.LocalLayoutDirection
-import androidx.compose.ui.unit.LayoutDirection
-
-@Composable
-fun ForceRtlLayout(content: @Composable () -> Unit) {
-    CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
-        content()
-    }
-}
-```
-
-  </TabItem>
-  <TabItem label="iOS (SwiftUI)">
-
-```swift
-// File: Core/DesignSystem/RtlEnvironment.swift
-import SwiftUI
-
-public extension View {
-    func forceRightToLeft() -> some View {
-        self.environment(\.layoutDirection, .rightToLeft)
-    }
-}
-```
-
-  </TabItem>
-  <TabItem label="React Native (TypeScript)">
-
-```typescript
-// File: src/core/i18n/rtlManager.ts
-import { I18nManager } from 'react-native';
-
-export const configureRtlDirection = (isRtl: boolean) => {
-  if (I18nManager.isRTL !== isRtl) {
-    I18nManager.allowRTL(isRtl);
-    I18nManager.forceRTL(isRtl);
+    user-select: none;
   }
-};
-```
 
-  </TabItem>
-</Tabs>
+  .button:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
 
----
 
-## 5. Mandatory Localization Rules
+  /* Primary */
 
-<div style="border: 1px solid rgba(239, 68, 68, 0.3); background: rgba(239, 68, 68, 0.04); border-left: 5px solid #ef4444; border-radius: 10px; padding: 22px 24px; margin: 28px 0;">
-  <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 16px;">
-    <span style="background: #ef4444; color: white; font-weight: 700; font-size: 0.75rem; padding: 3px 10px; border-radius: 4px; letter-spacing: 0.05em;">NON-NEGOTIABLE</span>
-    <h3 style="margin: 0; font-size: 1.1rem; color: var(--sl-color-white); font-weight: 700;">Localization Violations</h3>
-  </div>
-  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px;">
-    <div style="background: var(--sl-color-bg-nav); border: 1px solid var(--sl-color-gray-5); border-radius: 8px; padding: 14px 16px;">
-      <div style="font-weight: 700; color: #ef4444; font-size: 0.9rem; margin-bottom: 4px;">1. Zero Hardcoded UI Text</div>
-      <div style="font-size: 0.86rem; color: var(--sl-color-gray-2); line-height: 1.5;">Raw string literals like <code>"Submit"</code> or <code>"Cancel"</code> in UI files are forbidden. Reference string IDs.</div>
-    </div>
-    <div style="background: var(--sl-color-bg-nav); border: 1px solid var(--sl-color-gray-5); border-radius: 8px; padding: 14px 16px;">
-      <div style="font-weight: 700; color: #ef4444; font-size: 0.9rem; margin-bottom: 4px;">2. Zero String Concatenation</div>
-      <div style="font-size: 0.86rem; color: var(--sl-color-gray-2); line-height: 1.5;">Never join strings like <code>"Hello " + userName</code>. Use parameter format strings (<code>%1$s</code> or <code>&#123;&#123;userName&#125;&#125;</code>).</div>
-    </div>
-    <div style="background: var(--sl-color-bg-nav); border: 1px solid var(--sl-color-gray-5); border-radius: 8px; padding: 14px 16px;">
-      <div style="font-weight: 700; color: #ef4444; font-size: 0.9rem; margin-bottom: 4px;">3. Native Plural Handling</div>
-      <div style="font-size: 0.86rem; color: var(--sl-color-gray-2); line-height: 1.5;">Do not use <code>if (count > 1) "s"</code> logic. Use native platform plural rules for multi-language accuracy.</div>
-    </div>
-    <div style="background: var(--sl-color-bg-nav); border: 1px solid var(--sl-color-gray-5); border-radius: 8px; padding: 14px 16px;">
-      <div style="font-weight: 700; color: #ef4444; font-size: 0.9rem; margin-bottom: 4px;">4. Flexible RTL Margins</div>
-      <div style="font-size: 0.86rem; color: var(--sl-color-gray-2); line-height: 1.5;">Use Start/End layout margins instead of explicit Left/Right to ensure automatic flip in RTL mode.</div>
-    </div>
-  </div>
-</div>
+  .button--primary {
+    background-color: var(--color-primary-600);
+    color: var(--color-white);
+  }
 
----
+  .button--primary:hover:not(:disabled) {
+    background-color: var(--color-primary-700);
+  }
 
-## 6. Localization Quality Gate Checklist
 
-<div style="background: var(--sl-color-bg-nav); border: 1px solid var(--sl-color-gray-5); border-radius: 12px; padding: 22px 26px; margin: 28px 0;">
-  <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; border-bottom: 1px solid var(--sl-color-gray-5); padding-bottom: 12px;">
-    <h3 style="margin: 0; font-size: 1.1rem; color: var(--sl-color-white); font-weight: 700;">Localization Pre-Merge Gate</h3>
-    <span style="background: #0d9488; color: white; font-size: 0.75rem; font-weight: 700; padding: 4px 10px; border-radius: 12px;">PRE-MERGE CHECK</span>
-  </div>
-  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px;">
-    <div style="display: flex; align-items: flex-start; gap: 10px; font-size: 0.9rem; color: var(--sl-color-gray-2);">
-      <span style="color: #0d9488; font-weight: 900;">✓</span>
-      <div>All user-facing strings abstracted into localized string catalogs.</div>
-    </div>
-    <div style="display: flex; align-items: flex-start; gap: 10px; font-size: 0.9rem; color: var(--sl-color-gray-2);">
-      <span style="color: #0d9488; font-weight: 900;">✓</span>
-      <div>Dynamic placeholders used instead of concatenated strings.</div>
-    </div>
-    <div style="display: flex; align-items: flex-start; gap: 10px; font-size: 0.9rem; color: var(--sl-color-gray-2);">
-      <span style="color: #0d9488; font-weight: 900;">✓</span>
-      <div>Plurals handled using platform-native pluralization rules.</div>
-    </div>
-    <div style="display: flex; align-items: flex-start; gap: 10px; font-size: 0.9rem; color: var(--sl-color-gray-2);">
-      <span style="color: #0d9488; font-weight: 900;">✓</span>
-      <div>RTL layout directionality verified for Arabic/Hebrew locales.</div>
-    </div>
-  </div>
-</div>
+  /* Secondary */
+
+  .button--secondary {
+    background-color: var(--color-white);
+    border-color: var(--color-border-strong);
+    color: var(--color-text-primary);
+  }
+
+  .button--secondary:hover:not(:disabled) {
+    background-color: var(--color-gray-50);
+  }
+
+
+  /* Danger */
+
+  .button--danger {
+    background-color: var(--color-danger);
+    color: var(--color-white);
+  }
+
+  .button--danger:hover:not(:disabled) {
+    background-color: #b91c1c;
+  }
+
+
+  /* Ghost */
+
+  .button--ghost {
+    background-color: transparent;
+    color: var(--color-text-secondary);
+  }
+
+  .button--ghost:hover:not(:disabled) {
+    background-color: var(--color-gray-100);
+    color: var(--color-text-primary);
+  }
+
+
+  /* Sizes */
+
+  .button--sm {
+    min-height: 32px;
+    padding-inline: var(--space-3);
+    font-size:
